@@ -2,7 +2,11 @@
 
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\InvoiceController;
 use Inertia\Inertia;
+
+Route::get('excel', [InvoiceController::class, 'index'])->name('excel.index');
+
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
