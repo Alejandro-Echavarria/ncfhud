@@ -5,8 +5,9 @@ namespace App\Imports;
 use App\Models\Invoice;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithCalculatedFormulas;
 
-class InvoicesImport implements ToModel, WithHeadingRow
+class InvoicesImport implements ToModel, WithHeadingRow, WithCalculatedFormulas
 {
     private int $userId;
     private int $clientId;
