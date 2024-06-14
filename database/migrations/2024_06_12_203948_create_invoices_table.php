@@ -30,7 +30,7 @@ return new class extends Migration
             $this->addUnsignedNullableInteger($table, 'amount');
             $this->addUnsignedNullableInteger($table, 'itbis');
             $this->addUnsignedNullableInteger($table, 'third_party_itbis');
-            $this->addUnsignedNullableInteger($table, 'withheld_itbis');
+            $this->addUnsignedNullableInteger($table, 'received_itbis');
             $this->addUnsignedNullableInteger($table, 'third_party_income_retention');
             $this->addUnsignedNullableInteger($table, 'isr');
             $this->addUnsignedNullableInteger($table, 'selective_tax');
@@ -53,7 +53,7 @@ return new class extends Migration
      */
     private function addUnsignedNullableInteger(Blueprint $table, string $columnName): void
     {
-        $table->integer($columnName)->unsigned()->default(0)->nullable();
+        $table->integer($columnName)->unsigned()->default(0);
     }
 
     /**
