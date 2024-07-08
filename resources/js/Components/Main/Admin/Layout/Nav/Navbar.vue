@@ -17,6 +17,7 @@ watch(() => usePage().props.entity, (newEntity) => {
 
 const navItems = computed(() => [
     { href: 'admin.dashboard', active: route().current('admin.dashboard'), activeClass: '/admin/dashboard', label: 'Dashboard', children: [], icon: ['fas', 'chart-line'], visible: true },
+    { href: 'admin.clients.index', active: route().current('admin.clients.index'), activeClass: '/admin/clients', label: 'Clients', children: [], icon: ['fas', 'chart-line'], visible: true },
     { href: 'admin.invoices.index', active: route().current('admin.invoices.index'), activeClass: '/admin/invoices', label: 'Invoices', children: [], icon: ['fas', 'chart-line'], visible: true },
 ]);
 
