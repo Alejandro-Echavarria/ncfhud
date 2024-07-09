@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
+import { computed, onMounted, onUnmounted, watch } from 'vue';
 
 const props = defineProps({
     show: {
@@ -17,20 +17,12 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['close']);
-const dialog = ref();
-const showSlot = ref(props.show);
 
 watch(() => props.show, () => {
     if (props.show) {
         document.body.style.overflow = 'hidden';
-        showSlot.value = true;
-        dialog.value?.showModal();
     } else {
         document.body.style.overflow = null;
-        setTimeout(() => {
-            dialog.value?.close();
-            showSlot.value = false;
-        }, 200);
     }
 });
 
@@ -60,38 +52,40 @@ const maxWidthClass = computed(() => {
         'lg': 'sm:max-w-lg',
         'xl': 'sm:max-w-xl',
         '2xl': 'sm:max-w-2xl',
+        '3xl': 'sm:max-w-3xl',
+        '4xl': 'sm:max-w-4xl',
+        '5xl': 'sm:max-w-5xl',
+        '6xl': 'sm:max-w-6xl',
+        'full': 'sm:max-w-full',
     }[props.maxWidth];
 });
 </script>
 
 <template>
-    <dialog class="z-50 m-0 min-h-full min-w-full overflow-y-auto bg-transparent backdrop:bg-transparent" ref="dialog">
-        <div class="fixed inset-0 overflow-y-auto px-4 py-6 sm:px-0 z-50" scroll-region>
-            <transition
-                enter-active-class="ease-out duration-300"
-                enter-from-class="opacity-0"
-                enter-to-class="opacity-100"
-                leave-active-class="ease-in duration-200"
-                leave-from-class="opacity-100"
-                leave-to-class="opacity-0"
-            >
-                <div v-show="show" class="fixed inset-0 transform transition-all" @click="close">
-                    <div class="absolute inset-0 bg-gray-500 dark:bg-gray-900 opacity-75" />
-                </div>
-            </transition>
+    <teleport to="body">
+        <transition leave-active-class="duration-100">
+            <div id="modal" v-show="show" :class="maxWidthClass !== 'sm:max-w-full' && 'sm:px-4'"
+                 class="fixed inset-0 overflow-hidden flex items-end sm:items-center justify-center z-50">
+                <transition enter-active-class="ease-out duration-200" enter-from-class="opacity-0"
+                            enter-to-class="opacity-100" leave-active-class="ease-in duration-100"
+                            leave-from-class="opacity-100" leave-to-class="opacity-0">
+                    <div v-show="show" class="absolute inset-0 bg-gray-900/50 backdrop-blur backdrop-filter opacity-100"
+                         @click="close">
+                    </div>
+                </transition>
 
-            <transition
-                enter-active-class="ease-out duration-300"
-                enter-from-class="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                enter-to-class="opacity-100 translate-y-0 sm:scale-100"
-                leave-active-class="ease-in duration-200"
-                leave-from-class="opacity-100 translate-y-0 sm:scale-100"
-                leave-to-class="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-            >
-                <div v-show="show" class="mb-6 bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-xl transform transition-all sm:w-full sm:mx-auto" :class="maxWidthClass">
-                    <slot v-if="showSlot"/>
-                </div>
-            </transition>
-        </div>
-    </dialog>
+                <transition enter-active-class="ease-out duration-200"
+                            enter-from-class="opacity-0 translate-y-64 sm:translate-y-0 sm:scale-95"
+                            enter-to-class="opacity-100 translate-y-0 sm:scale-100"
+                            leave-active-class="ease-in duration-200"
+                            leave-from-class="opacity-100 translate-y-0 sm:scale-100"
+                            leave-to-class="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
+                    <div v-show="show" class="bg-white overflow-y-auto shadow-xl transform transition-all w-full"
+                         :class="[maxWidthClass, maxWidthClass !== 'sm:max-w-full' && 'rounded-t-xl sm:rounded-xl']">
+                        <slot v-if="show"/>
+                    </div>
+                </transition>
+            </div>
+        </transition>
+    </teleport>
 </template>
