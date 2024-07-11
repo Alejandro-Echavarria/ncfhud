@@ -1,5 +1,5 @@
 <script setup>
-// import Pagination from '@/Components/Main/Admin/Components/Paginations/Pagination.vue';
+import Pagination from '@/Components/Main/Admin/Components/Paginations/Pagination.vue';
 
 const props = defineProps({
     pagination: {
@@ -34,8 +34,8 @@ const props = defineProps({
                 </tbody>
             </table>
         </div>
-        <template v-if="pagination">
-<!--            <Pagination :pagination="pagination" />-->
+        <template v-if="pagination && pagination.links">
+            <Pagination :pagination="pagination" />
         </template>
     </div>
 </template>

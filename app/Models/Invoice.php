@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Invoice extends Model
 {
@@ -37,15 +38,55 @@ class Invoice extends Model
         'bonds_certificates',
     ];
 
-    public function getCreatedAtAttribute($value): string
+    protected function createdAt(): Attribute
     {
-        $carbon = Carbon::parse($value)->timezone(config('app.timezone'));
-        return $carbon->toFormattedDateString();
+        return Attribute::make(
+            get: fn($value) => Carbon::parse($value)->timezone(config('app.timezone'))->toFormattedDateString(),
+        );
     }
 
-    public function getUpdatedAtAttribute($value): string
+    protected function updatedAt(): Attribute
     {
-        $carbon = Carbon::parse($value)->timezone(config('app.timezone'));
-        return $carbon->toFormattedDateString();
+        return Attribute::make(
+            get: fn($value) => Carbon::parse($value)->timezone(config('app.timezone'))->toFormattedDateString(),
+        );
+    }
+
+    protected function proofDate(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => Carbon::parse($value)->format('d/m/Y'),
+        );
+    }
+
+    protected function amount(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => number_format($value, 2, '.', ','),
+        );
+    }
+
+    protected function itbis(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => number_format($value, 2, '.', ','),
+        );
+    }
+
+    public function scopeFilter($query, $clientFilter, $monthFilter, $yearFilter)
+    {
+        $query->when($clientFilter ?? null && $monthFilter && null && $yearFilter ?? null, function ($query, $clientFilter) use ($monthFilter, $yearFilter) {
+            $query->where('client_id', "$clientFilter")
+                ->whereMonth(
+                    config('app.db_driver') === 'pgsql' ?
+                        DB::raw("TO_DATE(proof_date, 'YYYYMMDD')") :
+                        DB::raw("STR_TO_DATE(proof_date, '%Y-%m-%d')"), "$monthFilter"
+                )
+                ->whereYear(
+                    config('app.db_driver') === 'pgsql' ?
+                        DB::raw("TO_DATE(proof_date, 'YYYYMMDD')") :
+                        DB::raw("STR_TO_DATE(proof_date, '%Y-%m-%d')"), "$yearFilter"
+                );
+        });
     }
 }
