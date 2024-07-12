@@ -20,6 +20,18 @@ const hasActiveChild = computed(() => {
     return hasActiveItem(props.item.children);
 });
 
+const getPathname = (url) => {
+    try {
+        return new URL(url, window.location.origin).pathname;
+    } catch (e) {
+        return '';
+    }
+}
+
+const isExactActiveClass = (url, activeClass) => {
+    return getPathname(url) === activeClass;
+}
+
 const toggleSidebarVisibility = () => {
     emit("click");
 }
@@ -30,7 +42,7 @@ const toggleSidebarVisibility = () => {
         enter-to="opacity-100" leave="transition-opacity duration-300" leave-from="opacity-100" leave-to="opacity-0">
         <Link v-if="!item.children.length && item.visible === true" :href="route(item.href)" @click="toggleSidebarVisibility" :class="[
             'flex whitespace-nowrap items-center py-2 px-3 text-sm font-semibold text-gray-800 rounded-lg dark:text-gray-200 hover:bg-indigo-700/10 dark:hover:bg-indigo-700 group transition duration-200 ease-linear',
-            { 'bg-indigo-700/10 text-indigo-700': $page.url.startsWith(item.activeClass) },
+            { 'bg-indigo-700/10 text-indigo-700': isExactActiveClass($page.url, item.activeClass) },
         ]">
         <span class="flex-1">
             <template v-if="item.icon">

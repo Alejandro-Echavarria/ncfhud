@@ -104,12 +104,12 @@ const changePage = (url) => {
                 <nav class="isolate inline-flex -space-x-px rounded-md" aria-label="Pagination">
                     <template v-for="(link, index) in pagination.links">
                         <div v-if="link.url == null" :key="'botons-' + index"
-                            class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-600 focus:z-20 cursor-not-allowed"
+                            class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-600 focus:z-20 cursor-not-allowed select-none"
                             v-html="link.label">
                         </div>
 
                         <a v-else :key="'links-' + index" @click="changePage(link.url)"
-                            class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 focus:z-20 cursor-pointer"
+                            class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 focus:z-20 cursor-pointer select-none"
                             :class="link.active
                     ? 'z-10 border-b-2 border-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 focus:outline-none focus:border-indigo-500 transition duration-150 ease-in-out'
                     : ''" v-html="link.label">

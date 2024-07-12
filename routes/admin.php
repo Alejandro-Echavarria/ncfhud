@@ -11,4 +11,4 @@ Route::get('dashboard', function () {
 })->name('admin.dashboard');
 
 Route::resource('clients', ClientController::class)->names('admin.clients');
-Route::get('invoices', [InvoiceController::class, 'index'])->name('admin.invoices.index');
+Route::resource('invoices', InvoiceController::class)->names('admin.invoices');

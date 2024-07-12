@@ -11,7 +11,7 @@ const props = defineProps({
         required: true
     },
     filters: {
-        type: Array,
+        type: Object,
         required: true
     },
     url: {
@@ -24,10 +24,17 @@ const currentDate = new Date();
 const currentMonth = currentDate.getMonth() + 1; // getMonth() returns 0-based index
 const currentYear = currentDate.getFullYear();
 
+const params = new URLSearchParams(window.location.search);
+const clientParam = params.get('client');
+const monthParam = params.get('month');
+const yearParam = params.get('year');
+const perPageParam = params.get('per_page');
+
 const form = useForm({
-    client: props.filters.client,
-    month: currentMonth,
-    year: currentYear,
+    client: clientParam || props.filters.client,
+    month: monthParam || currentMonth,
+    year: yearParam || currentYear,
+    perPage: perPageParam || 10,
 });
 
 const monthOptions = ref([
@@ -81,11 +88,29 @@ const monthOptions = ref([
     }
 ]);
 const yearOptions = ref(Array.from({ length: 2041 - 2010 }, (_, i) => ({ 'id': `${2010 + i}`, 'name': `${2010 + i}` })));
+const perPageOptions = ref([
+    {
+        'id': 10,
+        'name': '10'
+    },
+    {
+        'id': 25,
+        'name': '25'
+    },
+    {
+        'id': 50,
+        'name': '50'
+    },
+    {
+        'id': 100,
+        'name': '100'
+    }
+]);
 
-const debounceData = () => debounce(getData, 600);
+const debounceData = () => debounce(getData, 100);
 
 onMounted(() => {
-    debounceData.value = debounce(getData, 600);
+    debounceData.value = debounce(getData, 100);
 });
 
 watch(form, () => {
@@ -93,11 +118,13 @@ watch(form, () => {
 });
 
 const getData = () => {
-    router.get(route(props.url), pickBy({'client': form.client, 'month': form.month, 'year': form.year}), {
-        preserveScroll: true,
-        preserveState: true,
-        replace: true
-    });
+    if (form.client != null) {
+        router.get(route(props.url), pickBy({'client': form.client, 'month': form.month, 'year': form.year, 'per_page': form.perPage}), {
+            preserveScroll: true,
+            preserveState: true,
+            replace: true
+        });
+    }
 };
 
 const debounce = (func, wait) => {
@@ -115,20 +142,25 @@ const debounce = (func, wait) => {
 </script>
 
 <template>
-    <div class="grid grid-cols-1 sm:grid-cols-4 gap-6">
-        <div class="sm:col-span-2">
+    <div class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-12 gap-6">
+        <div class="sm:col-span-3 md:col-span-12">
             <InputLabel for="client" value="Cliente" />
-            <VueSelect id="client"  label="business_name" v-model="form.client" :options="clients" :reduce="options => options.id" />
+            <VueSelect id="client" label="business_name" v-model="form.client" :options="clients" :reduce="options => options.id" />
         </div>
 
-        <div>
+        <div class="sm:col-span-1 md:col-span-4">
             <InputLabel for="month" value="Mes" />
             <VueSelect id="month" label="name" v-model="form.month" :options="monthOptions" :reduce="options => options.id" />
         </div>
 
-        <div>
+        <div class="sm:col-span-1 md:col-span-4">
             <InputLabel for="year" value="Año" />
             <VueSelect id="year" label="name" v-model="form.year" :options="yearOptions" :reduce="options => options.id" />
+        </div>
+
+        <div class="sm:col-span-1 md:col-span-4">
+            <InputLabel for="perPage" value="Registros por página" />
+            <VueSelect id="perPage" label="name" v-model="form.perPage" :options="perPageOptions" :reduce="options => options.id" />
         </div>
     </div>
 </template>

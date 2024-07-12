@@ -19,17 +19,34 @@ class InvoiceController extends Controller
         $clientFilter = $request?->client;
         $monthFilter = $request?->month;
         $yearFilter = $request?->year;
+        $perPage = $request?->per_page;
         $page = $request?->page;
 
         $invoices = [];
         if ($clientFilter && $monthFilter && $yearFilter) {
             $invoices = Invoice::filter($clientFilter, $monthFilter, $yearFilter)
                 ->orderBy('proof_date', 'asc')
-                ->paginate(100);
+                ->paginate($perPage);
         }
 
         $clients = Client::select('id', 'business_name')->get();
 
-        return Inertia::render('Admin/Invoices/Index', compact('clients', 'invoices', 'clientFilter', 'monthFilter', 'yearFilter', 'page'));
+        return Inertia::render('Admin/Invoices/Index', compact('clients', 'invoices', 'clientFilter', 'monthFilter', 'yearFilter', 'page', 'perPage'));
+    }
+
+    public function create(): \Inertia\Response
+    {
+        $clients = Client::select('id', 'business_name')->get();
+
+        return Inertia::render('Admin/Invoices/Create', compact('clients'));
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            ''
+        ]);
+
+
     }
 }
