@@ -6,16 +6,17 @@ use App\Models\Invoice;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithCalculatedFormulas;
+use Maatwebsite\Excel\Concerns\WithValidation;
 
-class InvoicesImport implements ToModel, WithHeadingRow, WithCalculatedFormulas
+class InvoicesImport implements ToModel, WithValidation, WithHeadingRow, WithCalculatedFormulas
 {
     private int $userId;
     private int $clientId;
 
-    public function __construct()
+    public function __construct($data)
     {
-        $this->userId = 1;
-        $this->clientId = 1;
+        $this->userId = Auth()->user()->id;
+        $this->clientId = $data['client'];
     }
 
     public function model(array $row): Invoice
@@ -24,8 +25,8 @@ class InvoicesImport implements ToModel, WithHeadingRow, WithCalculatedFormulas
         $getOrZero = fn($value) => $value !== null ? round((float)$value, 2) : 0;
 
         return new Invoice([
-            'user_id' => 1,
-            'client_id' => 1,
+            'user_id' => $this->userId,
+            'client_id' => $this->clientId,
             'rnc' => $row['rnccedula_o_pasaporte'],
             'identification_type' => $row['tipo_identificacion'],
             'ncf' => $row['numero_comprobante_fiscal'],
@@ -50,5 +51,21 @@ class InvoicesImport implements ToModel, WithHeadingRow, WithCalculatedFormulas
             'barter' => $getOrZero($row['permuta']),
             'other_sales_forms' => $getOrZero($row['otras_formas_de_ventas']),
         ]);
+    }
+
+    public function rules(): array
+    {
+        return [
+            'rnccedula_o_pasaporte' => 'required|string|max:9|exists:clients,rnc',
+            'numero_comprobante_fiscal' => 'required|string|max:19|unique:invoices,ncf',
+        ];
+    }
+
+    public function customValidationAttributes(): array
+    {
+        return [
+            'rnccedula_o_pasaporte' => 'rnc',
+            'numero_comprobante_fiscal' => 'ncf',
+        ];
     }
 }

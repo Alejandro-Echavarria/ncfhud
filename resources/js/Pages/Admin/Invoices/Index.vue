@@ -1,6 +1,6 @@
 <script setup>
-import { ref, watch } from 'vue';
-import { Head, useForm, Link } from '@inertiajs/vue3';
+import { ref } from 'vue';
+import { Head, Link } from '@inertiajs/vue3';
 import MainLayout from "@/Components/Main/Admin/Layout/MainLayout.vue";
 import MainTitle from '@/Components/Main/Admin/Components/Titles/MainTitle.vue';
 import MainTable from '@/Components/Main/Admin/Components/Tables/MainTable.vue';
@@ -44,10 +44,6 @@ const openModal = (op, id, rnc, business_name, commercial_activity, email) => {
         <Filters :clients="clients" :filters="{ client: clientFilter, month: monthFilter, year: yearFilter }" :url="url"/>
 
         <MainTable :pagination="invoices">
-            <!--        <template #search>-->
-            <!--            <Search :filter="filter" :url="url"/>-->
-            <!--        </template>-->
-
             <template #createButton>
                 <Link :href="route('admin.invoices.create', { client: clientFilter, month: monthFilter, year: yearFilter })">
                     <PrimaryButton>Crear</PrimaryButton>

@@ -14,8 +14,6 @@ class InvoiceController extends Controller
 {
     public function index(Request $request): \Inertia\Response
     {
-//        return response()->json(["success" => true, 'data' => Invoice::all()], 200);
-//        $excel = Excel::import(new InvoicesImport, "C:\Users\mechavarria\OneDrive - aldereca.com\Desktop\Book1.xlsx");
         $clientFilter = $request?->client;
         $monthFilter = $request?->month;
         $yearFilter = $request?->year;
@@ -29,24 +27,47 @@ class InvoiceController extends Controller
                 ->paginate($perPage);
         }
 
-        $clients = Client::select('id', 'business_name')->get();
+        $clients = Client::selectRaw("id, CONCAT(rnc, ' - ', business_name, ' - ', commercial_activity) AS business_name")->get();
 
         return Inertia::render('Admin/Invoices/Index', compact('clients', 'invoices', 'clientFilter', 'monthFilter', 'yearFilter', 'page', 'perPage'));
     }
 
-    public function create(): \Inertia\Response
+    public function create(Request $request): \Inertia\Response
     {
-        $clients = Client::select('id', 'business_name')->get();
+        $clients = Client::selectRaw("id, CONCAT(rnc, ' - ', business_name, ' - ', commercial_activity) AS business_name")->get();
+        $clientFilter = $request?->client;
+        $monthFilter = $request?->month;
+        $yearFilter = $request?->year;
+        $perPage = $request?->per_page;
+        $page = $request?->page;
 
-        return Inertia::render('Admin/Invoices/Create', compact('clients'));
+        $client = [];
+        $invoices = [];
+        if ($clientFilter && $monthFilter && $yearFilter) {
+            $client = Client::select('id', 'business_name', 'commercial_activity')
+                ->where('id', $clientFilter)
+                ->get();
+
+            $invoices = Invoice::filter($clientFilter, $monthFilter, $yearFilter)
+                ->orderBy('proof_date', 'asc')
+                ->paginate($perPage);
+        }
+
+        return Inertia::render('Admin/Invoices/Create', compact('invoices', 'clients', 'client', 'clientFilter', 'monthFilter', 'yearFilter', 'page', 'perPage'));
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            ''
+        $data = $request->validate([
+            'client' => 'required',
+            'file' => 'required',
         ]);
 
+        $excel = Excel::import(new InvoicesImport($data), $data['file']);
+    }
 
+    public function compare()
+    {
+        return Inertia::render('Admin/Invoices/Compare');
     }
 }

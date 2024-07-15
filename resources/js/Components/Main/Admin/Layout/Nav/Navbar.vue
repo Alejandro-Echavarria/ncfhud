@@ -21,6 +21,7 @@ const navItems = computed(() => [
     { href: 'admin.invoices.index', active: route().current('admin.invoices.index'), activeClass: '/admin/invoices', label: 'Facturas', children: [
             { href: 'admin.invoices.index', active: route().current('admin.invoices.index'), activeClass: '/admin/invoices', label: 'Consultar', children: [], icon: ['fas', 'chart-line'], visible: true },
             { href: 'admin.invoices.create', active: route().current('admin.invoices.create'), activeClass: '/admin/invoices/create', label: 'Crear', children: [], icon: ['fas', 'chart-line'], visible: true },
+            { href: 'admin.invoicescompare.index', active: route().current('admin.invoicescompare.index'), activeClass: '/admin/invoices-compare', label: 'Comparar', children: [], icon: ['fas', 'chart-line'], visible: true },
     ], icon: ['fas', 'chart-line'], visible: true },
 ]);
 

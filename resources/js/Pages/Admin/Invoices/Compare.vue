@@ -1,13 +1,12 @@
 <script setup>
-import { watch } from 'vue';
-import { Head, useForm } from '@inertiajs/vue3';
+import { watch } from "vue";
+import { Head, useForm } from "@inertiajs/vue3";
 import MainLayout from "@/Components/Main/Admin/Layout/MainLayout.vue";
 import MainTitle from "@/Components/Main/Admin/Components/Titles/MainTitle.vue";
 import Filters from "@/Pages/Admin/Invoices/Partials/Filters.vue";
 import MainTable from "@/Components/Main/Admin/Components/Tables/MainTable.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
 import InputLabel from "@/Components/InputLabel.vue";
-import InputError from "@/Components/InputError.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
 
 defineOptions({
     layout: MainLayout
@@ -35,8 +34,8 @@ const form = useForm({
     file: null
 });
 
-const thead = ['ncf', 'Fecha comprobante', 'monto', 'itbis'];
-const url = 'admin.invoices.create';
+const thead = ['ncf', 'Fecha comprobante'];
+const url = 'admin.invoicescompare.index';
 
 watch(
     () => [props.clientFilter, props.monthFilter, props.yearFilter],
@@ -47,16 +46,16 @@ watch(
     }
 );
 
-const save = () => {
+const compare = () => {
     form.transform((data) => ({
         ...data,
         search: props.filter,
         page: props.page,
-    })).post(route('admin.invoices.store'), {
+    })).post(route('admin.invoicescompare.compare'), {
         preserveScroll: true,
         preserveState: true,
         onSuccess: () => {
-            ok('Client created');
+            // ok('Client created');
         },
         onError: () => {
             console.log("error");
@@ -66,9 +65,9 @@ const save = () => {
 </script>
 
 <template>
-    <Head title="Crear facturas"/>
+    <Head title="Comparar facturas"/>
 
-    <MainTitle>Crear facturas</MainTitle>
+    <MainTitle>Comparar facturas</MainTitle>
 
     <div class="space-y-6">
         <Filters :clients="clients" :filters="{ client: clientFilter, month: monthFilter, year: yearFilter }"
@@ -86,36 +85,30 @@ const save = () => {
                 </div>
 
                 <div>
-                    <PrimaryButton @click="save()">Crear</PrimaryButton>
+                    <PrimaryButton @click="compare()">Comparar</PrimaryButton>
                 </div>
             </div>
         </div>
 
-        <div>
-            <template v-for="error in form.errors">
-                <InputError :message="error" class="mt-2"/>
-            </template>
-        </div>
+        <div class="grid sm:grid-cols-8">
+            <div class="sm:col-span-4">
+                <MainTable :pagination="invoices">
+                    <template #thead>
+                        <th v-for="(th, key) in thead" scope="col" class="px-4 py-3" :key="key + 'th'">
+                            {{ th }}
+                        </th>
+                    </template>
 
-        <div>
-            <MainTable :pagination="invoices">
-                <template #thead>
-                    <th v-for="(th, key) in thead" scope="col" class="px-4 py-3" :key="key + 'th'">
-                        {{ th }}
-                    </th>
-                </template>
-
-                <template #tbody>
-                    <tr v-for="tb in invoices.data"
-                        class="dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition ease-linear duration-300"
-                        :key="tb.id + 'tb'">
-                        <td class="px-4 py-3">{{ tb.ncf }}</td>
-                        <td class="px-4 py-3">{{ tb.proof_date }}</td>
-                        <td class="px-4 py-3">{{ tb.amount }}</td>
-                        <td class="px-4 py-3">{{ tb.itbis }}</td>
-                    </tr>
-                </template>
-            </MainTable>
+                    <template #tbody>
+                        <tr v-for="tb in invoices.data"
+                            class="dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition ease-linear duration-300"
+                            :key="tb.id + 'tb'">
+                            <td class="px-4 py-3">{{ tb.ncf }}</td>
+                            <td class="px-4 py-3">{{ tb.proof_date }}</td>
+                        </tr>
+                    </template>
+                </MainTable>
+            </div>
         </div>
     </div>
 </template>
