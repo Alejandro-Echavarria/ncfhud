@@ -38,6 +38,7 @@ const thead = ['ncf', 'Fecha comprobante'];
 const url = 'admin.invoicescompare.index';
 
 const excel = ref([]);
+const notInDatabase = ref([]);
 
 watch(
     () => [props.clientFilter, props.monthFilter, props.yearFilter],
@@ -74,7 +75,8 @@ const compare = async () => {
             },
         });
 
-        excel.value = response.data;
+        excel.value = response.data.data;
+        notInDatabase.value = response.data.data.not_in_database;
         // ok('Client created');
     } catch (error) {
         console.log("error", error);
@@ -127,10 +129,25 @@ const compare = async () => {
                     </template>
                 </MainTable>
             </div>
+        </div>
 
-            <pre>
-                {{ excel }}
-            </pre>
+        <div>
+            <MainTable>
+                <template #thead>
+                    <th v-for="(th, key) in thead" scope="col" class="px-4 py-3" :key="key + 'th'">
+                        {{ th }}
+                    </th>
+                </template>
+
+                <template #tbody>
+                    <tr v-for="tb in notInDatabase"
+                        class="dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition ease-linear duration-300"
+                        :key="tb.id + 'tb'">
+                        <td class="px-4 py-3">{{ tb.ncf }}</td>
+                        <td class="px-4 py-3">{{ tb.proof_date }}</td>
+                    </tr>
+                </template>
+            </MainTable>
         </div>
     </div>
 </template>
