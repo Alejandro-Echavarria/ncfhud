@@ -1,5 +1,5 @@
 <script setup>
-import { watch } from "vue";
+import { watch, ref } from "vue";
 import { Head, useForm } from "@inertiajs/vue3";
 import MainLayout from "@/Components/Main/Admin/Layout/MainLayout.vue";
 import MainTitle from "@/Components/Main/Admin/Components/Titles/MainTitle.vue";
@@ -37,6 +37,8 @@ const form = useForm({
 const thead = ['ncf', 'Fecha comprobante'];
 const url = 'admin.invoicescompare.index';
 
+const excel = ref([]);
+
 watch(
     () => [props.clientFilter, props.monthFilter, props.yearFilter],
     ([newClient, newMonth, newYear]) => {
@@ -46,21 +48,37 @@ watch(
     }
 );
 
-const compare = () => {
-    form.transform((data) => ({
-        ...data,
-        search: props.filter,
-        page: props.page,
-    })).post(route('admin.invoicescompare.compare'), {
-        preserveScroll: true,
-        preserveState: true,
-        onSuccess: () => {
-            // ok('Client created');
-        },
-        onError: () => {
-            console.log("error");
-        }
-    });
+const compare = async () => {
+    // Crear un nuevo objeto FormData
+    const formData = new FormData();
+
+    // Agregar los campos de datos al FormData
+    formData.append('search', props.filter);
+    formData.append('page', props.page);
+
+    // Agregar los datos del formulario al FormData
+    for (const [key, value] of Object.entries(form.data())) {
+        formData.append(key, value);
+    }
+
+    // Suponiendo que tienes un campo de archivo en tu formulario
+    // Asegúrate de que el archivo esté incluido en los datos del formulario
+    if (form.file) {
+        formData.append('file', form.file);
+    }
+
+    try {
+        const response = await axios.post(route('api.v1.invoicescompare.compare'), formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+
+        excel.value = response.data;
+        // ok('Client created');
+    } catch (error) {
+        console.log("error", error);
+    }
 };
 </script>
 
@@ -109,6 +127,10 @@ const compare = () => {
                     </template>
                 </MainTable>
             </div>
+
+            <pre>
+                {{ excel }}
+            </pre>
         </div>
     </div>
 </template>

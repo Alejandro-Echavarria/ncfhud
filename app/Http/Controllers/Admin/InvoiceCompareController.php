@@ -33,6 +33,12 @@ class InvoiceCompareController extends Controller
 
     public function compare(Request $request)
     {
+        $clientFilter = $request?->client;
+        $monthFilter = $request?->month;
+        $yearFilter = $request?->year;
+        $perPage = $request?->per_page;
+        $page = $request?->page;
+
         $data = $request ->validate([
             'client' => 'required',
             'month' => 'required',
@@ -42,6 +48,16 @@ class InvoiceCompareController extends Controller
 
         $excel = Excel::toArray(new InvoicesImport($data), $data['file']);
 
-        return response()->json(["success" => true, 'data' => $excel], 200);
+        $invoices = Invoice::filter($clientFilter, $monthFilter, $yearFilter)
+                ->orderBy('proof_date', 'asc')
+                ->paginate($perPage);
+
+//        return to_route('admin.invoicescompare.index')->withInput('excel', $excel);
+        return response()->json([
+            'data' => [
+                'excel' => $excel,
+                'invoices' => $invoices
+            ]
+        ]);
     }
 }

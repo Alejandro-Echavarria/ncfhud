@@ -65,9 +65,4 @@ class InvoiceController extends Controller
 
         $excel = Excel::import(new InvoicesImport($data), $data['file']);
     }
-
-    public function compare()
-    {
-        return Inertia::render('Admin/Invoices/Compare');
-    }
 }

@@ -15,4 +15,4 @@ Route::resource('clients', ClientController::class)->names('admin.clients');
 
 Route::resource('invoices', InvoiceController::class)->names('admin.invoices');
 Route::resource('invoices-compare', InvoiceCompareController::class)->names('admin.invoicescompare');
-Route::post('invoices-compare/compare', [InvoiceCompareController::class, 'compare'])->name('admin.invoicescompare.compare');
+//Route::post('invoices-compare/compare', [InvoiceCompareController::class, 'compare'])->name('admin.invoicescompare.compare');
