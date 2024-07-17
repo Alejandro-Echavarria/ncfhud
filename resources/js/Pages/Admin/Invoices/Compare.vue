@@ -7,6 +7,7 @@ import Filters from "@/Pages/Admin/Invoices/Partials/Filters.vue";
 import MainTable from "@/Components/Main/Admin/Components/Tables/MainTable.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
+import H2Title from "@/Components/Main/Admin/Components/Titles/H2Title.vue";
 
 defineOptions({
     layout: MainLayout
@@ -34,11 +35,13 @@ const form = useForm({
     file: null
 });
 
-const thead = ['ncf', 'Fecha comprobante'];
+const thead = ['ncf', 'Detalle'];
 const url = 'admin.invoicescompare.index';
 
 const excel = ref([]);
+const notInExcel = ref([]);
 const notInDatabase = ref([]);
+const differences = ref([]);
 
 watch(
     () => [props.clientFilter, props.monthFilter, props.yearFilter],
@@ -76,7 +79,9 @@ const compare = async () => {
         });
 
         excel.value = response.data.data;
+        notInExcel.value = response.data.data.not_in_excel;
         notInDatabase.value = response.data.data.not_in_database;
+        differences.value = response.data.data.differences;
         // ok('Client created');
     } catch (error) {
         console.log("error", error);
@@ -89,7 +94,7 @@ const compare = async () => {
 
     <MainTitle>Comparar facturas</MainTitle>
 
-    <div class="space-y-6">
+    <div class="space-y-12">
         <Filters :clients="clients" :filters="{ client: clientFilter, month: monthFilter, year: yearFilter }"
                  :url="url"/>
 
@@ -110,8 +115,96 @@ const compare = async () => {
             </div>
         </div>
 
-        <div class="grid sm:grid-cols-8">
-            <div class="sm:col-span-4">
+        <div>
+            <H2Title>
+                NCF no declarados por 3ros
+            </H2Title>
+
+            <MainTable>
+                <template #thead>
+                    <th v-for="(th, key) in thead" scope="col" class="px-4 py-3" :key="key + 'th'">
+                        {{ th }}
+                    </th>
+                </template>
+
+                <template #tbody>
+                    <tr v-for="tb in notInExcel"
+                        class="dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition ease-linear duration-300"
+                        :key="tb.id + 'tb'">
+                        <td class="px-4 py-3">{{ tb.ncf }}</td>
+                        <td class="px-4 py-3">{{ tb.proof_date }}</td>
+                    </tr>
+                </template>
+            </MainTable>
+        </div>
+
+        <div>
+            <H2Title>
+                NCF no declarados de 3ros
+            </H2Title>
+
+            <MainTable>
+                <template #thead>
+                    <th v-for="(th, key) in thead" scope="col" class="px-4 py-3" :key="key + 'th'">
+                        {{ th }}
+                    </th>
+                </template>
+
+                <template #tbody>
+                    <tr v-for="tb in notInDatabase"
+                        class="dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition ease-linear duration-300"
+                        :key="tb.id + 'tb'">
+                        <td class="px-4 py-3">{{ tb.ncf }}</td>
+                        <td class="px-4 py-3">{{ tb.proof_date }}</td>
+                    </tr>
+                </template>
+            </MainTable>
+        </div>
+
+        <div>
+            <H2Title>
+                NCF con diferencias
+            </H2Title>
+
+            <MainTable>
+                <template #thead>
+                    <th v-for="(th, key) in thead" scope="col" class="px-4 py-3" :key="key + 'th'">
+                        {{ th }}
+                    </th>
+                </template>
+
+                <template #tbody>
+                    <tr v-for="tb in differences"
+                        class="dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition ease-linear duration-300"
+                        :key="tb.id + 'tb'">
+                        <td class="px-4 py-3">{{ tb.excel_row.ncf }}</td>
+                        <td class="px-4 py-3">
+                            <div class="grid grid-cols-2 gap-6">
+                                <div v-for="(difference, key) in tb.differences" class="flex-col border border-gray-300 p-2 rounded-lg">
+                                    <div class="font-bold flex justify-center">{{ key }}</div>
+                                    <div>
+                                        <span class="font-semibold">3ero:</span>
+                                        {{ difference.excel }}
+                                    </div>
+
+                                    <div>
+                                        <span class="font-semibold">DB:</span>
+                                        {{ difference.database }}
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </template>
+            </MainTable>
+        </div>
+
+        <div>
+            <div>
+                <H2Title>
+                    Facturas
+                </H2Title>
+
                 <MainTable :pagination="invoices">
                     <template #thead>
                         <th v-for="(th, key) in thead" scope="col" class="px-4 py-3" :key="key + 'th'">
@@ -129,25 +222,6 @@ const compare = async () => {
                     </template>
                 </MainTable>
             </div>
-        </div>
-
-        <div>
-            <MainTable>
-                <template #thead>
-                    <th v-for="(th, key) in thead" scope="col" class="px-4 py-3" :key="key + 'th'">
-                        {{ th }}
-                    </th>
-                </template>
-
-                <template #tbody>
-                    <tr v-for="tb in notInDatabase"
-                        class="dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition ease-linear duration-300"
-                        :key="tb.id + 'tb'">
-                        <td class="px-4 py-3">{{ tb.ncf }}</td>
-                        <td class="px-4 py-3">{{ tb.proof_date }}</td>
-                    </tr>
-                </template>
-            </MainTable>
         </div>
     </div>
 </template>

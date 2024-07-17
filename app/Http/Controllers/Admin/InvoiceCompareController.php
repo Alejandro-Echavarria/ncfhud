@@ -167,57 +167,31 @@ class InvoiceCompareController extends Controller
             return !$ncfExists;
         });
 
-//        $notInDatabase = array_filter($adjustedExcelData, function ($excelRow) use ($invoices) {
-//            $invoices = json_decode(json_encode($invoices), true);
-//
-//            foreach ($invoices as $invoice) {
-//                if (
-//                    $invoice['rnc'] === $excelRow['rnc'] &&
-//                    $invoice['identification_type'] === $excelRow['identification_type'] &&
-//                    $invoice['ncf'] === $excelRow['ncf'] &&
-//                    $invoice['ncf_modified'] === $excelRow['ncf_modified'] &&
-//                    $invoice['income_type'] === $excelRow['income_type'] &&
-//                    $invoice['proof_date'] == $excelRow['proof_date'] &&
-//                    $invoice['withholding_date'] == $excelRow['withholding_date'] &&
-//                    $this->getOrZero($invoice['amount']) ===  $this->getOrZero($excelRow['amount']) &&
-//                    $this->getOrZero($invoice['itbis']) ===  $this->getOrZero($excelRow['itbis']) &&
-//                    $this->getOrZero($invoice['third_party_itbis']) === $this->getOrZero($excelRow['third_party_itbis']) &&
-//                    $this->getOrZero($invoice['received_itbis']) === $this->getOrZero($excelRow['received_itbis']) &&
-//                    $this->getOrZero($invoice['third_party_income_retention']) === $this->getOrZero($excelRow['third_party_income_retention']) &&
-//                    $this->getOrZero($invoice['isr']) === $this->getOrZero($excelRow['isr']) &&
-//                    $this->getOrZero($invoice['selective_tax']) === $this->getOrZero($excelRow['selective_tax']) &&
-//                    $this->getOrZero($invoice['other_taxes_fees']) === $this->getOrZero($excelRow['other_taxes_fees']) &&
-//                    $this->getOrZero($invoice['legal_tip_amount']) === $this->getOrZero($excelRow['legal_tip_amount']) &&
-//                    $this->getOrZero($invoice['cash']) === $this->getOrZero($excelRow['cash']) &&
-//                    $this->getOrZero($invoice['check_transfer_deposit']) === $this->getOrZero($excelRow['check_transfer_deposit']) &&
-//                    $this->getOrZero($invoice['debit_credit_card']) === $this->getOrZero($excelRow['debit_credit_card']) &&
-//                    $this->getOrZero($invoice['credit_sale']) === $this->getOrZero($excelRow['credit_sale']) &&
-//                    $this->getOrZero($invoice['bonds_certificates']) === $this->getOrZero($excelRow['bonds_certificates']) &&
-//                    $this->getOrZero($invoice['barter']) === $this->getOrZero($excelRow['barter']) &&
-//                    $this->getOrZero($invoice['other_sales_forms']) === $this->getOrZero($excelRow['other_sales_forms'])
-//                ) {
-//                    return false;
-//                }
-//            }
-//            return true;
-//        });
+        $invoicesArray = json_decode(json_encode($invoices), true);
+
+        // Comparar datos de la base de datos con el Excel
+        $notInExcel = array_filter($invoicesArray, function ($invoice) use ($adjustedExcelData) {
+            $ncfExistsInExcel = false;
+
+            foreach ($adjustedExcelData as $excelRow) {
+                if ($invoice['ncf'] === $excelRow['ncf']) {
+                    $ncfExistsInExcel = true;
+                    break;
+                }
+            }
+
+            return !$ncfExistsInExcel;
+        });
 
         return response()->json([
             'data' => [
                 'excel' => $excelData,
                 'invoices' => $invoices,
                 'adjusted_excel' => $adjustedExcelData,
-//                'not_in_database' => $notInDatabase,
+                'not_in_excel' => $notInExcel,
                 'not_in_database' => array_values($notInDatabase),
                 'differences' => $differences,
             ]
         ]);
-    }
-
-    public function getOrZero($value)
-    {
-        return $value !== null
-            ? number_format($value, 2, '.', ',')
-            : number_format(0, 2, '.', ',');
     }
 }
