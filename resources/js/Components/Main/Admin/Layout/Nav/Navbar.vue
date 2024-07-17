@@ -16,13 +16,13 @@ watch(() => usePage().props.entity, (newEntity) => {
 })
 
 const navItems = computed(() => [
-    { href: 'admin.dashboard', active: route().current('admin.dashboard'), activeClass: '/admin/dashboard', label: 'Dashboard', children: [], icon: ['fas', 'chart-line'], visible: true },
-    { href: 'admin.clients.index', active: route().current('admin.clients.index'), activeClass: '/admin/clients', label: 'Clientes', children: [], icon: ['fas', 'chart-line'], visible: true },
+    { href: 'admin.dashboard', active: route().current('admin.dashboard'), activeClass: '/admin/dashboard', label: 'Dashboard', children: [], icon: 'Dashboard', visible: true },
+    { href: 'admin.clients.index', active: route().current('admin.clients.index'), activeClass: '/admin/clients', label: 'Clientes', children: [], icon: 'Client', visible: true },
     { href: 'admin.invoices.index', active: route().current('admin.invoices.index'), activeClass: '/admin/invoices', label: 'Facturas', children: [
-            { href: 'admin.invoices.index', active: route().current('admin.invoices.index'), activeClass: '/admin/invoices', label: 'Consultar', children: [], icon: ['fas', 'chart-line'], visible: true },
-            { href: 'admin.invoices.create', active: route().current('admin.invoices.create'), activeClass: '/admin/invoices/create', label: 'Crear', children: [], icon: ['fas', 'chart-line'], visible: true },
-            { href: 'admin.invoicescompare.index', active: route().current('admin.invoicescompare.index'), activeClass: '/admin/invoices-compare', label: 'Comparar', children: [], icon: ['fas', 'chart-line'], visible: true },
-    ], icon: ['fas', 'chart-line'], visible: true },
+            { href: 'admin.invoices.index', active: route().current('admin.invoices.index'), activeClass: '/admin/invoices', label: 'Consultar', children: [], icon: '', visible: true },
+            { href: 'admin.invoices.create', active: route().current('admin.invoices.create'), activeClass: '/admin/invoices/create', label: 'Crear', children: [], icon: '', visible: true },
+            { href: 'admin.invoicescompare.index', active: route().current('admin.invoicescompare.index'), activeClass: '/admin/invoices-compare', label: 'Comparar', children: [], icon: '', visible: true },
+    ], icon: '', visible: true },
 ]);
 
 onMounted(() => {
@@ -73,10 +73,12 @@ defineExpose({ toggleSidebarVisibility });
                         </div>
                     </button>
                     <Link href="/" class="flex md:mr-24 gap-2">
-                    <ApplicationLogo :entity-name="$page.props.entity?.name" :url="$page.props.entity?.url" />
-                    <span
-                        class="self-center text-xl font-bold sm:text-2xl whitespace-nowrap dark:text-gray-200 text-gray-800">
-                        {{ $page.props.entity?.name }}
+                        <div class="w-9 h-9">
+                            <ApplicationLogo :entity-name="$page.props.entity?.name" :url="$page.props.entity?.url"/>
+                        </div>
+                        <span
+                            class="self-center text-xl font-bold sm:text-2xl whitespace-nowrap dark:text-gray-200 text-gray-800">
+                            NCFHUD
                     </span>
                     </Link>
                 </div>

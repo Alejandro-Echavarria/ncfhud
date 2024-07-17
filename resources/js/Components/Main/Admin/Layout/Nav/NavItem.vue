@@ -2,6 +2,7 @@
 import { computed, ref } from 'vue';
 import { Link } from "@inertiajs/vue3";
 import { Disclosure, DisclosureButton, DisclosurePanel, TransitionRoot } from "@headlessui/vue";
+import Icon from "@/Components/Main/Admin/Components/Icons/Icon.vue";
 
 const props = defineProps({
     item: {
@@ -44,9 +45,10 @@ const toggleSidebarVisibility = () => {
             'flex whitespace-nowrap items-center py-2 px-3 text-sm font-semibold text-gray-800 rounded-lg dark:text-gray-200 hover:bg-indigo-700/10 dark:hover:bg-indigo-700 group transition duration-200 ease-linear',
             { 'bg-indigo-700/10 text-indigo-700': isExactActiveClass($page.url, item.activeClass) },
         ]">
-        <span class="flex-1">
+        <span class="flex flex-1 gap-2">
             <template v-if="item.icon">
-                <font-awesome-icon class="w-4 h-4 mr-2" :icon="item.icon" />
+                <Icon :icon="item.icon" />
+<!--                <font-awesome-icon class="w-4 h-4 mr-2" :icon="item.icon" />-->
             </template>
             {{ item.label }}
         </span>
@@ -56,11 +58,12 @@ const toggleSidebarVisibility = () => {
                 'flex w-full whitespace-nowrap text-left items-center py-2 px-3 text-sm font-semibold text-gray-800 rounded-lg dark:text-gray-200 hover:bg-indigo-700/10 dark:hover:bg-indigo-700 group transition duration-200 ease-linear',
                 open ? 'text-indigo-700' : '',
             ]">
-                <span :class="['flex-1',
+                <span :class="['flex flex-1 gap-2',
                     open ? 'text-indigo-700' : '',
                 ]">
                     <template v-if="item.icon">
-                        <font-awesome-icon class="w-4 h-4 mr-2" :icon="item.icon" />
+                        <Icon :icon="item.icon" />
+<!--                        <font-awesome-icon class="w-4 h-4 mr-2" :icon="item.icon" />-->
                     </template>
                     {{ item.label }}
                 </span>

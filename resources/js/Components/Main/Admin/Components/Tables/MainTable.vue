@@ -4,6 +4,10 @@ import Pagination from '@/Components/Main/Admin/Components/Paginations/Paginatio
 const props = defineProps({
     pagination: {
         type: Object,
+    },
+    actions: {
+        type: Boolean,
+        default: true
     }
 });
 </script>
@@ -24,7 +28,7 @@ const props = defineProps({
                 <thead class="text-xs bg-gray-50 dark:bg-gray-700 text-gray-700 uppercase dark:text-gray-400">
                     <tr>
                         <slot name="thead" />
-                        <th scope="col" class="px-4 py-3">
+                        <th v-if="actions" scope="col" class="px-4 py-3">
                             <span class="sr-only">Actions</span>
                         </th>
                     </tr>

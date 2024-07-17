@@ -51,29 +51,31 @@ class InvoiceCompareController extends Controller
 
         $adjustedExcelData = array_map(function ($row) {
             return [
-                'rnc' => $row['rnccedula_o_pasaporte'],
-                'identification_type' => $row['tipo_identificacion'],
-                'ncf' => $row['numero_comprobante_fiscal'],
-                'ncf_modified' => $row['numero_comprobante_fiscal_modificado'],
-                'income_type' => $row['tipo_de_ingreso'],
+//                'rnc' => $row['rnccedula_o_pasaporte'],
+//                'identification_type' => $row['tipo_identificacion'],
+//                'ncf' => $row['numero_comprobante_fiscal'],
+                'ncf' => $row['numero_de_comprobante'],
+//                'ncf_modified' => $row['numero_comprobante_fiscal_modificado'],
+//                'income_type' => $row['tipo_de_ingreso'],
                 'proof_date' => $row['fecha_comprobante'],
-                'withholding_date' => $row['fecha_de_retencion'],
+//                'withholding_date' => $row['fecha_de_retencion'],
                 'amount' => $row['monto_facturado'],
                 'itbis' => $row['itbis_facturado'],
-                'third_party_itbis' => $row['itbis_retenido_por_terceros'],
-                'received_itbis' => $row['itbis_percibido'],
-                'third_party_income_retention' => $row['retencion_renta_por_terceros'],
-                'isr' => $row['isr_percibido'],
-                'selective_tax' => $row['impuesto_selectivo_al_consumo'],
-                'other_taxes_fees' => $row['otros_impuestostasas'],
-                'legal_tip_amount' => $row['monto_propina_legal'],
-                'cash' => $row['efectivo'],
-                'check_transfer_deposit' => $row['cheque_transferencia_deposito'],
-                'debit_credit_card' => $row['tarjeta_debitocredito'],
-                'credit_sale' => $row['venta_a_credito'],
-                'bonds_certificates' => $row['bonos_o_certificados_de_regalo'],
-                'barter' => $row['permuta'],
-                'other_sales_forms' => $row['otras_formas_de_ventas'],
+//                'third_party_itbis' => $row['itbis_retenido_por_terceros'],
+                'third_party_itbis' => $row['itbis_retenido'],
+//                'received_itbis' => $row['itbis_percibido'],
+//                'third_party_income_retention' => $row['retencion_renta_por_terceros'],
+//                'isr' => $row['isr_percibido'],
+//                'selective_tax' => $row['impuesto_selectivo_al_consumo'],
+//                'other_taxes_fees' => $row['otros_impuestostasas'],
+//                'legal_tip_amount' => $row['monto_propina_legal'],
+//                'cash' => $row['efectivo'],
+//                'check_transfer_deposit' => $row['cheque_transferencia_deposito'],
+//                'debit_credit_card' => $row['tarjeta_debitocredito'],
+//                'credit_sale' => $row['venta_a_credito'],
+//                'bonds_certificates' => $row['bonos_o_certificados_de_regalo'],
+//                'barter' => $row['permuta'],
+//                'other_sales_forms' => $row['otras_formas_de_ventas'],
             ];
         }, $excelData[0]);
 
@@ -83,29 +85,29 @@ class InvoiceCompareController extends Controller
 
         $invoices = DB::table('invoices')
             ->select(
-                'rnc',
-                'identification_type',
+//                'rnc',
+//                'identification_type',
                 'ncf',
-                'ncf_modified',
-                'income_type',
+//                'ncf_modified',
+//                'income_type',
                 'proof_date',
-                'withholding_date',
+//                'withholding_date',
                 'amount',
                 'itbis',
                 'third_party_itbis',
-                'received_itbis',
-                'third_party_income_retention',
-                'isr',
-                'selective_tax',
-                'other_taxes_fees',
-                'legal_tip_amount',
-                'cash',
-                'check_transfer_deposit',
-                'debit_credit_card',
-                'credit_sale',
-                'bonds_certificates',
-                'barter',
-                'other_sales_forms'
+//                'received_itbis',
+//                'third_party_income_retention',
+//                'isr',
+//                'selective_tax',
+//                'other_taxes_fees',
+//                'legal_tip_amount',
+//                'cash',
+//                'check_transfer_deposit',
+//                'debit_credit_card',
+//                'credit_sale',
+//                'bonds_certificates',
+//                'barter',
+//                'other_sales_forms'
             )
             ->where('client_id', $clientFilter)
             ->whereMonth(
@@ -131,12 +133,29 @@ class InvoiceCompareController extends Controller
                 if ($invoice['ncf'] === $excelRow['ncf']) {
                     $ncfExists = true;
                     $fieldsToCompare = [
-                        'rnc', 'identification_type', 'ncf', 'ncf_modified', 'income_type',
-                        'proof_date', 'withholding_date', 'amount', 'itbis', 'third_party_itbis',
-                        'received_itbis', 'third_party_income_retention', 'isr', 'selective_tax',
-                        'other_taxes_fees', 'legal_tip_amount', 'cash', 'check_transfer_deposit',
-                        'debit_credit_card', 'credit_sale', 'bonds_certificates', 'barter',
-                        'other_sales_forms'
+//                        'rnc',
+//                        'identification_type',
+                        'ncf',
+//                        'ncf_modified',
+//                        'income_type',
+                        'proof_date',
+//                        'withholding_date',
+                        'amount',
+                        'itbis',
+                        'third_party_itbis',
+//                        'received_itbis',
+//                        'third_party_income_retention',
+//                        'isr',
+//                        'selective_tax',
+//                        'other_taxes_fees',
+//                        'legal_tip_amount',
+//                        'cash',
+//                        'check_transfer_deposit',
+//                        'debit_credit_card',
+//                        'credit_sale',
+//                        'bonds_certificates',
+//                        'barter',
+//                        'other_sales_forms'
                     ];
 
                     $rowDifferences = [];
@@ -145,7 +164,18 @@ class InvoiceCompareController extends Controller
                         $excelValue = $excelRow[$field];
                         $invoiceValue = $invoice[$field];
 
-                        if (in_array($field, ['amount', 'itbis', 'third_party_itbis', 'received_itbis', 'third_party_income_retention', 'isr', 'selective_tax', 'other_taxes_fees', 'legal_tip_amount', 'cash', 'check_transfer_deposit', 'debit_credit_card', 'credit_sale', 'bonds_certificates', 'barter', 'other_sales_forms'])) {
+                        if (in_array($field, [
+                            'amount',
+                            'itbis',
+                            'third_party_itbis',
+//                            'received_itbis',
+//                            'third_party_income_retention',
+//                            'isr',
+//                            'selective_tax',
+//                            'other_taxes_fees',
+//                            'legal_tip_amount',
+//                            'cash', 'check_transfer_deposit', 'debit_credit_card', 'credit_sale', 'bonds_certificates', 'barter', 'other_sales_forms'
+                        ])) {
                             // Comparación de valores numéricos
                             if (round((float)$excelValue, 2) !== round((float)$invoiceValue, 2)) {
                                 $rowDifferences[$field] = ['excel' => $excelValue, 'database' => $invoiceValue];
