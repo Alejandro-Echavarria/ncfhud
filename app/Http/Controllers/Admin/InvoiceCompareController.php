@@ -51,7 +51,7 @@ class InvoiceCompareController extends Controller
 
         $adjustedExcelData = array_map(function ($row) {
             return [
-//                'rnc' => $row['rnccedula_o_pasaporte'],
+                'rnc' => $row['rnc_cedula'],
 //                'identification_type' => $row['tipo_identificacion'],
 //                'ncf' => $row['numero_comprobante_fiscal'],
                 'ncf' => $row['numero_de_comprobante'],
@@ -85,7 +85,7 @@ class InvoiceCompareController extends Controller
 
         $invoices = DB::table('invoices')
             ->select(
-//                'rnc',
+                'rnc',
 //                'identification_type',
                 'ncf',
 //                'ncf_modified',
@@ -133,7 +133,7 @@ class InvoiceCompareController extends Controller
                 if ($invoice['ncf'] === $excelRow['ncf']) {
                     $ncfExists = true;
                     $fieldsToCompare = [
-//                        'rnc',
+                        'rnc',
 //                        'identification_type',
                         'ncf',
 //                        'ncf_modified',

@@ -73,7 +73,7 @@ defineExpose({ toggleSidebarVisibility });
                         </div>
                     </button>
                     <Link href="/" class="flex md:mr-24 gap-2">
-                        <div class="w-9 h-9">
+                        <div class="w-8 h-8">
                             <ApplicationLogo :entity-name="$page.props.entity?.name" :url="$page.props.entity?.url"/>
                         </div>
                         <span

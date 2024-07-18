@@ -36,7 +36,7 @@ const form = useForm({
     file: null
 });
 
-const thead = ['ncf', 'Detalle'];
+const thead = ['rnc', 'ncf', 'Detalle'];
 const url = 'admin.invoicescompare.index';
 
 const excel = ref([]);
@@ -140,6 +140,7 @@ const compare = async () => {
                     <tr v-for="tb in notInExcel"
                         class="dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition ease-linear duration-300"
                         :key="tb.id + 'tb'">
+                        <td class="px-4 py-3">{{ tb.rnc }}</td>
                         <td class="px-4 py-3">{{ tb.ncf }}</td>
                         <td class="px-4 py-3">
                             <div>
@@ -186,6 +187,7 @@ const compare = async () => {
                     <tr v-for="tb in notInDatabase"
                         class="dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition ease-linear duration-300"
                         :key="tb.id + 'tb'">
+                        <td class="px-4 py-3">{{ tb.rnc }}</td>
                         <td class="px-4 py-3">{{ tb.ncf }}</td>
                         <td class="px-4 py-3">
                             <div>
@@ -232,6 +234,7 @@ const compare = async () => {
                     <tr v-for="tb in differences"
                         class="dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition ease-linear duration-300"
                         :key="tb.id + 'tb'">
+                        <td class="px-4 py-3">{{ tb.excel_row.rnc }}</td>
                         <td class="px-4 py-3">{{ tb.excel_row.ncf }}</td>
                         <td class="px-4 py-3">
                             <div class="grid grid-cols-2 gap-6">
@@ -272,6 +275,7 @@ const compare = async () => {
                         <tr v-for="tb in invoices.data"
                             class="dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition ease-linear duration-300"
                             :key="tb.id + 'tb'">
+                            <td class="px-4 py-3">{{ tb.rnc }}</td>
                             <td class="px-4 py-3">{{ tb.ncf }}</td>
                             <td class="px-4 py-3">{{ tb.proof_date }}</td>
                         </tr>
