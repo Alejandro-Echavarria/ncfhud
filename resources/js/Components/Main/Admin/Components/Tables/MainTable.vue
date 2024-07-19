@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import {ref} from 'vue';
 import Pagination from '@/Components/Main/Admin/Components/Paginations/Pagination.vue';
 import SecondaryButton from "@/Components/SecondaryButton.vue";
 import Icon from "@/Components/Main/Admin/Components/Icons/Icon.vue";
@@ -83,15 +83,15 @@ const copyTableData = () => {
         <div class="overflow-x-auto">
             <table ref="tableRef" class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead class="text-xs bg-gray-50 dark:bg-gray-700 text-gray-700 uppercase dark:text-gray-400">
-                    <tr>
-                        <slot name="thead"/>
-                        <th v-if="actions" scope="col" class="px-4 py-3">
-                            <span class="sr-only">Actions</span>
-                        </th>
-                    </tr>
+                <tr>
+                    <slot name="thead"/>
+                    <th v-if="actions" scope="col" class="px-4 py-3">
+                        <span class="sr-only">Actions</span>
+                    </th>
+                </tr>
                 </thead>
-                <tbody :class="tailwindCopy && 'select-all'" >
-                    <slot name="tbody"/>
+                <tbody :class="tailwindCopy && 'select-all'">
+                <slot name="tbody"/>
                 </tbody>
             </table>
         </div>

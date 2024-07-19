@@ -9,7 +9,6 @@ import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import H2Title from "@/Components/Main/Admin/Components/Titles/H2Title.vue";
 import InputError from "@/Components/InputError.vue";
-import SecondaryButton from "@/Components/SecondaryButton.vue";
 
 defineOptions({
     layout: MainLayout
@@ -44,6 +43,7 @@ const excel = ref([]);
 const notInExcel = ref([]);
 const notInDatabase = ref([]);
 const differences = ref([]);
+const comparing = ref(false);
 
 watch(
     () => [props.clientFilter, props.monthFilter, props.yearFilter],
@@ -55,7 +55,7 @@ watch(
 );
 
 const compare = async () => {
-    // Crear un nuevo objeto FormData
+    comparing.value = true;
     const formData = new FormData();
 
     // Agregar los campos de datos al FormData
@@ -86,12 +86,11 @@ const compare = async () => {
         differences.value = response.data.data.differences;
         // ok('Client created');
     } catch (error) {
-        console.log("error", error);
+        console.log("error");
     }
+
+    comparing.value = false;
 };
-
-
-
 </script>
 
 <template>
@@ -116,7 +115,15 @@ const compare = async () => {
                     </div>
 
                     <div>
-                        <PrimaryButton @click="compare()">Comparar</PrimaryButton>
+                        <PrimaryButton @click="compare()" :class="{ 'opacity-25 animate-pulse': comparing }" :disabled="comparing">
+                            <template v-if="comparing">
+                                Comparando..
+                            </template>
+
+                            <template v-else>
+                                Comparar
+                            </template>
+                        </PrimaryButton>
                     </div>
                 </div>
             </div>

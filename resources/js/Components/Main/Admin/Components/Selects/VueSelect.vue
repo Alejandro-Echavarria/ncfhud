@@ -11,7 +11,7 @@ defineProps({
 </script>
 
 <template>
-    <vSelect class="mt-2 style-chooser text-sm" :appendToBody="append">
+    <vSelect class="mt-2 style-chooser text-sm" :append-to-body="append" :select-on-tab="true">
     </vSelect>
 </template>
 

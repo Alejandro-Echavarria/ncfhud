@@ -86,7 +86,7 @@ const save = () => {
                 </div>
 
                 <div>
-                    <PrimaryButton @click="save()">Crear</PrimaryButton>
+                    <PrimaryButton @click="save()" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">Crear</PrimaryButton>
                 </div>
             </div>
         </div>
