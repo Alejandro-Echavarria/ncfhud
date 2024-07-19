@@ -1,45 +1,102 @@
 <script setup>
+import { ref } from 'vue';
 import Pagination from '@/Components/Main/Admin/Components/Paginations/Pagination.vue';
+import SecondaryButton from "@/Components/SecondaryButton.vue";
+import Icon from "@/Components/Main/Admin/Components/Icons/Icon.vue";
 
 const props = defineProps({
     pagination: {
         type: Object,
+    },
+    copyTable: {
+        type: Boolean,
+        default: false
+    },
+    tailwindCopy: {
+        type: Boolean,
+        default: false
     },
     actions: {
         type: Boolean,
         default: true
     }
 });
+
+// Ref para la tabla
+const tableRef = ref(null);
+
+const copyTableData = () => {
+    // Selecciona la tabla usando la referencia
+    const table = tableRef.value;
+
+    if (!table) {
+        console.error("La referencia a la tabla es nula.");
+        return;
+    }
+
+    // Obtén todas las filas de la tabla
+    const rows = table.querySelectorAll('tr');
+
+    // Extrae los datos de cada celda y formato en una cadena
+    const textToCopy = Array.from(rows)
+        .map(row => {
+            // Obtén las celdas de la fila
+            const cells = Array.from(row.querySelectorAll('td'));
+            // Verifica que la fila tenga celdas y no sea una fila vacía
+            if (cells.length > 0) {
+                return cells.map(cell => cell.textContent.trim()).join('\t');
+            }
+            return ''; // Filas vacías no se incluyen en el texto final
+        })
+        .filter(row => row.trim() !== '') // Elimina filas vacías
+        .join('\n'); // Usa saltos de línea entre filas
+
+    // Copia el texto al portapapeles
+    navigator.clipboard.writeText(textToCopy)
+        .then(() => {
+            console.log("Datos copiados al portapapeles con éxito.");
+        })
+        .catch((error) => {
+            console.error("No se pudo copiar los datos: ", error);
+        });
+};
 </script>
 
 <template>
     <div class="bg-white dark:bg-gray-800 relative border rounded-xl overflow-hidden">
         <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
             <div class="w-full md:w-1/2">
-                <slot name="search" />
+                <slot name="search"/>
             </div>
+
             <div
                 class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end space-x-7 flex-shrink-0">
-                <slot name="createButton" />
+                <slot name="createButton"/>
+            </div>
+
+            <div v-if="copyTable">
+                <SecondaryButton @click="copyTableData">
+                    <Icon icon="Copy"/>
+                </SecondaryButton>
             </div>
         </div>
         <div class="overflow-x-auto">
-            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+            <table ref="tableRef" class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead class="text-xs bg-gray-50 dark:bg-gray-700 text-gray-700 uppercase dark:text-gray-400">
                     <tr>
-                        <slot name="thead" />
+                        <slot name="thead"/>
                         <th v-if="actions" scope="col" class="px-4 py-3">
                             <span class="sr-only">Actions</span>
                         </th>
                     </tr>
                 </thead>
-                <tbody>
-                    <slot name="tbody" />
+                <tbody :class="tailwindCopy && 'select-all'" >
+                    <slot name="tbody"/>
                 </tbody>
             </table>
         </div>
         <template v-if="pagination && pagination.links">
-            <Pagination :pagination="pagination" />
+            <Pagination :pagination="pagination"/>
         </template>
     </div>
 </template>

@@ -113,12 +113,12 @@ class InvoiceCompareController extends Controller
             ->whereMonth(
                 config('app.db_driver') === 'pgsql' ?
                     DB::raw("TO_DATE(proof_date, 'YYYYMMDD')") :
-                    DB::raw("STR_TO_DATE(proof_date, '%Y-%m-%d')"), "$monthFilter"
+                    DB::raw("STR_TO_DATE(proof_date, '%Y%m%d')"), "$monthFilter"
             )
             ->whereYear(
                 config('app.db_driver') === 'pgsql' ?
                     DB::raw("TO_DATE(proof_date, 'YYYYMMDD')") :
-                    DB::raw("STR_TO_DATE(proof_date, '%Y-%m-%d')"), "$yearFilter"
+                    DB::raw("STR_TO_DATE(proof_date, '%Y%m%d')"), "$yearFilter"
             )
             ->orderBy('ncf')
             ->get();

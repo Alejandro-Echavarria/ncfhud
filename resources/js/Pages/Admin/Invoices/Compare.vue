@@ -9,6 +9,7 @@ import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import H2Title from "@/Components/Main/Admin/Components/Titles/H2Title.vue";
 import InputError from "@/Components/InputError.vue";
+import SecondaryButton from "@/Components/SecondaryButton.vue";
 
 defineOptions({
     layout: MainLayout
@@ -88,6 +89,9 @@ const compare = async () => {
         console.log("error", error);
     }
 };
+
+
+
 </script>
 
 <template>
@@ -129,7 +133,7 @@ const compare = async () => {
                 NCF no declarados en el reporte de terceros DGII
             </H2Title>
 
-            <MainTable :actions="false">
+            <MainTable :actions="false" :copy-table="true" :show-all="true">
                 <template #thead>
                     <th v-for="(th, key) in thead" scope="col" class="px-4 py-3" :key="key + 'th'">
                         {{ th }}
@@ -144,26 +148,10 @@ const compare = async () => {
                         <td class="px-4 py-3">{{ tb.ncf }}</td>
                         <td class="px-4 py-3">
                             <div>
-<!--                                <div>-->
-<!--                                    <span class="font-semibold text-gray-700">RNC: </span>-->
-<!--                                    {{ tb.rnc }}-->
-<!--                                </div>-->
-<!--                                <div>-->
-<!--                                    <span class="font-semibold text-gray-700">Tipo de identificaci&oacute;n: </span>-->
-<!--                                    {{ tb.identification_type }}-->
-<!--                                </div>-->
-<!--                                <div>-->
-<!--                                    <span class="font-semibold text-gray-700">Fecha de comprobante: </span>-->
-<!--                                    {{ tb.proof_date }}-->
-<!--                                </div>-->
                                 <div>
 <!--                                    <span class="font-semibold text-gray-700">Monto: </span>-->
                                     {{ tb.amount }}
                                 </div>
-<!--                                <div>-->
-<!--                                    <span class="font-semibold text-gray-700">Itbis: </span>-->
-<!--                                    {{ tb.itbis }}-->
-<!--                                </div>-->
                             </div>
                         </td>
                     </tr>
@@ -176,7 +164,7 @@ const compare = async () => {
                 NCF faltantes declarados por terceros
             </H2Title>
 
-            <MainTable :actions="false">
+            <MainTable :actions="false" :copy-table="true">
                 <template #thead>
                     <th v-for="(th, key) in thead" scope="col" class="px-4 py-3" :key="key + 'th'">
                         {{ th }}
@@ -223,7 +211,7 @@ const compare = async () => {
                 NCF con diferencias
             </H2Title>
 
-            <MainTable :actions="false">
+            <MainTable :actions="false" :tailwind-copy="true">
                 <template #thead>
                     <th v-for="(th, key) in thead" scope="col" class="px-4 py-3" :key="key + 'th'">
                         {{ th }}
