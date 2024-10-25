@@ -1,9 +1,5 @@
-<template>
-  <component :is="iconComponent" />
-</template>
-
 <script setup>
-import { defineAsyncComponent, computed } from 'vue';
+import {defineAsyncComponent, computed} from 'vue';
 
 const props = defineProps({
     icon: {
@@ -12,11 +8,22 @@ const props = defineProps({
     }
 });
 
+// Función para cargar dinámicamente el componente basado en el nombre
+const loadIconComponent = (iconName) => {
+    return defineAsyncComponent(async () => {
+        try {
+            return await import(`../Icons/${iconName}Icon.vue`);
+        } catch (e) {
+            console.error(`Error loading component: ${iconName}Icon.vue`);
+        }
+    });
+};
+
 const iconComponent = computed(() => {
-    try {
-        return defineAsyncComponent(() => import(/* @vite-ignore */ `../Icons/${props.icon}Icon.vue`));
-    } catch (error) {
-        console.log(error);
-    }
+    return loadIconComponent(props.icon);
 });
 </script>
+
+<template>
+    <component :is="iconComponent"/>
+</template>
