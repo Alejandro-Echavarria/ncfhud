@@ -17,12 +17,12 @@ return new class extends Migration
             $table->foreignId('client_id')->constrained();
             $table->string('rnc', 11)->nullable();
 
-            $this->addUnsignedNullableInteger($table, 'identification_type');
+            $table->integer('identification_type')->unsigned()->default(0);
 
             $table->string('ncf', 19)->nullable();
             $table->string('ncf_modified', 19)->nullable();
 
-            $this->addUnsignedNullableInteger($table, 'income_type');
+            $table->integer('income_type')->unsigned()->default(0);
 
             $table->string('proof_date', 8)->nullable();
             $table->string('withholding_date', 8)->nullable();
@@ -30,7 +30,7 @@ return new class extends Migration
             $this->addUnsignedNullableInteger($table, 'amount');
             $this->addUnsignedNullableInteger($table, 'itbis');
             $this->addUnsignedNullableInteger($table, 'third_party_itbis');
-            $this->addUnsignedNullableInteger($table, 'withheld_itbis');
+            $this->addUnsignedNullableInteger($table, 'received_itbis');
             $this->addUnsignedNullableInteger($table, 'third_party_income_retention');
             $this->addUnsignedNullableInteger($table, 'isr');
             $this->addUnsignedNullableInteger($table, 'selective_tax');
@@ -53,7 +53,7 @@ return new class extends Migration
      */
     private function addUnsignedNullableInteger(Blueprint $table, string $columnName): void
     {
-        $table->integer($columnName)->unsigned()->default(0)->nullable();
+        $table->decimal($columnName, 15, 2)->unsigned()->default(0);
     }
 
     /**

@@ -4,6 +4,17 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Application DB Driver
+    |--------------------------------------------------------------------------
+    |
+    | This value is the name of the application DB driver for identify the database
+    | connection that will be used to filter the data.
+    |
+    */
+    'db_driver' => env('DB_CONNECTION', 'mysql'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Name
     |--------------------------------------------------------------------------
     |
