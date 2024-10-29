@@ -1,3 +1,3 @@
 <template>
-    <img class="block h-full w-auto" src="/img/logo/logo.png" alt="Workflow" />
+    <img class="'w-8 h-8'" src="/img/logo/logo.png" alt="Workflow" />
 </template>
