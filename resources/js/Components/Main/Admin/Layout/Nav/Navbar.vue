@@ -78,7 +78,7 @@ defineExpose({ toggleSidebarVisibility });
                         </div>
                         <span
                             class="self-center text-xl font-bold sm:text-2xl whitespace-nowrap dark:text-gray-200 text-gray-800">
-                            NCFHUD
+                            NCF Hud
                     </span>
                     </Link>
                 </div>
