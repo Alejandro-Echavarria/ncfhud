@@ -4,6 +4,11 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('Auth/Login');
+// Redirección para el prefijo /admin
+Route::prefix('/admin')->group(function () {
+    Route::redirect('/', '/admin/dashboard');
 });
+
+// Otras redirecciones específicas
+Route::redirect('/dashboard', '/admin/dashboard');
+Route::redirect('/', '/login');
