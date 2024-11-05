@@ -168,7 +168,7 @@ const compare = async () => {
 
         <div>
             <H2Title>
-                NCF faltantes declarados por terceros
+                NCF declarados por terceros que no corresponden al 607 reportado
             </H2Title>
 
             <MainTable :actions="false" :copy-table="true">
