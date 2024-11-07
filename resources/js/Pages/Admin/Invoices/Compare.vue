@@ -36,7 +36,7 @@ const form = useForm({
     file: null
 });
 
-const thead = ['rnc', 'ncf', 'Detalle'];
+const thead = ['rnc', 'ncf', 'Fecha', 'Monto', 'itbis'];
 const url = 'admin.invoicescompare.index';
 
 const excel = ref([]);
@@ -153,14 +153,17 @@ const compare = async () => {
                         :key="tb.id + 'tb'">
                         <td class="px-4 py-3">{{ tb.rnc }}</td>
                         <td class="px-4 py-3">{{ tb.ncf }}</td>
-                        <td class="px-4 py-3">
-                            <div>
-                                <div>
+                        <td class="px-4 py-3">{{ tb.proof_date }}</td>
+                        <td class="px-4 py-3">{{ tb.amount }}</td>
+                        <td class="px-4 py-3">{{ tb.itbis }}</td>
+<!--                        <td class="px-4 py-3">-->
+<!--                            <div>-->
+<!--                                <div>-->
 <!--                                    <span class="font-semibold text-gray-700">Monto: </span>-->
-                                    {{ tb.amount }}
-                                </div>
-                            </div>
-                        </td>
+<!--                                    {{ tb.amount }}-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </td>-->
                     </tr>
                 </template>
             </MainTable>
@@ -184,30 +187,9 @@ const compare = async () => {
                         :key="tb.id + 'tb'">
                         <td class="px-4 py-3">{{ tb.rnc }}</td>
                         <td class="px-4 py-3">{{ tb.ncf }}</td>
-                        <td class="px-4 py-3">
-                            <div>
-<!--                                <div>-->
-<!--                                    <span class="font-semibold text-gray-700">RNC: </span>-->
-<!--                                    {{ tb.rnc }}-->
-<!--                                </div>-->
-<!--                                <div>-->
-<!--                                    <span class="font-semibold text-gray-700">Tipo de identificaci&oacute;n: </span>-->
-<!--                                    {{ tb.identification_type }}-->
-<!--                                </div>-->
-<!--                                <div>-->
-<!--                                    <span class="font-semibold text-gray-700">Fecha de comprobante: </span>-->
-<!--                                    {{ tb.proof_date }}-->
-<!--                                </div>-->
-                                <div>
-<!--                                    <span class="font-semibold text-gray-700">Monto: </span>-->
-                                    {{ tb.amount }}
-                                </div>
-<!--                                <div>-->
-<!--                                    <span class="font-semibold text-gray-700">Itbis: </span>-->
-<!--                                    {{ tb.itbis }}-->
-<!--                                </div>-->
-                            </div>
-                        </td>
+                        <td class="px-4 py-3">{{ tb.proof_date }}</td>
+                        <td class="px-4 py-3">{{ tb.amount }}</td>
+                        <td class="px-4 py-3">{{ tb.itbis }}</td>
                     </tr>
                 </template>
             </MainTable>
@@ -273,6 +255,8 @@ const compare = async () => {
                             <td class="px-4 py-3">{{ tb.rnc }}</td>
                             <td class="px-4 py-3">{{ tb.ncf }}</td>
                             <td class="px-4 py-3">{{ tb.proof_date }}</td>
+                            <td class="px-4 py-3">{{ tb.amount }}</td>
+                            <td class="px-4 py-3">{{ tb.itbis }}</td>
                         </tr>
                     </template>
                 </MainTable>
