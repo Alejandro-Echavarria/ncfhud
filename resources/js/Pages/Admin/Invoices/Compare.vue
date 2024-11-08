@@ -37,6 +37,7 @@ const form = useForm({
 });
 
 const thead = ['rnc', 'ncf', 'Fecha', 'Monto', 'itbis'];
+const thead_differences = ['rnc', 'ncf', 'Detalle'];
 const url = 'admin.invoicescompare.index';
 
 const excel = ref([]);
@@ -115,7 +116,8 @@ const compare = async () => {
                     </div>
 
                     <div>
-                        <PrimaryButton @click="compare()" :class="{ 'opacity-25 animate-pulse': comparing }" :disabled="comparing">
+                        <PrimaryButton @click="compare()" :class="{ 'opacity-25 animate-pulse': comparing }"
+                                       :disabled="comparing">
                             <template v-if="comparing">
                                 Comparando..
                             </template>
@@ -156,14 +158,14 @@ const compare = async () => {
                         <td class="px-4 py-3">{{ tb.proof_date }}</td>
                         <td class="px-4 py-3">{{ tb.amount }}</td>
                         <td class="px-4 py-3">{{ tb.itbis }}</td>
-<!--                        <td class="px-4 py-3">-->
-<!--                            <div>-->
-<!--                                <div>-->
-<!--                                    <span class="font-semibold text-gray-700">Monto: </span>-->
-<!--                                    {{ tb.amount }}-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </td>-->
+                        <!--                        <td class="px-4 py-3">-->
+                        <!--                            <div>-->
+                        <!--                                <div>-->
+                        <!--                                    <span class="font-semibold text-gray-700">Monto: </span>-->
+                        <!--                                    {{ tb.amount }}-->
+                        <!--                                </div>-->
+                        <!--                            </div>-->
+                        <!--                        </td>-->
                     </tr>
                 </template>
             </MainTable>
@@ -200,9 +202,9 @@ const compare = async () => {
                 NCF con diferencias
             </H2Title>
 
-            <MainTable :actions="false" :tailwind-copy="true">
+            <MainTable :actions="false" :copy-table="true">
                 <template #thead>
-                    <th v-for="(th, key) in thead" scope="col" class="px-4 py-3" :key="key + 'th'">
+                    <th v-for="(th, key) in thead_differences" scope="col" class="px-4 py-3" :key="key + 'th'">
                         {{ th }}
                     </th>
                 </template>
@@ -213,23 +215,39 @@ const compare = async () => {
                         :key="tb.id + 'tb'">
                         <td class="px-4 py-3">{{ tb.excel_row.rnc }}</td>
                         <td class="px-4 py-3">{{ tb.excel_row.ncf }}</td>
-                        <td class="px-4 py-3">
-                            <div class="grid grid-cols-2 gap-6">
-                                <div v-for="(difference, key) in tb.differences"
-                                     class="flex-col border border-gray-300 p-2 rounded-lg">
-                                    <div class="font-bold flex justify-center uppercase text-gray-700">{{ key }}</div>
-                                    <div>
-                                        <span class="font-semibold text-gray-700">3ro:</span>
-                                        {{ difference.excel }}
-                                    </div>
+                        <td class="px-4 py-3 flex-col border border-gray-300 p-2 rounded-lg" v-for="(difference, key) in tb.differences">
+                            <div class=" font-bold flex justify-center uppercase text-gray-700">{{ key }}</div>
+                            <div class="flex gap-3">
+                                <td>
+                                    <span class="font-semibold text-gray-700">606:</span>
+                                    {{ difference.excel }}
+                                </td>
 
-                                    <div>
-                                        <span class="font-semibold text-gray-700">DB:</span>
-                                        {{ difference.database }}
-                                    </div>
-                                </div>
+                                <td>
+                                    <span class="font-semibold text-gray-700">607:</span>
+                                    {{ difference.database }}
+                                </td>
                             </div>
+
+
                         </td>
+<!--                        <td class="px-4 py-3">-->
+<!--                            <div class="flex gap-6">-->
+<!--                                <div v-for="(difference, key) in tb.differences"-->
+<!--                                     class="flex-col border border-gray-300 p-2 rounded-lg">-->
+<!--                                    <div class="font-bold flex justify-center uppercase text-gray-700">{{ key }}</div>-->
+<!--                                    <div>-->
+<!--                                        <span class="font-semibold text-gray-700">606:</span>-->
+<!--                                        {{ difference.excel }}-->
+<!--                                    </div>-->
+
+<!--                                    <div>-->
+<!--                                        <span class="font-semibold text-gray-700">607:</span>-->
+<!--                                        {{ difference.database }}-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </td>-->
                     </tr>
                 </template>
             </MainTable>

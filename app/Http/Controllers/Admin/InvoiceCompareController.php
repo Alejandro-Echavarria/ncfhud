@@ -44,7 +44,7 @@ class InvoiceCompareController extends Controller
             'client' => 'required',
             'month' => 'required',
             'year' => 'required',
-            'file' => 'required'
+            'file' => 'required|mimes:xlsx,xls,csv',
         ]);
 
         $excelData = Excel::toArray(new InvoicesImport($data), $data['file']);

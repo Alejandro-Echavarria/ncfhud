@@ -56,11 +56,11 @@ class InvoiceController extends Controller
         return Inertia::render('Admin/Invoices/Create', compact('invoices', 'clients', 'client', 'clientFilter', 'monthFilter', 'yearFilter', 'page', 'perPage'));
     }
 
-    public function store(Request $request)
+    public function store(Request $request): void
     {
         $data = $request->validate([
             'client' => 'required',
-            'file' => 'required',
+            'file' => 'required|mimes:xlsx,xls,csv',
         ]);
 
         $excel = Excel::import(new InvoicesImport($data), $data['file']);

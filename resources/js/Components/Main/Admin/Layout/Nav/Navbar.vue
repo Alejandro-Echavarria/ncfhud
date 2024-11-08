@@ -1,6 +1,6 @@
 <script setup>
-import { ref, watch, computed, onBeforeUnmount, onMounted } from 'vue';
-import { router, Link, usePage } from "@inertiajs/vue3";
+import {ref, watch, computed, onBeforeUnmount, onMounted} from 'vue';
+import {router, Link, usePage} from "@inertiajs/vue3";
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import NavItem from '@/Components/Main/Admin/Layout/Nav/NavItem.vue';
 import Dropdown from '@/Components/Dropdown.vue';
@@ -8,7 +8,7 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 
 const isSidebarVisible = ref(true);
 const isBackDropVisible = ref(false);
-const { props } = usePage();
+const {props} = usePage();
 const entity = ref(props.entity);
 
 watch(() => usePage().props.entity, (newEntity) => {
@@ -16,13 +16,71 @@ watch(() => usePage().props.entity, (newEntity) => {
 })
 
 const navItems = computed(() => [
-    { href: 'admin.dashboard', active: route().current('admin.dashboard'), activeClass: '/admin/dashboard', label: 'Dashboard', children: [], icon: 'Dashboard', visible: true },
-    { href: 'admin.clients.index', active: route().current('admin.clients.index'), activeClass: '/admin/clients', label: 'Clientes', children: [], icon: 'Client', visible: true },
-    { href: 'admin.invoices.index', active: route().current('admin.invoices.index'), activeClass: '/admin/invoices', label: 'Facturas', children: [
-            { href: 'admin.invoices.index', active: route().current('admin.invoices.index'), activeClass: '/admin/invoices', label: 'Consultar', children: [], icon: '', visible: true },
-            { href: 'admin.invoices.create', active: route().current('admin.invoices.create'), activeClass: '/admin/invoices/create', label: 'Crear', children: [], icon: '', visible: true },
-            { href: 'admin.invoicescompare.index', active: route().current('admin.invoicescompare.index'), activeClass: '/admin/invoices-compare', label: 'Comparar', children: [], icon: '', visible: true },
-    ], icon: 'Invoice', visible: true },
+    {
+        href: 'admin.dashboard',
+        active: route().current('admin.dashboard'),
+        activeClass: '/admin/dashboard',
+        label: 'Dashboard',
+        children: [],
+        icon: 'Dashboard',
+        visible: true
+    },
+    {
+        href: 'admin.clients.index',
+        active: route().current('admin.clients.index'),
+        activeClass: '/admin/clients',
+        label: 'Clientes',
+        children: [],
+        icon: 'Client',
+        visible: true
+    },
+    {
+        href: 'admin.invoices.index',
+        active: route().current('admin.invoices.index'),
+        activeClass: '/admin/invoices',
+        label: 'Facturas',
+        children: [
+            {
+                href: 'admin.invoices.index',
+                active: route().current('admin.invoices.index'),
+                activeClass: '/admin/invoices',
+                label: 'Consultar',
+                children: [],
+                icon: '',
+                visible: true
+            },
+            {
+                href: 'admin.invoices.create',
+                active: route().current('admin.invoices.create'),
+                activeClass: '/admin/invoices/create',
+                label: 'Cargar',
+                children: [
+                    {
+                        href: 'admin.invoices.create',
+                        active: route().current('admin.invoices.create'),
+                        activeClass: '/admin/invoices/create',
+                        label: '607',
+                        children: [],
+                        icon: '',
+                        visible: true
+                    },
+                ],
+                icon: '',
+                visible: true
+            },
+            {
+                href: 'admin.invoicescompare.index',
+                active: route().current('admin.invoicescompare.index'),
+                activeClass: '/admin/invoices-compare',
+                label: 'Comparar',
+                children: [],
+                icon: '',
+                visible: true
+            },
+        ],
+        icon: 'Invoice',
+        visible: true
+    },
 ]);
 
 onMounted(() => {
@@ -54,7 +112,7 @@ const logout = () => {
     router.post(route('logout'));
 };
 
-defineExpose({ toggleSidebarVisibility });
+defineExpose({toggleSidebarVisibility});
 </script>
 
 <template>
@@ -89,8 +147,8 @@ defineExpose({ toggleSidebarVisibility });
                                 <button
                                     class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition">
                                     <img class="h-8 w-8 rounded-full object-cover"
-                                        :src="$page.props.auth.user.profile_photo_url"
-                                        :alt="$page.props.auth.user.name">
+                                         :src="$page.props.auth.user.profile_photo_url"
+                                         :alt="$page.props.auth.user.name">
                                 </button>
                             </template>
 
@@ -105,11 +163,11 @@ defineExpose({ toggleSidebarVisibility });
                                 </DropdownLink>
 
                                 <DropdownLink v-if="$page.props.jetstream.hasApiFeatures"
-                                    :href="route('api-tokens.index')">
+                                              :href="route('api-tokens.index')">
                                     API Tokens
                                 </DropdownLink>
 
-                                <div class="border-t border-gray-200" />
+                                <div class="border-t border-gray-200"/>
 
                                 <!-- Authentication -->
                                 <form @submit.prevent="logout">
@@ -126,22 +184,22 @@ defineExpose({ toggleSidebarVisibility });
     </nav>
 
     <aside :class="['sidebar', { 'collapsed': !isSidebarVisible }]"
-        class="fixed top-0 left-0 z-40 w-64 h-screen pt-16 bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+           class="fixed top-0 left-0 z-40 w-64 h-screen pt-16 bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700">
 
         <!-- Contenido del sidebar y transición -->
         <transition name="sidebar-transition">
             <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
                 <div class="space-y-2" :class="{ 'hidden': !isSidebarVisible }">
-                    <NavItem :item="item" v-for="item in navItems" @click="toggleSidebarVisibility" :key="item.label" />
+                    <NavItem :item="item" v-for="item in navItems" @click="toggleSidebarVisibility" :key="item.label"/>
                 </div>
             </div>
         </transition>
     </aside>
 
     <transition enter-active-class="ease-out duration-200" enter-from-class="opacity-0" enter-to-class="opacity-100"
-        leave-active-class="ease-in duration-100" leave-from-class="opacity-100" leave-to-class="opacity-0">
+                leave-active-class="ease-in duration-100" leave-from-class="opacity-100" leave-to-class="opacity-0">
         <div v-if="isBackDropVisible && isSidebarVisible" @click="toggleSidebarVisibility"
-            class="fixed inset-0 transform transition-all bg-gray-900/50 backdrop-blur backdrop-filter opacity-100 z-30" />
+             class="fixed inset-0 transform transition-all bg-gray-900/50 backdrop-blur backdrop-filter opacity-100 z-30"/>
     </transition>
 </template>
 
