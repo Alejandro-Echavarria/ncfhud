@@ -215,10 +215,10 @@ const compare = async () => {
                         :key="tb.id + 'tb'">
                         <td class="px-4 py-3">{{ tb.excel_row.rnc }}</td>
                         <td class="px-4 py-3">{{ tb.excel_row.ncf }}</td>
-                        <td class="px-4 py-3 border border-gray-300 p-2 rounded-lg" v-for="(difference, key) in tb.differences">
+                        <td class="px-4 py-3 p-2 rounded-lg" v-for="(difference, key) in tb.differences">
                             <div class="flex text-xs">
                             <div class="pr-1 font-bold justify-center uppercase text-gray-700">{{ key }} | </div>
-                                <div class="flex gap-3">
+                                <div class="flex gap-3 w-auto">
                                     <div>
                                         <span class="font-semibold text-gray-700">606:</span>
                                         {{ difference.excel }}
