@@ -120,9 +120,11 @@ const copyTableData = () => {
                 </tbody>
             </table>
         </div>
+
+        <HideBackground v-if="showAll && showAllButton"/>
+
         <template v-if="pagination && pagination.links">
             <Pagination :pagination="pagination"/>
         </template>
-        <HideBackground v-if="showAll && showAllButton"/>
     </div>
 </template>
