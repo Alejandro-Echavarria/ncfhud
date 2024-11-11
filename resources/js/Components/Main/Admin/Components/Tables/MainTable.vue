@@ -3,12 +3,18 @@ import {ref} from 'vue';
 import Pagination from '@/Components/Main/Admin/Components/Paginations/Pagination.vue';
 import SecondaryButton from "@/Components/SecondaryButton.vue";
 import Icon from "@/Components/Main/Admin/Components/Icons/Icon.vue";
+import HideBackground from "@/Components/Main/Admin/Components/Backgrounds/HideBackground.vue";
+import HoverTooltip from "@/Components/Main/Admin/Components/ToolTips/HoverTooltip.vue";
 
 const props = defineProps({
     pagination: {
         type: Object,
     },
     copyTable: {
+        type: Boolean,
+        default: false
+    },
+    showAllButton: {
         type: Boolean,
         default: false
     },
@@ -24,6 +30,7 @@ const props = defineProps({
 
 // Ref para la tabla
 const tableRef = ref(null);
+const showAll = ref(true);
 
 const copyTableData = () => {
     // Selecciona la tabla usando la referencia
@@ -63,7 +70,8 @@ const copyTableData = () => {
 </script>
 
 <template>
-    <div class="bg-white dark:bg-gray-800 relative border rounded-xl overflow-hidden">
+    <div :class="showAll && showAllButton ? 'h-72' : 'h-full'"
+         class="relative bg-white dark:bg-gray-800 border rounded-xl overflow-hidden">
         <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
             <div class="w-full md:w-1/2">
                 <slot name="search"/>
@@ -74,12 +82,29 @@ const copyTableData = () => {
                 <slot name="createButton"/>
             </div>
 
-            <div v-if="copyTable">
-                <SecondaryButton @click="copyTableData">
-                    <Icon icon="Copy"/>
-                </SecondaryButton>
+            <div v-if="showAllButton || copyTable" class="flex gap-3">
+                <div v-if="showAllButton">
+                    <HoverTooltip content="Mostrar todas las filas">
+                        <SecondaryButton @click="() => showAll = !showAll">
+                            <Icon icon="Arrow"
+                                  :class="[!showAll ?
+                              '-rotate-0 transition duration-150 ease-linear':
+                              '-rotate-90 transition duration-150 ease-linear'
+                          ]"/>
+                        </SecondaryButton>
+                    </HoverTooltip>
+                </div>
+
+                <div v-if="copyTable">
+                    <HoverTooltip content="Copiar tabla">
+                        <SecondaryButton @click="copyTableData">
+                            <Icon icon="Copy"/>
+                        </SecondaryButton>
+                    </HoverTooltip>
+                </div>
             </div>
         </div>
+
         <div class="overflow-x-auto">
             <table ref="tableRef" class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead class="text-xs bg-gray-50 dark:bg-gray-700 text-gray-700 uppercase dark:text-gray-400">
@@ -98,5 +123,6 @@ const copyTableData = () => {
         <template v-if="pagination && pagination.links">
             <Pagination :pagination="pagination"/>
         </template>
+        <HideBackground v-if="showAll && showAllButton"/>
     </div>
 </template>

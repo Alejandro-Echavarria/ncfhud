@@ -142,7 +142,7 @@ const compare = async () => {
                 NCF no declarados en el reporte de terceros DGII
             </H2Title>
 
-            <MainTable :actions="false" :copy-table="true" :show-all="true">
+            <MainTable :actions="false" :copy-table="true" :show-all-button="true">
                 <template #thead>
                     <th v-for="(th, key) in thead" scope="col" class="px-4 py-3" :key="key + 'th'">
                         {{ th }}
@@ -176,7 +176,7 @@ const compare = async () => {
                 NCF declarados por terceros que no corresponden al 607 reportado
             </H2Title>
 
-            <MainTable :actions="false" :copy-table="true">
+            <MainTable :actions="false" :copy-table="true" :show-all-button="true">
                 <template #thead>
                     <th v-for="(th, key) in thead" scope="col" class="px-4 py-3" :key="key + 'th'">
                         {{ th }}
@@ -202,53 +202,36 @@ const compare = async () => {
                 NCF con diferencias
             </H2Title>
 
-            <MainTable :actions="false" :copy-table="true">
+            <MainTable :actions="false" :copy-table="true" :show-all-button="true">
                 <template #thead>
-                    <th v-for="(th, key) in thead_differences" scope="col" class="px-4 py-3" :key="key + 'th'">
+                    <th v-for="(th, key) in thead_differences" scope="col" :class="['px-4 py-3', key === 2 && 'bg-white']" :key="key + 'th'">
                         {{ th }}
                     </th>
                 </template>
 
                 <template #tbody>
                     <tr v-for="tb in differences"
-                        class="dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition ease-linear duration-300"
+                        class="hover:bg-gray-50 dark:hover:bg-gray-600 transition ease-linear duration-300"
                         :key="tb.id + 'tb'">
                         <td class="px-4 py-3">{{ tb.excel_row.rnc }}</td>
                         <td class="px-4 py-3">{{ tb.excel_row.ncf }}</td>
                         <td class="px-4 py-3 border border-gray-300 p-2 rounded-lg"
-                            v-for="(difference, key) in tb.differences">
-                            <div class="flex text-xs">
-                                <div class="pr-1 font-bold justify-center uppercase text-gray-700">{{ key }} |</div>
+                            v-for="(difference, key) in tb.differences" :key="key">
+                            <div class="flex text-xs min-w-[150px] flex-shrink-0">
+                                <div class="pr-1 font-bold justify-center uppercase text-gray-700">{{ key }}</div>
                                 <div class="flex gap-3">
-                                    <div>
-                                        <span class="font-semibold text-gray-700">606:</span>
+                                    <div class="whitespace-nowrap">
+                                        <span class="font-semibold text-gray-700">| 606:</span>
                                         {{ difference.excel }}
                                     </div>
 
-                                    <div>
+                                    <div class="whitespace-nowrap">
                                         <span class="font-semibold text-gray-700">607:</span>
                                         {{ difference.database }}
                                     </div>
                                 </div>
                             </div>
                         </td>
-                        <!--                        <td class="px-4 py-3">-->
-                        <!--                            <div class="flex gap-6">-->
-                        <!--                                <div v-for="(difference, key) in tb.differences"-->
-                        <!--                                     class="flex-col border border-gray-300 p-2 rounded-lg">-->
-                        <!--                                    <div class="font-bold flex justify-center uppercase text-gray-700">{{ key }}</div>-->
-                        <!--                                    <div>-->
-                        <!--                                        <span class="font-semibold text-gray-700">606:</span>-->
-                        <!--                                        {{ difference.excel }}-->
-                        <!--                                    </div>-->
-
-                        <!--                                    <div>-->
-                        <!--                                        <span class="font-semibold text-gray-700">607:</span>-->
-                        <!--                                        {{ difference.database }}-->
-                        <!--                                    </div>-->
-                        <!--                                </div>-->
-                        <!--                            </div>-->
-                        <!--                        </td>-->
                     </tr>
                 </template>
             </MainTable>
