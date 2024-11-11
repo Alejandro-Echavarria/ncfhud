@@ -17,7 +17,7 @@ const props = defineProps({
 const orientationClass = computed(() => {
     return {
         'top': 'data-[tooltip]:after:bottom-[calc(100%+4px)] data-[tooltip]:before:[clip-path:polygon(100%_0,0_0,50%_100%)] data-[tooltip]:after:scale-50 hover:data-[tooltip]:after:scale-100',
-        'bottom': 'data-[tooltip]:after:bottom-[calc(-100%+4px)] data-[tooltip]:before:bottom-[calc(-100%+28.9px)] data-[tooltip]:before:[clip-path:polygon(0%_100%,100%_100%,50%_0%)]',
+        'bottom': 'data-[tooltip]:after:bottom-[calc(-100%+4px)] data-[tooltip]:before:bottom-[calc(-100%+28.5px)] data-[tooltip]:before:[clip-path:polygon(0%_100%,100%_100%,50%_0%)]',
     }[props.orientation];
 });
 </script>
