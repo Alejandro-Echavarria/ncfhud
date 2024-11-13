@@ -1,6 +1,6 @@
 <script setup>
-import {ref, watch, computed, onBeforeUnmount, onMounted} from 'vue';
-import {router, Link, usePage} from "@inertiajs/vue3";
+import { ref, watch, computed, onBeforeUnmount, onMounted } from 'vue';
+import { router, Link, usePage } from "@inertiajs/vue3";
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import NavItem from '@/Components/Main/Admin/Layout/Nav/NavItem.vue';
 import Dropdown from '@/Components/Dropdown.vue';
@@ -8,7 +8,7 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 
 const isSidebarVisible = ref(true);
 const isBackDropVisible = ref(false);
-const {props} = usePage();
+const { props } = usePage();
 const entity = ref(props.entity);
 
 watch(() => usePage().props.entity, (newEntity) => {
@@ -23,6 +23,24 @@ const navItems = computed(() => [
         label: 'Dashboard',
         children: [],
         icon: 'Dashboard',
+        visible: true
+    },
+    {
+        href: 'admin.dashboard',
+        active: route().current('admin.dashboard'),
+        activeClass: '/admin/users',
+        label: 'Administración',
+        children: [
+            {
+                href: 'admin.users.index',
+                active: route().current('admin.users.index'),
+                activeClass: '/admin/users',
+                label: 'Usuarios',
+                children: [],
+                visible: true
+            },
+        ],
+        icon: 'Administration',
         visible: true
     },
     {
@@ -112,7 +130,7 @@ const logout = () => {
     router.post(route('logout'));
 };
 
-defineExpose({toggleSidebarVisibility});
+defineExpose({ toggleSidebarVisibility });
 </script>
 
 <template>
