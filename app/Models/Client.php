@@ -18,6 +18,9 @@ class Client extends Model
         'email',
     ];
 
+    /*----------------------------------------------------------------------------*/
+    // Accessors & Mutators
+    /*----------------------------------------------------------------------------*/
     public function getCreatedAtAttribute($value)
     {
         $carbon = Carbon::parse($value)->timezone(config('app.timezone'));
@@ -30,6 +33,10 @@ class Client extends Model
         return $carbon->toFormattedDateString();
     }
 
+
+    /*----------------------------------------------------------------------------*/
+    // Scopes (local)
+    /*----------------------------------------------------------------------------*/
     public function scopeFilter($query, $filter)
     {
         $query->when($filter ?? null, function ($query, $search) {

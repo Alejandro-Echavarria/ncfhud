@@ -29,6 +29,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'is_active',
     ];
 
     /**
@@ -62,9 +63,13 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_active' => 'boolean',
         ];
     }
 
+    /*----------------------------------------------------------------------------*/
+    // Accessors & Mutators
+    /*----------------------------------------------------------------------------*/
     protected function createdAt(): Attribute
     {
         return Attribute::make(
@@ -77,5 +82,19 @@ class User extends Authenticatable
         return Attribute::make(
             get: fn($value) => Carbon::parse($value)->timezone(config('app.timezone'))->toFormattedDateString(),
         );
+    }
+
+    /*----------------------------------------------------------------------------*/
+    // Scopes (local)
+    /*----------------------------------------------------------------------------*/
+    public function scopeFilter($query, $filter)
+    {
+        $query->when($filter ?? null, function ($query, $search) {
+            $query->whereAny([
+                'name',
+                'email',
+                'created_at'
+            ], config('app.db_driver') === 'pgsql' ? 'ILIKE' : 'LIKE', "%$search%");
+        });
     }
 }
