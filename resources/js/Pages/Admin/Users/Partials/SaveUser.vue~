@@ -118,7 +118,7 @@ defineExpose({ openModal });
 
                             <div class="md:col-span-2">
                                 <InputLabel for="email" value="Email" :required="true"/>
-                                <TextInput id="email" ref="EmailInput" v-model="form.email" type="text" autocomplete="off"/>
+                                <TextInput id="email" ref="EmailInput" v-model="form.email" type="text" autocomplete="nope"/>
 
                                 <InputError :message="form.errors.email" class="mt-2"/>
                             </div>
@@ -127,7 +127,7 @@ defineExpose({ openModal });
                                 <div class="grow">
                                     <InputLabel for="password" value="Password" :required="true"/>
                                     <TextInput id="password" ref="PasswordInput" v-model="form.password"
-                                               type="password" autocomplete="off"/>
+                                               type="password" autocomplete="none"/>
 
                                     <InputError :message="form.errors.password" class="mt-2"/>
                                 </div>

@@ -59,7 +59,7 @@ const openModal = (op, data) => {
                 <td class="px-4 py-3">{{ tb.email }}</td>
                 <td class="px-4 py-3 text-xs">
                         <span class="px-2 py-1 font-semibold rounded-full text-nowrap"
-                              :class="tb.is_active ? 'border-2 border-indigo-700 text-indigo-700' : 'border-2 border-gray-400 text-gray-400'">
+                              :class="tb.is_active ? 'border-2 border-indigo-700 text-green-700' : 'border-2 border-gray-400 text-gray-400'">
                             <template v-if="tb.is_active">
                                 Activo
                             </template>
