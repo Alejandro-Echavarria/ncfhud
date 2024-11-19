@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\RoleController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UserController;
@@ -13,6 +14,7 @@ Route::get('dashboard', function () {
 })->name('admin.dashboard');
 
 Route::resource('users', UserController::class)->names('admin.users');
+Route::resource('roles', RoleController::class)->names('admin.roles');
 
 Route::resource('clients', ClientController::class)->names('admin.clients');
 

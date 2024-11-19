@@ -39,6 +39,14 @@ const navItems = computed(() => [
                 children: [],
                 visible: true
             },
+            {
+                href: 'admin.roles.index',
+                active: route().current('admin.roles.index'),
+                activeClass: '/admin/roles',
+                label: 'Roles',
+                children: [],
+                visible: true
+            }
         ],
         icon: 'Administration',
         visible: true
