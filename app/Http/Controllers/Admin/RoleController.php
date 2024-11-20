@@ -23,7 +23,7 @@ class RoleController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $data = $request->validate([
-            'name' => 'required|max:255',
+            'name' => 'required|max:255|unique:roles,name',
             'permissions' => 'required|array|min:1'
         ]);
 
@@ -43,7 +43,7 @@ class RoleController extends Controller
     public function update(Request $request, Role $role): RedirectResponse
     {
         $data = $request->validate([
-            'name' => 'required|max:255',
+            'name' => 'required|max:255|unique:roles,name,' . $role->id,
             'permissions' => 'required|array|min:1'
         ]);
 
@@ -58,5 +58,16 @@ class RoleController extends Controller
             'search' => $search,
             'page' => $page
         ])->with('flash', 'Rol actualizado');
+    }
+
+    public function destroy(Role $role): RedirectResponse
+    {
+        if ($role->users()->exists()) {
+            return to_route('admin.roles.index')->withErrors(['delete' => 'Este rol no puede ser eliminado porque está asignado a uno o más usuarios.']);
+        }
+
+        $role->delete();
+
+        return to_route('admin.roles.index')->with('flash', 'Rol eliminado');
     }
 }

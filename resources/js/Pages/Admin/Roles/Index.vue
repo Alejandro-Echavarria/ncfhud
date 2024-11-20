@@ -8,6 +8,7 @@ import Icon from "@/Components/Main/Admin/Components/Icons/Icon.vue";
 import TableButton from "@/Components/Main/Admin/Components/Buttons/TableButton.vue";
 import Search from "@/Components/Main/Admin/Components/Searchs/Search.vue";
 import SaveRole from "@/Pages/Admin/Roles/Partials/SaveRole.vue";
+import DeleteRole from "@/Pages/Admin/Roles/Partials/DeleteRole.vue";
 
 defineOptions({
     layout: MainLayout
@@ -60,11 +61,15 @@ const openModal = (op, data) => {
                 class="dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition ease-linear duration-300"
                 :key="tb.id + 'tb'">
                 <td class="px-4 py-3">{{ tb.name }}</td>
-                <TableButton>
-                    <Icon @click="openModal(2, tb)" class="text-indigo-500"
-                          icon="Edit"/>
-                </TableButton>
-                <!--                <DeleteCategory :id="tb.id" :filter="filter" :page="page" :key="tb.id + 'deleteBtn'"/>-->
+                <td class="px-4 py-3">
+                    <div class="flex items-center justify-end">
+                        <TableButton>
+                            <Icon @click="openModal(2, tb)" class="text-indigo-500"
+                                  icon="Edit"/>
+                        </TableButton>
+                        <DeleteRole :id="tb.id" :filter="filter" :page="page" :key="tb.id + 'deleteBtn'"/>
+                    </div>
+                </td>
             </tr>
         </template>
     </MainTable>

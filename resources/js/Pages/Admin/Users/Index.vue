@@ -71,11 +71,14 @@ const openModal = (op, data) => {
                 </td>
                 <td class="px-4 py-3">{{ tb.created_at }}</td>
                 <td class="px-4 py-3">{{ tb.updated_at }}</td>
-                <TableButton>
-                    <Icon @click="openModal(2, tb)" class="text-indigo-500"
-                          icon="Edit"/>
-                </TableButton>
-                <!--                <DeleteCategory :id="tb.id" :filter="filter" :page="page" :key="tb.id + 'deleteBtn'"/>-->
+                <td class="px-4 py-3">
+                    <div class="flex items-center justify-end">
+                        <TableButton>
+                            <Icon @click="openModal(2, tb)" class="text-indigo-500"
+                                  icon="Edit"/>
+                        </TableButton>
+                    </div>
+                </td>
             </tr>
         </template>
     </MainTable>

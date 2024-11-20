@@ -123,8 +123,7 @@ defineExpose({ openModal });
 
                             <div class="col-span-4">
                                 <span class="mb-2 block font-medium text-sm text-gray-700 dark:text-gray-300">
-                                    Roles
-                                    <span class="text-red-500"> * </span>
+                                    Roles         <span class="text-red-500"> * </span>
                                 </span>
                                 <div class="grid grid-cols-2 gap-3">
                                     <div v-for="permission in permissions" :key="permission.id" class="flex gap-3">
