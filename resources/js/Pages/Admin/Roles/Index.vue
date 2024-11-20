@@ -47,7 +47,6 @@ const openModal = (op, data) => {
 
         <template #createButton>
             <SaveRole ref="callOpenModal" :permissions="permissions" :filter="filter" :page="page"/>
-            <!--            <SaveUser ref="callOpenModal" :filter="filter" :page="page"/>-->
         </template>
 
         <template #thead>

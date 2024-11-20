@@ -8,7 +8,6 @@ import SecondaryButton from "@/Components/SecondaryButton.vue";
 import SimpleForm from "@/Components/Main/Admin/Components/Forms/Forms/SimpleForm.vue";
 import Icon from "@/Components/Main/Admin/Components/Icons/Icon.vue";
 import TextInput from "@/Components/TextInput.vue";
-import ToggleSwitch from "@/Components/Main/Admin/Components/Forms/Inputs/ToggleSwitch/ToggleSwitch.vue";
 import InputError from "@/Components/InputError.vue";
 import Checkbox from "@/Components/Checkbox.vue";
 
@@ -29,6 +28,40 @@ const form = useForm({
     permissions: [],
 });
 
+const save = () => {
+    if (operation.value === 1) {
+        form.transform((data) => ({
+            ...data,
+            search: props.filter,
+            page: props.page
+        })).post(route('admin.roles.store'), {
+            preserveScroll: true,
+            preserveState: true,
+            onSuccess: () => {
+                ok('Rol creado');
+            },
+            onError: () => {
+                console.log("error");
+            }
+        });
+    } else {
+        form.transform((data) => ({
+            ...data,
+            search: props.filter,
+            page: props.page
+        })).put(route('admin.roles.update', role.value), {
+            preserveScroll: true,
+            preserveState: true,
+            onSuccess: () => {
+                ok('Rol actualizado');
+            },
+            onError: () => {
+                console.log("error");
+            }
+        });
+    }
+};
+
 const openModal = (op, data) => {
     modal.value = true;
     operation.value = op;
@@ -39,9 +72,7 @@ const openModal = (op, data) => {
         title.value = 'Editar role';
         role.value = data.id;
         form.name = data.name;
-        form.email = data.email;
-        form.is_active = data.is_active;
-        form.password = '';
+        form.permissions = data.permissions.map(permission => permission.id);
     }
 };
 
@@ -83,14 +114,18 @@ defineExpose({ openModal });
                             </div>
 
                             <div class="col-span-4">
-                                <InputLabel for="roles" value="Roles" :required="false"/>
+                                <span
+                                    class="mb-2 block font-medium text-sm text-gray-700 dark:text-gray-300">Roles</span>
                                 <div class="grid grid-cols-2 gap-3">
-                                    <div v-for="permission in permissions" :key="permission.id">
-                                        <Checkbox v-model="form.permissions" :value="permission.id"/>
-                                        <span class="ml-2 text-sm text-gray-600">{{ permission.description }}</span>
+                                    <div v-for="permission in permissions" :key="permission.id" class="flex gap-3">
+                                        <Checkbox v-model:checked="form.permissions" :value="permission.id"
+                                                  :id="`role-${permission.name}`"/>
 
-                                        <InputError :message="form.errors.roles" class="mt-2"/>
+                                        <InputLabel :for="`role-${permission.name}`" :value="permission.description"
+                                                    :required="false"/>
                                     </div>
+
+                                    <InputError :message="form.errors.permissions" class="mt-2"/>
                                 </div>
                             </div>
                         </div>
