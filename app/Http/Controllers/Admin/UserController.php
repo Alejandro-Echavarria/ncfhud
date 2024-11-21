@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
 use Inertia\Response;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -20,9 +21,12 @@ class UserController extends Controller
         $users = User::filter($filter)
             ->select('id', 'name', 'email', 'is_active', 'created_at', 'updated_at')
             ->where('id', '!=', '1')
+            ->with('roles:id,name')
             ->paginate(10);
 
-        return Inertia::render('Admin/Users/Index', compact('page', 'filter', 'users'));
+        $roles = Role::all();
+
+        return Inertia::render('Admin/Users/Index', compact('page', 'filter', 'users', 'roles'));
     }
 
     public function store(Request $request): RedirectResponse
@@ -31,12 +35,14 @@ class UserController extends Controller
             'name' => 'required|max:255',
             'email' => 'required|unique:users|email:rfc,dns|max:255',
             'password' => 'required|max:255|min:4',
+            'roles' => 'required|array|min:1|exists:roles,id',
             'is_active' => 'required|boolean'
         ]);
 
         $data['password'] = Hash::make($data['password']);
 
-        User::create($data);
+        $user = User::create($data);
+        $user->roles()->sync($data['roles']);
 
         $page = $request?->page;
         $search = $request?->search;
@@ -57,6 +63,7 @@ class UserController extends Controller
             'name' => 'required|max:255',
             'email' => 'required|unique:users,email,' . $user->id . '|email:rfc,dns|max:255',
             'password' => 'nullable|max:255|min:4', // Hacer que el campo sea opcional
+            'roles' => 'required|array|min:1|exists:roles,id',
             'is_active' => 'required|boolean'
         ]);
 
@@ -69,6 +76,7 @@ class UserController extends Controller
         }
 
         $user->update($data);
+        $user->roles()->sync($data['roles']);
 
         $page = $request?->page;
         $search = $request?->search;

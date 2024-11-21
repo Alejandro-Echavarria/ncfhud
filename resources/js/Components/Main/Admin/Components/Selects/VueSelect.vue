@@ -21,7 +21,7 @@ defineProps({
 }
 
 div.vs--single span.vs__selected {
-    margin: 0px !important;
+    margin: 0 !important;
 }
 
 div.vs--open span.vs__selected {
@@ -29,11 +29,11 @@ div.vs--open span.vs__selected {
 }
 
 div.vs--single .vs__selected {
-    padding: 0px 0.75rem 0px 0.75rem;
+    padding: 0 0.75rem 0 0.75rem;
 }
 
 div.vs--single .vs__selected-options {
-    padding: 0px;
+    padding: 0;
 }
 
 .v-select.drop-up.vs--open .vs__dropdown-toggle {
@@ -56,7 +56,7 @@ div.vs--single .vs__selected-options {
 }
 
 .style-chooser .vs__search::placeholder,
-.style-chooser .vs__dropdown-toggle::focus {
+.style-chooser .vs__dropdown-toggle:focus {
     margin: 20px !important;
 }
 
@@ -78,19 +78,18 @@ div.vs--single .vs__selected-options {
 }
 
 .style-chooser .vs__search::placeholder {
-    border: 0px solid #d1d5db;
+    border: 0 solid #d1d5db;
 }
 
 .style-chooser input.vs__search {
-    border: 0px;
-    padding: 0px 0.75rem 0px 0.75rem;
+    border: 0;
+    padding: 0 0.75rem 0 0.75rem;
     font-size: 0.875rem;
     line-height: 1.7rem;
 }
 
 .style-chooser input.vs__search:focus {
-    outline: none !important;
-    outline-width: 0 !important;
+    outline: none 0 !important;
     box-shadow: none;
     -moz-box-shadow: none;
     -webkit-box-shadow: none;

@@ -18,11 +18,15 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    roles: {
+        type: Object,
+        required: true
+    },
     filter: String,
     page: String
 });
 
-const thead = ['nombre', 'email', 'estado', 'fecha de creación', 'fecha de actualización'];
+const thead = ['nombre', 'email', 'roles', 'estado', 'fecha de creación', 'fecha de actualización'];
 const url = 'admin.users.index';
 const callOpenModal = ref(null);
 
@@ -42,7 +46,7 @@ const openModal = (op, data) => {
         </template>
 
         <template #createButton>
-            <SaveUser ref="callOpenModal" :filter="filter" :page="page"/>
+            <SaveUser ref="callOpenModal" :data="{ roles }" :filter="filter" :page="page"/>
         </template>
 
         <template #thead>
@@ -57,6 +61,7 @@ const openModal = (op, data) => {
                 :key="tb.id + 'tb'">
                 <td class="px-4 py-3">{{ tb.name }}</td>
                 <td class="px-4 py-3">{{ tb.email }}</td>
+                <td class="px-4 py-3">{{ tb.roles.map(role => role.name).join(', ') }}</td>
                 <td class="px-4 py-3 text-xs">
                         <span class="px-2 py-1 font-semibold rounded-full text-nowrap"
                               :class="tb.is_active ? 'border-2 border-indigo-700 text-indigo-700' : 'border-2 border-gray-400 text-gray-400'">

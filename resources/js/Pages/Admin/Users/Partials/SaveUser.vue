@@ -10,6 +10,8 @@ import InputLabel from '@/Components/InputLabel.vue';
 import SimpleForm from '@/Components/Main/Admin/Components/Forms/Forms/SimpleForm.vue';
 import Icon from "@/Components/Main/Admin/Components/Icons/Icon.vue";
 import ToggleSwitch from "@/Components/Main/Admin/Components/Forms/Inputs/ToggleSwitch/ToggleSwitch.vue";
+import VueSelect from "@/Components/Main/Admin/Components/Selects/VueSelect.vue";
+import SaveAlert from "@/Helpers/Alerts/SaveAlert.js";
 
 const props = defineProps({
     data: Object,
@@ -19,14 +21,18 @@ const props = defineProps({
 
 const title = ref('');
 const modal = ref(false);
+const closeOpenModal = ref(true);
 const operation = ref(1);
 const user = ref(null);
+
+const rolesOptions = ref(props.data.roles);
 
 const form = useForm({
     name: '',
     email: '',
     password: '',
-    is_active: true
+    is_active: true,
+    roles: []
 });
 
 const save = () => {
@@ -39,10 +45,13 @@ const save = () => {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
-                ok('User created');
+                ok('Usuario creado');
             },
             onError: () => {
-                console.log("error");
+                if (errors.create) {
+                    closeOpenModal.value = false;
+                    ok(errors.create, 'error', null, false, 'Error');
+                }
             }
         });
     } else {
@@ -54,10 +63,13 @@ const save = () => {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
-                ok('User updated');
+                ok('Usuario actualizado');
             },
-            onError: () => {
-                console.log("error");
+            onError: (errors) => {
+                if (errors.update) {
+                    closeOpenModal.value = false;
+                    ok(errors.update, 'error', null, false, 'Error');
+                }
             }
         });
     }
@@ -75,6 +87,7 @@ const openModal = (op, data) => {
         form.name = data.name;
         form.email = data.email;
         form.is_active = data.is_active;
+        form.roles = data.roles.map(role => role.id);
         form.password = '';
     }
 };
@@ -85,10 +98,11 @@ const closeModal = () => {
     form.reset();
 };
 
-const ok = (msj, type, timer) => {
-    closeModal();
-    // SaveAlert(msj, type, timer);
+const ok = (msj, type, timer, toast, title) => {
+    closeOpenModal.value && closeModal();
+    SaveAlert(msj, type, timer, toast, title);
 };
+
 
 defineExpose({ openModal });
 </script>
@@ -117,13 +131,23 @@ defineExpose({ openModal });
                             </div>
 
                             <div class="md:col-span-2">
+                                <InputLabel for="role" value="Rol" :required="true"/>
+                                <VueSelect id="role" label="name" v-model="form.roles" :options="rolesOptions"
+                                           :reduce="options => options.id" :multiple="true" :close-on-select="false"
+                                           :append="true"/>
+
+                                <InputError :message="form.errors.roles" class="mt-2"/>
+                            </div>
+
+                            <div class="md:col-span-2">
                                 <InputLabel for="email" value="Email" :required="true"/>
-                                <TextInput id="email" ref="EmailInput" v-model="form.email" type="text" autocomplete="off"/>
+                                <TextInput id="email" ref="EmailInput" v-model="form.email" type="text"
+                                           autocomplete="off"/>
 
                                 <InputError :message="form.errors.email" class="mt-2"/>
                             </div>
 
-                            <div class="flex items-center sm:col-span-4 gap-6">
+                            <div class="flex items-center sm:col-span-2 gap-6">
                                 <div class="grow">
                                     <InputLabel for="password" value="Password" :required="true"/>
                                     <TextInput id="password" ref="PasswordInput" v-model="form.password"
