@@ -132,9 +132,12 @@ defineExpose({ openModal });
 
                             <div class="md:col-span-2">
                                 <InputLabel for="role" value="Rol" :required="true"/>
-                                <VueSelect id="role" label="name" v-model="form.roles" :options="rolesOptions"
-                                           :reduce="options => options.id" :multiple="true" :close-on-select="false"
-                                           :append="true"/>
+                                <VueSelect id="role" label="name" v-model="form.roles"
+                                           :multiple="true"
+                                           :close-on-select="false"
+                                           :append="true"
+                                           :options="rolesOptions"
+                                           :reduce="options => options.id"/>
 
                                 <InputError :message="form.errors.roles" class="mt-2"/>
                             </div>

@@ -66,7 +66,7 @@ div.vs--single .vs__selected-options {
     font-variant: small-caps;
     border: 1.5px solid #d1d5db;
     border-radius: 8px 8px 8px 8px;
-    margin-top: 1px;
+    margin-top: 0.5rem;
     box-shadow: none;
     font-size: 0.875rem;
     /* line-height: 1.6; */
