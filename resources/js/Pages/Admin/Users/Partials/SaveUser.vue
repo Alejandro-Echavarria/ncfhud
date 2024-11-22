@@ -47,7 +47,7 @@ const save = () => {
             onSuccess: () => {
                 ok('Usuario creado');
             },
-            onError: () => {
+            onError: (errors) => {
                 if (errors.create) {
                     closeOpenModal.value = false;
                     ok(errors.create, 'error', null, false, 'Error');
