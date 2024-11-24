@@ -23,12 +23,13 @@ const navItems = computed(() => [
         label: 'Dashboard',
         children: [],
         icon: 'Dashboard',
-        visible: true
+        permissions: ['admin.dashboard.index'],
+        visible: true,
     },
     {
-        href: 'admin.dashboard',
-        active: route().current('admin.dashboard'),
-        activeClass: '/admin/users',
+        // href: 'admin.dashboard',
+        // active: route().current('admin.dashboard'),
+        // activeClass: '/admin/users',
         label: 'Administración',
         children: [
             {
@@ -37,6 +38,7 @@ const navItems = computed(() => [
                 activeClass: '/admin/users',
                 label: 'Usuarios',
                 children: [],
+                permissions: ['admin.users.index'],
                 visible: true
             },
             {
@@ -45,10 +47,12 @@ const navItems = computed(() => [
                 activeClass: '/admin/roles',
                 label: 'Roles',
                 children: [],
+                permissions: ['admin.roles.index'],
                 visible: true
             }
         ],
         icon: 'Administration',
+        permissions: ['admin.users.index', 'admin.roles.index'],
         visible: true
     },
     {
@@ -58,12 +62,10 @@ const navItems = computed(() => [
         label: 'Clientes',
         children: [],
         icon: 'Client',
+        permissions: ['admin.clients.index'],
         visible: true
     },
     {
-        href: 'admin.invoices.index',
-        active: route().current('admin.invoices.index'),
-        activeClass: '/admin/invoices',
         label: 'Facturas',
         children: [
             {
@@ -73,12 +75,10 @@ const navItems = computed(() => [
                 label: 'Consultar',
                 children: [],
                 icon: '',
+                permissions: ['admin.invoices.index'],
                 visible: true
             },
             {
-                href: 'admin.invoices.create',
-                active: route().current('admin.invoices.create'),
-                activeClass: '/admin/invoices/create',
                 label: 'Cargar',
                 children: [
                     {
@@ -88,10 +88,12 @@ const navItems = computed(() => [
                         label: '607',
                         children: [],
                         icon: '',
+                        permissions: ['admin.invoices.create_607'],
                         visible: true
                     },
                 ],
                 icon: '',
+                permissions: ['admin.invoices.create_607'],
                 visible: true
             },
             {
@@ -101,10 +103,12 @@ const navItems = computed(() => [
                 label: 'Comparar',
                 children: [],
                 icon: '',
+                permissions: ['admin.invoices.compare'],
                 visible: true
             },
         ],
         icon: 'Invoice',
+        permissions: ['admin.invoices.index', 'admin.invoices.create_607', 'admin.invoices.compare'],
         visible: true
     },
 ]);
