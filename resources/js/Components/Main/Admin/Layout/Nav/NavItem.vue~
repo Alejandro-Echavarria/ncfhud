@@ -41,6 +41,9 @@ const toggleSidebarVisibility = () => {
 </script>
 
 <template>
+<!--    <pre>-->
+<!--        {{ item.permissions }}-->
+<!--    </pre>-->
     <div v-if="hasPermission(item.permissions)">
         <TransitionRoot class="space-y-2" appear :show="isShowing" enter="transition-opacity duration-75"
                         enter-from="opacity-0"

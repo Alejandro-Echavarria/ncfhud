@@ -10,9 +10,20 @@ use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
 use Inertia\Response;
 use Spatie\Permission\Models\Role;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 
-class UserController extends Controller
+class UserController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('permission:admin.users.index', only: ['index']),
+            new Middleware('permission:admin.users.create', only: ['store']),
+            new Middleware('permission:admin.users.edit', only: ['update']),
+        ];
+    }
+
     public function index(Request $request): Response
     {
         $page = $request?->page;

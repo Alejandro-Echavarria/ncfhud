@@ -2,7 +2,7 @@ import { usePage } from "@inertiajs/vue3";
 
 export function usePermission() {
     const hasRole = (roles) => {
-        const userRoles = usePage().props.auth?.roles || [];
+        const userRoles = usePage().props.auth.user?.roles || [];
 
         if (Array.isArray(roles)) {
             // Devuelve true si algún rol requerido está en los roles del usuario
@@ -14,7 +14,7 @@ export function usePermission() {
     };
 
     const hasPermission = (permissions) => {
-        const userPermissions = usePage().props.auth?.permissions || [];
+        const userPermissions = usePage().props.auth.user?.permissions || [];
 
         if (Array.isArray(permissions)) {
             // Devuelve true si alguna permission requerida está en las permissions del usuario
