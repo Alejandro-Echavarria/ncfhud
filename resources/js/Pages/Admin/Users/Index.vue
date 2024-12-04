@@ -1,13 +1,13 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, defineAsyncComponent } from 'vue';
 import { Head } from '@inertiajs/vue3';
 import MainLayout from "@/Components/Main/Admin/Layout/MainLayout.vue";
 import MainTitle from '@/Components/Main/Admin/Components/Titles/MainTitle.vue';
 import MainTable from "@/Components/Main/Admin/Components/Tables/MainTable.vue";
 import Search from "@/Components/Main/Admin/Components/Searchs/Search.vue";
 import SaveUser from "@/Pages/Admin/Users/Partials/SaveUser.vue";
-import TableButton from "@/Components/Main/Admin/Components/Buttons/TableButton.vue";
-import Icon from "@/Components/Main/Admin/Components/Icons/Icon.vue";
+import EditButton from "@/Components/Main/Admin/Components/Buttons/Tables/EditButton.vue";
+import { usePermission } from "@/Composables/permissions";
 
 defineOptions({
     layout: MainLayout
@@ -30,6 +30,13 @@ const thead = ['nombre', 'email', 'roles', 'estado', 'fecha de creación', 'fech
 const url = 'admin.users.index';
 const callOpenModal = ref(null);
 
+const { hasPermission } = usePermission();
+const canCreateUser = hasPermission("admin.users.create");
+const canEditUser = hasPermission("admin.users.edit");
+
+const CreateUserComponent = canCreateUser ? SaveUser : null;
+const EditUserComponent = canEditUser ? EditButton : null;
+
 const openModal = (op, data) => {
     callOpenModal.value.openModal(op, data);
 };
@@ -45,8 +52,8 @@ const openModal = (op, data) => {
             <Search :filter="filter" :url="url"/>
         </template>
 
-        <template #createButton>
-            <SaveUser ref="callOpenModal" :data="{ roles }" :filter="filter" :page="page"/>
+        <template #createButton v-if="canCreateUser">
+            <component :is="CreateUserComponent" ref="callOpenModal" :data="{ roles }" :filter="filter" :page="page"/>
         </template>
 
         <template #thead>
@@ -63,25 +70,22 @@ const openModal = (op, data) => {
                 <td class="px-4 py-3">{{ tb.email }}</td>
                 <td class="px-4 py-3">{{ tb.roles.map(role => role.name).join(', ') }}</td>
                 <td class="px-4 py-3 text-xs">
-                        <span class="px-2 py-1 font-semibold rounded-full text-nowrap"
-                              :class="tb.is_active ? 'border-2 border-indigo-700 text-indigo-700' : 'border-2 border-gray-400 text-gray-400'">
-                            <template v-if="tb.is_active">
-                                Activo
-                            </template>
+                    <span class="px-2 py-1 font-semibold rounded-full text-nowrap"
+                          :class="tb.is_active ? 'border-2 border-indigo-700 text-indigo-700' : 'border-2 border-gray-400 text-gray-400'">
+                        <template v-if="tb.is_active">
+                            Activo
+                        </template>
 
-                            <template v-else>
-                                Inactivo
-                            </template>
-                        </span>
+                        <template v-else>
+                            Inactivo
+                        </template>
+                    </span>
                 </td>
                 <td class="px-4 py-3">{{ tb.created_at }}</td>
                 <td class="px-4 py-3">{{ tb.updated_at }}</td>
-                <td class="px-4 py-3">
+                <td class="px-4 py-3" v-if="canEditUser">
                     <div class="flex items-center justify-end">
-                        <TableButton>
-                            <Icon @click="openModal(2, tb)" class="text-indigo-500"
-                                  icon="Edit"/>
-                        </TableButton>
+                        <component :is="EditUserComponent" @click="openModal(2, tb)"/>
                     </div>
                 </td>
             </tr>

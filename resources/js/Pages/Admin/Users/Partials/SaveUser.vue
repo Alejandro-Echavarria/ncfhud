@@ -45,6 +45,7 @@ const save = () => {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
+                closeOpenModal.value = true;
                 ok('Usuario creado');
             },
             onError: (errors) => {
@@ -63,6 +64,7 @@ const save = () => {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
+                closeOpenModal.value = true;
                 ok('Usuario actualizado');
             },
             onError: (errors) => {

@@ -5,13 +5,25 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Inertia\Inertia;
 use Inertia\Response;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
-class RoleController extends Controller
+class RoleController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('permission:admin.roles.index', only: ['index']),
+            new Middleware('permission:admin.roles.create', only: ['store']),
+            new Middleware('permission:admin.roles.edit', only: ['update']),
+            new Middleware('permission:admin.roles.destroy', only: ['destroy']),
+        ];
+    }
+
     public function index(): Response
     {
         $roles = Role::with('permissions:id')->paginate(10);
@@ -63,7 +75,9 @@ class RoleController extends Controller
     public function destroy(Role $role): RedirectResponse
     {
         if ($role->users()->exists()) {
-            return to_route('admin.roles.index')->withErrors(['delete' => 'Este rol no puede ser eliminado porque está asignado a uno o más usuarios.']);
+            return to_route('admin.roles.index')->withErrors([
+                'delete' => 'Este rol no puede ser eliminado porque está asignado a uno o más usuarios.'
+            ]);
         }
 
         $role->delete();

@@ -40,6 +40,7 @@ const save = () => {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
+                closeOpenModal.value = true;
                 ok('Rol creado');
             },
             onError: (errors) => {
@@ -58,6 +59,7 @@ const save = () => {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
+                closeOpenModal.value = true;
                 ok('Rol actualizado');
             },
             onError: (errors) => {

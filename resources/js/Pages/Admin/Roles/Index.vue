@@ -8,7 +8,10 @@ import Icon from "@/Components/Main/Admin/Components/Icons/Icon.vue";
 import TableButton from "@/Components/Main/Admin/Components/Buttons/TableButton.vue";
 import Search from "@/Components/Main/Admin/Components/Searchs/Search.vue";
 import SaveRole from "@/Pages/Admin/Roles/Partials/SaveRole.vue";
+import EditButton from "@/Components/Main/Admin/Components/Buttons/Tables/EditButton.vue";
 import DeleteRole from "@/Pages/Admin/Roles/Partials/DeleteRole.vue";
+import { usePermission } from "@/Composables/permissions";
+
 
 defineOptions({
     layout: MainLayout
@@ -31,6 +34,15 @@ const thead = ['nombre'];
 const url = 'admin.roles.index';
 const callOpenModal = ref(null);
 
+const { hasPermission } = usePermission();
+const canCreateRole = hasPermission("admin.roles.create");
+const canEditRole = hasPermission("admin.roles.edit");
+const canDeleteRole = hasPermission("admin.roles.destroy");
+
+const CreateRoleComponent = canCreateRole ? SaveRole : null;
+const EditButtonComponent = canEditRole ? EditButton : null;
+const DeleteRoleComponent = canDeleteRole ? DeleteRole : null;
+
 const openModal = (op, data) => {
     callOpenModal.value.openModal(op, data);
 };
@@ -47,7 +59,8 @@ const openModal = (op, data) => {
         </template>
 
         <template #createButton>
-            <SaveRole ref="callOpenModal" :permissions="permissions" :filter="filter" :page="page"/>
+            <component :is="CreateRoleComponent" ref="callOpenModal" :permissions="permissions" :filter="filter"
+                       :page="page"/>
         </template>
 
         <template #thead>
@@ -63,11 +76,11 @@ const openModal = (op, data) => {
                 <td class="px-4 py-3">{{ tb.name }}</td>
                 <td class="px-4 py-3">
                     <div class="flex items-center justify-end">
-                        <TableButton>
-                            <Icon @click="openModal(2, tb)" class="text-indigo-500"
-                                  icon="Edit"/>
-                        </TableButton>
-                        <DeleteRole :id="tb.id" :filter="filter" :page="page" :key="tb.id + 'deleteBtn'"/>
+                        <component :is="EditButtonComponent" @click="openModal(2, tb)"
+                                   :key="tb.id + 'editBtn'"/>
+
+                        <component :is="DeleteRoleComponent" :id="tb.id" :filter="filter" :page="page"
+                                   :key="tb.id + 'deleteBtn'"/>
                     </div>
                 </td>
             </tr>

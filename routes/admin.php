@@ -11,7 +11,9 @@ use Inertia\Inertia;
 
 Route::get('dashboard', function () {
     return Inertia::render('Admin/Dashboard');
-})->name('admin.dashboard');
+})
+    ->middleware('permission:admin.dashboard.index')
+    ->name('admin.dashboard');
 
 Route::resource('users', UserController::class)->names('admin.users');
 Route::resource('roles', RoleController::class)->names('admin.roles');

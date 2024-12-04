@@ -67,7 +67,7 @@ class UserController extends Controller implements HasMiddleware
     public function update(Request $request, User $user): RedirectResponse
     {
         if ($user->id === 1) {
-            return redirect()->back()->withErrors(['id' => 'Este usuario no puede ser editado.']);
+            return redirect()->back()->withErrors(['update' => 'Este usuario no puede ser editado.']);
         }
 
         $data = $request->validate([
