@@ -7,12 +7,21 @@ use App\Imports\InvoicesImport;
 use App\Models\Client;
 use App\Models\Invoice;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Maatwebsite\Excel\Facades\Excel;
 
-class InvoiceCompareController extends Controller
+class InvoiceCompareController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('permission:admin.invoices.compare', only: ['index', 'compare']),
+        ];
+    }
+
     public function index(Request $request): \Inertia\Response
     {
         $clients = Client::selectRaw("id, CONCAT(rnc, ' - ', business_name, ' - ', commercial_activity) AS business_name")->get();
@@ -44,7 +53,7 @@ class InvoiceCompareController extends Controller
             'client' => 'required',
             'month' => 'required',
             'year' => 'required',
-            'file' => 'required'
+            'file' => 'required|mimes:xlsx,xls,csv',
         ]);
 
         $excelData = Excel::toArray(new InvoicesImport($data), $data['file']);

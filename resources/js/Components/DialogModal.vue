@@ -1,6 +1,7 @@
 <script setup>
 import Modal from './Modal.vue';
 import { ref } from 'vue';
+import Icon from "@/Components/Main/Admin/Components/Icons/Icon.vue";
 
 const emit = defineEmits(['close']);
 
@@ -66,7 +67,7 @@ const close = () => {
 
                         <button @click="close"
                                 class="text-gray-700 bg-gray-200/60 rounded-full w-8 h-8 shrink-0 flex items-center justify-center">
-                            <font-awesome-icon :class="['w-4 h-4']" :icon="['fas', 'xmark']"/>
+                            <Icon icon="Close"/>
                         </button>
                     </div>
                 </div>

@@ -38,6 +38,9 @@ class Invoice extends Model
         'bonds_certificates',
     ];
 
+    /*----------------------------------------------------------------------------*/
+    // Accessors & Mutators
+    /*----------------------------------------------------------------------------*/
     protected function createdAt(): Attribute
     {
         return Attribute::make(
@@ -73,6 +76,10 @@ class Invoice extends Model
         );
     }
 
+
+    /*----------------------------------------------------------------------------*/
+    // Scopes (local)
+    /*----------------------------------------------------------------------------*/
     public function scopeFilter($query, $clientFilter, $monthFilter, $yearFilter)
     {
         $query->when($clientFilter ?? null && $monthFilter && null && $yearFilter ?? null, function ($query, $clientFilter) use ($monthFilter, $yearFilter) {

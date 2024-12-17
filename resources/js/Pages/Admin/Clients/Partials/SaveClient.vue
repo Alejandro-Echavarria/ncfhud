@@ -8,6 +8,7 @@ import TextInput from '@/Components/TextInput.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import SimpleForm from '@/Components/Main/Admin/Components/Forms/Forms/SimpleForm.vue';
+import Icon from "@/Components/Main/Admin/Components/Icons/Icon.vue";
 
 const props = defineProps({
     data: Object,
@@ -61,7 +62,7 @@ const save = () => {
     }
 };
 
-const openModal = (op, id, rnc, business_name, commercial_activity, email) => {
+const openModal = (op, data) => {
     modal.value = true;
     operation.value = op;
 
@@ -69,11 +70,11 @@ const openModal = (op, id, rnc, business_name, commercial_activity, email) => {
         title.value = 'Crea un nuevo cliente';
     } else {
         title.value = 'Editar cliente';
-        client.value = id;
-        form.rnc = rnc;
-        form.business_name = business_name;
-        form.commercial_activity = commercial_activity;
-        form.email = email;
+        client.value = data.id;
+        form.rnc = data.rnc;
+        form.business_name = data.business_name;
+        form.commercial_activity = data.commercial_activity;
+        form.email = data.email;
     }
 };
 
@@ -94,7 +95,7 @@ defineExpose({openModal});
 <template>
     <div>
         <PrimaryButton class="w-full" @click="openModal(1)">
-            <font-awesome-icon class="mr-2" :icon="['fas', 'plus']"/>
+            <Icon icon="Plus" class="mr-1"/>
             Agregar cliente
         </PrimaryButton>
 

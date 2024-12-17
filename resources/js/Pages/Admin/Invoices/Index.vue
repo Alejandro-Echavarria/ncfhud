@@ -6,6 +6,7 @@ import MainTitle from '@/Components/Main/Admin/Components/Titles/MainTitle.vue';
 import MainTable from '@/Components/Main/Admin/Components/Tables/MainTable.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import Filters from "@/Pages/Admin/Invoices/Partials/Filters.vue";
+import { usePermission } from "@/Composables/permissions.js";
 
 defineOptions({
     layout: MainLayout
@@ -30,24 +31,35 @@ const thead = ['ncf', 'Fecha comprobante', 'monto', 'itbis'];
 const url = 'admin.invoices.index';
 const callOpenModal = ref(null);
 
+const { hasPermission } = usePermission();
+const canCreateInvoice = hasPermission("admin.invoices.create_607");
+
+const LinkComponent = canCreateInvoice ? Link : null;
+const CreateInvoiceComponent = canCreateInvoice ? PrimaryButton : null;
+
 const openModal = (op, id, rnc, business_name, commercial_activity, email) => {
     callOpenModal.value.openModal(op, id, rnc, business_name, commercial_activity, email);
 };
 </script>
 
 <template>
-    <Head title="Facturas" />
+    <Head title="Facturas"/>
 
     <MainTitle>Facturas</MainTitle>
 
     <div class="space-y-6">
-        <Filters :clients="clients" :filters="{ client: clientFilter, month: monthFilter, year: yearFilter }" :url="url"/>
+        <Filters :clients="clients" :filters="{ client: clientFilter, month: monthFilter, year: yearFilter }"
+                 :url="url"/>
 
         <MainTable :pagination="invoices">
-            <template #createButton>
-                <Link :href="route('admin.invoices.create', { client: clientFilter, month: monthFilter, year: yearFilter })">
-                    <PrimaryButton>Crear</PrimaryButton>
-                </Link>
+            <template #createButton v-if="canCreateInvoice">
+                <component :is="LinkComponent"
+                           :href="route(
+                               'admin.invoices.create',
+                               { client: clientFilter, month: monthFilter, year: yearFilter }
+                           )">
+                    <component :is="CreateInvoiceComponent">Crear</component>
+                </component>
             </template>
 
             <template #thead>

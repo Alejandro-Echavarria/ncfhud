@@ -7,11 +7,21 @@ use App\Imports\InvoicesImport;
 use App\Models\Client;
 use App\Models\Invoice;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Inertia\Inertia;
 use Maatwebsite\Excel\Facades\Excel;
 
-class InvoiceController extends Controller
+class InvoiceController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('permission:admin.invoices.index', only: ['index']),
+            new Middleware('permission:admin.invoices.create_607', only: ['create', 'store']),
+        ];
+    }
+
     public function index(Request $request): \Inertia\Response
     {
         $clientFilter = $request?->client;
@@ -56,11 +66,11 @@ class InvoiceController extends Controller
         return Inertia::render('Admin/Invoices/Create', compact('invoices', 'clients', 'client', 'clientFilter', 'monthFilter', 'yearFilter', 'page', 'perPage'));
     }
 
-    public function store(Request $request)
+    public function store(Request $request): void
     {
         $data = $request->validate([
             'client' => 'required',
-            'file' => 'required',
+            'file' => 'required|mimes:xlsx,xls,csv',
         ]);
 
         $excel = Excel::import(new InvoicesImport($data), $data['file']);

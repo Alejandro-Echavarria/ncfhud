@@ -6,6 +6,9 @@ import MainTitle from '@/Components/Main/Admin/Components/Titles/MainTitle.vue';
 import MainTable from '@/Components/Main/Admin/Components/Tables/MainTable.vue';
 import SaveClient from "@/Pages/Admin/Clients/Partials/SaveClient.vue";
 import Search from '@/Components/Main/Admin/Components/Searchs/Search.vue';
+import { usePermission } from "@/Composables/permissions";
+import SaveUser from "@/Pages/Admin/Users/Partials/SaveUser.vue";
+import EditButton from "@/Components/Main/Admin/Components/Buttons/Tables/EditButton.vue";
 
 defineOptions({
     layout: MainLayout
@@ -24,8 +27,15 @@ const thead = ['rnc', 'nombre', 'actividad comercial', 'email', 'creado', 'actua
 const url = 'admin.clients.index';
 const callOpenModal = ref(null);
 
-const openModal = (op, id, rnc, business_name, commercial_activity, email) => {
-    callOpenModal.value.openModal(op, id, rnc, business_name, commercial_activity, email);
+const { hasPermission } = usePermission();
+const canCreateClient = hasPermission("admin.clients.create");
+const canEditClient = hasPermission("admin.clients.edit");
+
+const CreateClientComponent = canCreateClient ? SaveClient : null;
+const EditClientComponent = canEditClient ? EditButton : null;
+
+const openModal = (op, data) => {
+    callOpenModal.value.openModal(op, data);
 };
 </script>
 
@@ -39,8 +49,8 @@ const openModal = (op, id, rnc, business_name, commercial_activity, email) => {
             <Search :filter="filter" :url="url"/>
         </template>
 
-        <template #createButton>
-            <SaveClient ref="callOpenModal" :filter="filter" :page="page"/>
+        <template #createButton v-if="canCreateClient">
+            <component :is="CreateClientComponent" ref="callOpenModal" :filter="filter" :page="page"/>
         </template>
 
         <template #thead>
@@ -60,11 +70,7 @@ const openModal = (op, id, rnc, business_name, commercial_activity, email) => {
                 <td class="px-4 py-3">{{ tb.created_at }}</td>
                 <td class="px-4 py-3">{{ tb.updated_at }}</td>
                 <td class="px-4 py-3 flex items-center justify-end">
-                    <!--                    <TableButton>-->
-                    <!--                        <font-awesome-icon @click="openModal(2, tb.slug, tb.name)" class="w-4 h-4 text-indigo-500"-->
-                    <!--                            :icon="['far', 'pen-to-square']" />-->
-                    <!--                    </TableButton>-->
-                    <!--                    <DeleteCategory :id="tb.slug" :filter="filter" :page="page" :key="tb.id + 'deleteBtn'" />-->
+
                 </td>
             </tr>
         </template>

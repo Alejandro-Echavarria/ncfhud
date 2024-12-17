@@ -21,6 +21,7 @@
     "dependencies": {
         "@headlessui/vue": "^1.7.22",
         "lodash": "^4.17.21",
+        "sweetalert2": "^11.14.5",
         "vue-select": "^4.0.0-beta.6"
     }
 }

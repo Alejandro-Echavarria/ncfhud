@@ -57,6 +57,10 @@ class InvoicesImport implements ToModel, WithValidation, WithHeadingRow, WithCal
     {
         return [
 //            'rnccedula_o_pasaporte' => 'required|string|max:9|exists:clients,rnc',
+            'fecha_comprobante' => [
+                'required',
+                'regex:/^\d{4}(0[1-9]|1[0-2])([0-2][0-9]|3[0-1])$/'
+            ],
             'numero_comprobante_fiscal' => 'required|string|max:19|unique:invoices,ncf',
         ];
     }

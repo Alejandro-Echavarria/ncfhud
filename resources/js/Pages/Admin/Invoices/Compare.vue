@@ -36,7 +36,8 @@ const form = useForm({
     file: null
 });
 
-const thead = ['rnc', 'ncf', 'Detalle'];
+const thead = ['rnc', 'ncf', 'Fecha', 'Monto', 'itbis'];
+const thead_differences = ['rnc', 'ncf', 'Detalle'];
 const url = 'admin.invoicescompare.index';
 
 const excel = ref([]);
@@ -115,7 +116,8 @@ const compare = async () => {
                     </div>
 
                     <div>
-                        <PrimaryButton @click="compare()" :class="{ 'opacity-25 animate-pulse': comparing }" :disabled="comparing">
+                        <PrimaryButton @click="compare()" :class="{ 'opacity-25 animate-pulse': comparing }"
+                                       :disabled="comparing">
                             <template v-if="comparing">
                                 Comparando..
                             </template>
@@ -140,7 +142,7 @@ const compare = async () => {
                 NCF no declarados en el reporte de terceros DGII
             </H2Title>
 
-            <MainTable :actions="false" :copy-table="true" :show-all="true">
+            <MainTable :actions="false" :copy-table="true" :show-all-button="true">
                 <template #thead>
                     <th v-for="(th, key) in thead" scope="col" class="px-4 py-3" :key="key + 'th'">
                         {{ th }}
@@ -153,14 +155,17 @@ const compare = async () => {
                         :key="tb.id + 'tb'">
                         <td class="px-4 py-3">{{ tb.rnc }}</td>
                         <td class="px-4 py-3">{{ tb.ncf }}</td>
-                        <td class="px-4 py-3">
-                            <div>
-                                <div>
-<!--                                    <span class="font-semibold text-gray-700">Monto: </span>-->
-                                    {{ tb.amount }}
-                                </div>
-                            </div>
-                        </td>
+                        <td class="px-4 py-3">{{ tb.proof_date }}</td>
+                        <td class="px-4 py-3">{{ tb.amount }}</td>
+                        <td class="px-4 py-3">{{ tb.itbis }}</td>
+                        <!--                        <td class="px-4 py-3">-->
+                        <!--                            <div>-->
+                        <!--                                <div>-->
+                        <!--                                    <span class="font-semibold text-gray-700">Monto: </span>-->
+                        <!--                                    {{ tb.amount }}-->
+                        <!--                                </div>-->
+                        <!--                            </div>-->
+                        <!--                        </td>-->
                     </tr>
                 </template>
             </MainTable>
@@ -168,10 +173,10 @@ const compare = async () => {
 
         <div>
             <H2Title>
-                NCF faltantes declarados por terceros
+                NCF declarados por terceros que no corresponden al 607 reportado
             </H2Title>
 
-            <MainTable :actions="false" :copy-table="true">
+            <MainTable :actions="false" :copy-table="true" :show-all-button="true">
                 <template #thead>
                     <th v-for="(th, key) in thead" scope="col" class="px-4 py-3" :key="key + 'th'">
                         {{ th }}
@@ -184,30 +189,9 @@ const compare = async () => {
                         :key="tb.id + 'tb'">
                         <td class="px-4 py-3">{{ tb.rnc }}</td>
                         <td class="px-4 py-3">{{ tb.ncf }}</td>
-                        <td class="px-4 py-3">
-                            <div>
-<!--                                <div>-->
-<!--                                    <span class="font-semibold text-gray-700">RNC: </span>-->
-<!--                                    {{ tb.rnc }}-->
-<!--                                </div>-->
-<!--                                <div>-->
-<!--                                    <span class="font-semibold text-gray-700">Tipo de identificaci&oacute;n: </span>-->
-<!--                                    {{ tb.identification_type }}-->
-<!--                                </div>-->
-<!--                                <div>-->
-<!--                                    <span class="font-semibold text-gray-700">Fecha de comprobante: </span>-->
-<!--                                    {{ tb.proof_date }}-->
-<!--                                </div>-->
-                                <div>
-<!--                                    <span class="font-semibold text-gray-700">Monto: </span>-->
-                                    {{ tb.amount }}
-                                </div>
-<!--                                <div>-->
-<!--                                    <span class="font-semibold text-gray-700">Itbis: </span>-->
-<!--                                    {{ tb.itbis }}-->
-<!--                                </div>-->
-                            </div>
-                        </td>
+                        <td class="px-4 py-3">{{ tb.proof_date }}</td>
+                        <td class="px-4 py-3">{{ tb.amount }}</td>
+                        <td class="px-4 py-3">{{ tb.itbis }}</td>
                     </tr>
                 </template>
             </MainTable>
@@ -218,31 +202,31 @@ const compare = async () => {
                 NCF con diferencias
             </H2Title>
 
-            <MainTable :actions="false" :tailwind-copy="true">
+            <MainTable :actions="false" :copy-table="true" :show-all-button="true">
                 <template #thead>
-                    <th v-for="(th, key) in thead" scope="col" class="px-4 py-3" :key="key + 'th'">
+                    <th v-for="(th, key) in thead_differences" scope="col" :class="['px-4 py-3', key === 2 && 'bg-white']" :key="key + 'th'">
                         {{ th }}
                     </th>
                 </template>
 
                 <template #tbody>
                     <tr v-for="tb in differences"
-                        class="dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition ease-linear duration-300"
+                        class="hover:bg-gray-50 dark:hover:bg-gray-600 transition ease-linear duration-300"
                         :key="tb.id + 'tb'">
                         <td class="px-4 py-3">{{ tb.excel_row.rnc }}</td>
                         <td class="px-4 py-3">{{ tb.excel_row.ncf }}</td>
-                        <td class="px-4 py-3">
-                            <div class="grid grid-cols-2 gap-6">
-                                <div v-for="(difference, key) in tb.differences"
-                                     class="flex-col border border-gray-300 p-2 rounded-lg">
-                                    <div class="font-bold flex justify-center uppercase text-gray-700">{{ key }}</div>
-                                    <div>
-                                        <span class="font-semibold text-gray-700">3ro:</span>
+                        <td class="px-4 py-3 border border-gray-300 p-2 rounded-lg"
+                            v-for="(difference, key) in tb.differences" :key="key">
+                            <div class="flex text-xs min-w-[150px] flex-shrink-0">
+                                <div class="pr-1 font-bold justify-center uppercase text-gray-700">{{ key }}</div>
+                                <div class="flex gap-3">
+                                    <div class="whitespace-nowrap">
+                                        <span class="font-semibold text-gray-700">| 606:</span>
                                         {{ difference.excel }}
                                     </div>
 
-                                    <div>
-                                        <span class="font-semibold text-gray-700">DB:</span>
+                                    <div class="whitespace-nowrap">
+                                        <span class="font-semibold text-gray-700">607:</span>
                                         {{ difference.database }}
                                     </div>
                                 </div>
@@ -273,6 +257,8 @@ const compare = async () => {
                             <td class="px-4 py-3">{{ tb.rnc }}</td>
                             <td class="px-4 py-3">{{ tb.ncf }}</td>
                             <td class="px-4 py-3">{{ tb.proof_date }}</td>
+                            <td class="px-4 py-3">{{ tb.amount }}</td>
+                            <td class="px-4 py-3">{{ tb.itbis }}</td>
                         </tr>
                     </template>
                 </MainTable>
