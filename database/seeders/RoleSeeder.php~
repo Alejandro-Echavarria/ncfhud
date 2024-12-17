@@ -104,7 +104,7 @@ class RoleSeeder extends Seeder
             'order' => 4
         ])->syncRoles([$admin, $operator]);
 
-        // Gestión de Facturas
+// Gestión de Facturas
         Permission::create([
             'name' => 'admin.invoices.index',
             'description' => 'Ver facturas',

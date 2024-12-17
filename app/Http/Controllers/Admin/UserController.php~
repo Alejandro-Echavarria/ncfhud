@@ -35,7 +35,7 @@ class UserController extends Controller implements HasMiddleware
             ->with('roles:id,name')
             ->paginate(10);
 
-        $roles = Role::select('id', 'name')->get();
+        $roles = Role::select('id', 'name', 'description')->get();
 
         return Inertia::render('Admin/Users/Index', compact('page', 'filter', 'users', 'roles'));
     }

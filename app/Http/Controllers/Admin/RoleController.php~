@@ -28,8 +28,7 @@ class RoleController extends Controller implements HasMiddleware
     {
         $roles = Role::with('permissions:id')->paginate(10);
         $permissions = Permission::select('id', 'name', 'description')
-            ->orderBy('type')
-            ->orderBy('order')
+            ->orderBy('type', 'order')
             ->get();
 
         return Inertia::render('Admin/Roles/Index', compact('roles', 'permissions'));
