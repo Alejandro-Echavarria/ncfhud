@@ -50,7 +50,7 @@ class RoleSeeder extends Seeder
         Permission::create(['name' => 'admin.invoices.create_607',
             'description' => 'Crear facturas 607'])->syncRoles([$admin, $operator]);
         Permission::create(['name' => 'admin.invoices.create_606',
-            'description' => 'Crear facturas 607'])->syncRoles([$admin, $operator]);
+            'description' => 'Crear facturas 606'])->syncRoles([$admin, $operator]);
         Permission::create(['name' => 'admin.invoices.edit',
             'description' => 'Editar facturas'])->syncRoles([$admin, $operator]);
         Permission::create(['name' => 'admin.invoices.compare',

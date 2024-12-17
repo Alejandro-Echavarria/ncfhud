@@ -50,6 +50,7 @@ const openModal = (op, data) => {
         </template>
 
         <template #createButton v-if="canCreateClient">
+            <SaveClient ref="callOpenModal" :filter="filter" :page="page"/>
             <component :is="CreateClientComponent" ref="callOpenModal" :filter="filter" :page="page"/>
         </template>
 

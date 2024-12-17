@@ -6,10 +6,21 @@ use App\Http\Controllers\Controller;
 use App\Models\Client;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Inertia\Inertia;
 
-class ClientController extends Controller
+class ClientController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('permission:admin.clients.index', only: ['index']),
+            new Middleware('permission:admin.clients.create', only: ['store']),
+            new Middleware('permission:admin.clients.edit', only: ['update']),
+        ];
+    }
+
     public function index(Request $request): \Inertia\Response
     {
         $page = $request?->page;

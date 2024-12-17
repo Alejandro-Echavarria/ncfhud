@@ -18,7 +18,8 @@ class InvoiceCompareController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware('permission:admin.invoices.compare', only: ['index', 'compare']),
+            new Middleware('permission:admin.invoices_compare.index', only: ['index']),
+            new Middleware('permission:admin.invoices_compare.compare', only: ['compare']),
         ];
     }
 

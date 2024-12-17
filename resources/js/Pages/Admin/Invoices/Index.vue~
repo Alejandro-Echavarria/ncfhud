@@ -32,7 +32,7 @@ const url = 'admin.invoices.index';
 const callOpenModal = ref(null);
 
 const { hasPermission } = usePermission();
-const canCreateInvoice = hasPermission("admin.invoices.create_607");
+const canCreateInvoice = hasPermission("admin.invoices.create");
 
 const LinkComponent = canCreateInvoice ? Link : null;
 const CreateInvoiceComponent = canCreateInvoice ? PrimaryButton : null;
