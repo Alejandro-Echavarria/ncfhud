@@ -27,35 +27,6 @@ const navItems = computed(() => [
         visible: true,
     },
     {
-        // href: 'admin.dashboard',
-        // active: route().current('admin.dashboard'),
-        // activeClass: '/admin/users',
-        label: 'Administración',
-        children: [
-            {
-                href: 'admin.users.index',
-                active: route().current('admin.users.index'),
-                activeClass: '/admin/users',
-                label: 'Usuarios',
-                children: [],
-                permissions: ['admin.users.index'],
-                visible: true
-            },
-            {
-                href: 'admin.roles.index',
-                active: route().current('admin.roles.index'),
-                activeClass: '/admin/roles',
-                label: 'Roles',
-                children: [],
-                permissions: ['admin.roles.index'],
-                visible: true
-            }
-        ],
-        icon: 'Administration',
-        permissions: ['admin.users.index', 'admin.roles.index'],
-        visible: true
-    },
-    {
         href: 'admin.clients.index',
         active: route().current('admin.clients.index'),
         activeClass: '/admin/clients',
@@ -109,6 +80,35 @@ const navItems = computed(() => [
         ],
         icon: 'Invoice',
         permissions: ['admin.invoices.index', 'admin.invoices.create_607', 'admin.invoices.compare'],
+        visible: true
+    },
+    {
+        // href: 'admin.dashboard',
+        // active: route().current('admin.dashboard'),
+        // activeClass: '/admin/users',
+        label: 'Administración',
+        children: [
+            {
+                href: 'admin.users.index',
+                active: route().current('admin.users.index'),
+                activeClass: '/admin/users',
+                label: 'Usuarios',
+                children: [],
+                permissions: ['admin.users.index'],
+                visible: true
+            },
+            {
+                href: 'admin.roles.index',
+                active: route().current('admin.roles.index'),
+                activeClass: '/admin/roles',
+                label: 'Roles',
+                children: [],
+                permissions: ['admin.roles.index'],
+                visible: true
+            }
+        ],
+        icon: 'Administration',
+        permissions: ['admin.users.index', 'admin.roles.index'],
         visible: true
     },
 ]);

@@ -22,4 +22,5 @@ Route::resource('clients', ClientController::class)->names('admin.clients');
 
 Route::resource('invoices', InvoiceController::class)->names('admin.invoices');
 Route::resource('invoices-compare', InvoiceCompareController::class)->names('admin.invoicescompare');
-//Route::post('invoices-compare/compare', [InvoiceCompareController::class, 'compare'])->name('admin.invoicescompare.compare');
+
+Route::post('api/v1/invoices-compare/compare', [InvoiceCompareController::class, 'compare'])->name('api.v1.invoicescompare.compare');

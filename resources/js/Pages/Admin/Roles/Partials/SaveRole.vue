@@ -128,17 +128,31 @@ defineExpose({ openModal });
                                     Roles
                                     <span class="text-red-500"> * </span>
                                 </span>
-                                <div class="grid grid-cols-2 gap-3">
-                                    <div v-for="permission in permissions" :key="permission.id" class="flex gap-3">
-                                        <Checkbox v-model:checked="form.permissions" :value="permission.id"
-                                                  :id="`role-${permission.name}`"/>
 
-                                        <InputLabel :for="`role-${permission.name}`" :value="permission.description"
-                                                    :required="false"/>
+                                <div v-for="(permissionsByType, type) in permissions" :key="type" class="mb-8">
+                                    <!-- Título del tipo de permisos -->
+                                    <div class="my-4 capitalize flex gap-1">
+                                        <p class="text-sm font-medium">
+                                            {{ type.replace('_', ' ') }}
+                                        </p>
                                     </div>
 
-                                    <InputError :message="form.errors.permissions" class="mt-2"/>
+                                    <!-- Permisos del tipo -->
+                                    <div class="grid grid-cols-2 gap-3">
+                                        <div v-for="permission in permissionsByType" :key="permission.id"
+                                             class="flex gap-3">
+                                            <Checkbox v-model:checked="form.permissions" :value="permission.id"
+                                                      :id="`role-${permission.name}`"/>
+
+                                            <InputLabel class="font-normal" :for="`role-${permission.name}`"
+                                                        :value="permission.description"
+                                                        :required="false"/>
+                                        </div>
+                                    </div>
                                 </div>
+
+                                <!-- Error de permisos -->
+                                <InputError :message="form.errors.permissions" class="mt-2"/>
                             </div>
                         </div>
                     </template>
