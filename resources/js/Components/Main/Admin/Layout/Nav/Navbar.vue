@@ -62,6 +62,16 @@ const navItems = computed(() => [
                         permissions: ['admin.invoices.create_607'],
                         visible: true
                     },
+                    {
+                        href: 'admin.invoices606.create',
+                        active: route().current('admin.invoices606.create'),
+                        activeClass: '/admin/invoices-606/create',
+                        label: '606',
+                        children: [],
+                        icon: '',
+                        permissions: ['admin.invoices.create_606'],
+                        visible: true
+                    },
                 ],
                 icon: '',
                 permissions: ['admin.invoices.create_607'],

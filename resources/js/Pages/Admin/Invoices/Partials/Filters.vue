@@ -8,7 +8,8 @@ import VueSelect from "@/Components/Main/Admin/Components/Selects/VueSelect.vue"
 const props = defineProps({
     clients: {
         type: Object,
-        required: true
+        default: null,
+        required: false
     },
     filters: {
         type: Object,
@@ -36,6 +37,11 @@ const form = useForm({
     year: yearParam || currentYear,
     perPage: perPageParam || 10,
 });
+
+const years = ref(Array.from({ length: 2041 - 2010 }, (_, i) => ({
+    'id': 2010 + i,
+    'name': 2010 + i
+})));
 
 const monthOptions = ref([
     {
@@ -87,7 +93,7 @@ const monthOptions = ref([
         'name': 'Diciembre'
     }
 ]);
-const yearOptions = ref(Array.from({ length: 2041 - 2010 }, (_, i) => ({ 'id': `${2010 + i}`, 'name': `${2010 + i}` })));
+const yearOptions = ref(years.value);
 const perPageOptions = ref([
     {
         'id': 10,
@@ -118,13 +124,16 @@ watch(form, () => {
 });
 
 const getData = () => {
-    if (form.client != null) {
-        router.get(route(props.url), pickBy({'client': form.client, 'month': form.month, 'year': form.year, 'per_page': form.perPage}), {
-            preserveScroll: true,
-            preserveState: true,
-            replace: true
-        });
-    }
+    router.get(route(props.url), pickBy({
+        'client': form.client,
+        'month': form.month,
+        'year': form.year,
+        'per_page': form.perPage
+    }), {
+        preserveScroll: true,
+        preserveState: true,
+        replace: true
+    });
 };
 
 const debounce = (func, wait) => {
@@ -143,24 +152,28 @@ const debounce = (func, wait) => {
 
 <template>
     <div class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-12 gap-6">
-        <div class="sm:col-span-3 md:col-span-12">
-            <InputLabel for="client" value="Cliente" />
-            <VueSelect id="client" label="business_name" v-model="form.client" :options="clients" :reduce="options => options.id" />
+        <div v-if="clients !== null" class="sm:col-span-3 md:col-span-12">
+            <InputLabel for="client" value="Cliente"/>
+            <VueSelect id="client" label="business_name" v-model="form.client" :options="clients"
+                       :reduce="options => options.id"/>
         </div>
 
         <div class="sm:col-span-1 md:col-span-4">
-            <InputLabel for="month" value="Mes" />
-            <VueSelect id="month" label="name" v-model="form.month" :options="monthOptions" :reduce="options => options.id" />
+            <InputLabel for="month" value="Mes"/>
+            <VueSelect id="month" label="name" v-model="form.month" :options="monthOptions"
+                       :reduce="options => options.id"/>
         </div>
 
         <div class="sm:col-span-1 md:col-span-4">
-            <InputLabel for="year" value="Año" />
-            <VueSelect id="year" label="name" v-model="form.year" :options="yearOptions" :reduce="options => options.id" />
+            <InputLabel for="year" value="Año"/>
+            <VueSelect id="year" label="name" v-model="form.year" :options="yearOptions"
+                       :reduce="options => options.id"/>
         </div>
 
         <div class="sm:col-span-1 md:col-span-4">
-            <InputLabel for="perPage" value="Registros por página" />
-            <VueSelect id="perPage" label="name" v-model="form.perPage" :options="perPageOptions" :reduce="options => options.id" />
+            <InputLabel for="perPage" value="Registros por página"/>
+            <VueSelect id="perPage" label="name" v-model="form.perPage" :options="perPageOptions"
+                       :reduce="options => options.id"/>
         </div>
     </div>
 </template>

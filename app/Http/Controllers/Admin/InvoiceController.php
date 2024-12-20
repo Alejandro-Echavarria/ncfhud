@@ -69,7 +69,7 @@ class InvoiceController extends Controller implements HasMiddleware
     public function store(Request $request): void
     {
         $data = $request->validate([
-            'client' => 'required',
+            'client' => 'required|exists:clients,id',
             'file' => 'required|mimes:xlsx,xls,csv',
         ]);
 

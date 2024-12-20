@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\Invoice606Controller;
 use App\Http\Controllers\Admin\RoleController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -22,5 +23,7 @@ Route::resource('clients', ClientController::class)->names('admin.clients');
 
 Route::resource('invoices', InvoiceController::class)->names('admin.invoices');
 Route::resource('invoices-compare', InvoiceCompareController::class)->names('admin.invoicescompare');
+
+Route::resource('invoices-606', Invoice606Controller::class)->names('admin.invoices606');
 
 Route::post('api/v1/invoices-compare/compare', [InvoiceCompareController::class, 'compare'])->name('api.v1.invoicescompare.compare');
