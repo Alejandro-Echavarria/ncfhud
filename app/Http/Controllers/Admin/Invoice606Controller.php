@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Imports\Invoices606Import;
+use App\Models\Client;
 use App\Models\Invoice606;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
@@ -23,24 +24,32 @@ class Invoice606Controller extends Controller implements HasMiddleware
 
     public function create(Request $request): Response
     {
+        $clients = Client::selectRaw(
+            "id, CONCAT(rnc, ' - ', business_name, ' - ', commercial_activity) AS business_name"
+        )->get();
+
         $clientFilter = $request?->client;
         $monthFilter = $request?->month;
         $yearFilter = $request?->year;
         $perPage = $request?->per_page;
         $page = $request?->page;
 
+        $client = [];
         $invoices = [];
 
-        if ($monthFilter && $yearFilter) {
+        if ($clientFilter && $monthFilter && $yearFilter) {
+            $client = Client::select('id', 'business_name', 'commercial_activity')
+                ->where('id', $clientFilter)
+                ->get();
+
             $invoices = Invoice606::filter($clientFilter, $monthFilter, $yearFilter)
                 ->orderBy('proof_date', 'asc')
                 ->paginate($perPage);
         }
 
         return Inertia::render('Admin/Invoices/606/Create', compact(
-                'invoices', 'clientFilter',
-                'monthFilter', 'yearFilter',
-                'perPage', 'page'
+                'invoices', 'clients', 'client',
+                'clientFilter', 'monthFilter', 'yearFilter', 'page', 'perPage'
             )
         );
     }
@@ -48,13 +57,64 @@ class Invoice606Controller extends Controller implements HasMiddleware
     public function store(Request $request): void
     {
         $data = $request->validate([
+            'client' => 'required|exists:clients,id',
             'file' => 'required|mimes:xlsx,xls,csv',
         ]);
 
-        $excel = Excel::import(new Invoices606Import($data), $data['file']);
+        $data['user'] = auth()->user()->id;
 
-//        $excel = Excel::toArray(new Invoices606Import($data), $data['file']);
-//
-//        return response()->json(["success" => true, 'data' => $excel], 200);
+        Excel::import(new Invoices606Import($data), $data['file']);
+    }
+
+    public function delete(Request $request): Response
+    {
+        $clients = Client::selectRaw(
+            "id, CONCAT(rnc, ' - ', business_name, ' - ', commercial_activity) AS business_name"
+        )->get();
+
+        $clientFilter = $request?->client;
+        $monthFilter = $request?->month;
+        $yearFilter = $request?->year;
+        $perPage = $request?->per_page;
+        $page = $request?->page;
+
+        $client = [];
+        $invoices = [];
+
+        if ($clientFilter && $monthFilter && $yearFilter) {
+            $client = Client::select('id', 'business_name', 'commercial_activity')
+                ->where('id', $clientFilter)
+                ->get();
+
+            $invoices = Invoice606::filter($clientFilter, $monthFilter, $yearFilter)
+                ->orderBy('proof_date', 'asc')
+                ->paginate($perPage);
+        }
+
+        return Inertia::render('Admin/Invoices/606/Delete',
+            compact(
+                'invoices', 'clients', 'client',
+                'clientFilter', 'monthFilter', 'yearFilter', 'page', 'perPage'
+            )
+        );
+    }
+
+    public function destroy(Request $request)
+    {
+        $data = $request->validate([
+            'client' => 'required|exists:clients,id',
+            'month' => 'required|between:1,12',
+            'year' => 'required|digits:4',
+        ]);
+
+        Invoice606::filter($data['client'], $data['month'], $data['year'])
+            ->delete();
+
+        return to_route('admin.invoices606.delete', [
+            'client' => $data['client'],
+            'month' => $data['month'],
+            'year' => $data['year'],
+            'per_page' => '10'
+        ])->with('flash', 'Facturas eliminadas');
     }
 }

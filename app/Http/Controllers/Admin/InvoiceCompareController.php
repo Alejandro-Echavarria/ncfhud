@@ -56,6 +56,8 @@ class InvoiceCompareController extends Controller implements HasMiddleware
             'file' => 'required|mimes:xlsx,xls,csv',
         ]);
 
+        $data['user'] = auth()->user()->id;
+
         $excelData = Excel::toArray(new InvoicesImport($data), $data['file']);
 
         $adjustedExcelData = array_map(function ($row) {

@@ -15,6 +15,10 @@ defineOptions({
 });
 
 const props = defineProps({
+    clients: {
+        type: Object,
+        required: true
+    },
     invoices: {
         type: Object,
         default: null
@@ -26,17 +30,19 @@ const props = defineProps({
 });
 
 const form = useForm({
+    client: props.clientFilter,
     month: props.monthFilter,
     year: props.yearFilter,
     file: null
 });
 
-const thead = ['ncf', 'Fecha comprobante', 'monto', 'itbis'];
+const thead = ['rnc', 'razon social', 'ncf', 'Fecha comprobante', 'monto', 'itbis'];
 const url = 'admin.invoices606.create';
 
 watch(
-    () => [props.monthFilter, props.yearFilter],
-    ([newMonth, newYear]) => {
+    () => [props.clientFilter, props.monthFilter, props.yearFilter],
+    ([newClient, newMonth, newYear]) => {
+        form.client = newClient;
         form.month = newMonth;
         form.year = newYear;
     }
@@ -51,7 +57,7 @@ const save = () => {
         preserveScroll: true,
         preserveState: true,
         onSuccess: () => {
-            ok('Rol creado');
+            ok('Facturas cargadas');
         },
         onError: (errors) => {
             if (errors.data) {
@@ -72,7 +78,7 @@ const ok = (msj, type, timer, toast, title) => {
     <MainTitle>Facturas 606</MainTitle>
 
     <div class="space-y-6">
-        <Filters :filters="{ month: monthFilter, year: yearFilter }"
+        <Filters :clients="clients" :filters="{ month: monthFilter, year: yearFilter }"
                  :url="url"/>
 
         <div>
@@ -90,7 +96,7 @@ const ok = (msj, type, timer, toast, title) => {
                     <PrimaryButton
                         @click="save()" :class="{ 'opacity-25': form.processing }"
                         :disabled="form.processing">
-                        {{ form.processing ? 'Procesando...' : 'Crear' }}
+                        {{ form.processing ? 'Procesando...' : 'Cargar' }}
                     </PrimaryButton>
                 </div>
             </div>
@@ -114,10 +120,15 @@ const ok = (msj, type, timer, toast, title) => {
                     <tr v-for="tb in invoices.data"
                         class="dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition ease-linear duration-300"
                         :key="tb.id + 'tb'">
+                        <td class="px-4 py-3">{{ tb.rnc }}</td>
+                        <td class="px-4 py-3">{{ tb.business_name }}</td>
                         <td class="px-4 py-3">{{ tb.ncf }}</td>
                         <td class="px-4 py-3">{{ tb.proof_date }}</td>
                         <td class="px-4 py-3">{{ tb.amount }}</td>
                         <td class="px-4 py-3">{{ tb.itbis }}</td>
+                        <td class="px-4 py-3 flex items-center justify-end">
+
+                        </td>
                     </tr>
                 </template>
             </MainTable>

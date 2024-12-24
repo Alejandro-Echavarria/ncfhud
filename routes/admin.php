@@ -21,9 +21,16 @@ Route::resource('roles', RoleController::class)->names('admin.roles');
 
 Route::resource('clients', ClientController::class)->names('admin.clients');
 
-Route::resource('invoices', InvoiceController::class)->names('admin.invoices');
+Route::resource('invoices', InvoiceController::class)
+    ->only('index', 'create', 'store', 'destroy')
+    ->names('admin.invoices');
+Route::get('invoices/delete', [InvoiceController::class, 'delete'])->name('admin.invoices.delete');
+
 Route::resource('invoices-compare', InvoiceCompareController::class)->names('admin.invoicescompare');
 
-Route::resource('invoices-606', Invoice606Controller::class)->names('admin.invoices606');
+Route::resource('invoices-606', Invoice606Controller::class)
+    ->only('create', 'store', 'destroy')
+    ->names('admin.invoices606');
+Route::get('invoices-606/delete', [Invoice606Controller::class, 'delete'])->name('admin.invoices606.delete');
 
 Route::post('api/v1/invoices-compare/compare', [InvoiceCompareController::class, 'compare'])->name('api.v1.invoicescompare.compare');

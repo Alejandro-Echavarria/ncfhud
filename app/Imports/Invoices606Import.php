@@ -11,12 +11,13 @@ use Maatwebsite\Excel\Concerns\WithValidation;
 
 class Invoices606Import implements ToModel, WithValidation, WithHeadingRow, WithCalculatedFormulas
 {
-
     private int $userId;
+    private int $clientId;
 
     public function __construct($data)
     {
-        $this->userId = 1;
+        $this->userId = $data['user'];
+        $this->clientId = $data['client'];
     }
 
     /**
@@ -31,6 +32,7 @@ class Invoices606Import implements ToModel, WithValidation, WithHeadingRow, With
 
         return new Invoice606([
             'user_id' => $this->userId,
+            'client_id' => $this->clientId,
             'rnc' => $row['rnc_cedula'],
             'business_name' => $row['razon_social'],
             'ncf' => $row['numero_de_comprobante'],
@@ -49,14 +51,14 @@ class Invoices606Import implements ToModel, WithValidation, WithHeadingRow, With
                 'required',
                 'regex:/^\d{4}(0[1-9]|1[0-2])([0-2][0-9]|3[0-1])$/'
             ],
-            'numero_de_comprobante' => 'required|string|max:19|unique:invoices,ncf',
+            'numero_de_comprobante' => 'required|string|max:19|unique:invoices_606,ncf',
         ];
     }
 
     public function customValidationAttributes(): array
     {
         return [
-            'rnccedula_o_pasaporte' => 'rnc',
+            'rnc_cedula' => 'rnc',
             'numero_de_comprobante' => 'ncf',
         ];
     }

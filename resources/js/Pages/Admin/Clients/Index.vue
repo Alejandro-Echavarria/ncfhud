@@ -7,7 +7,6 @@ import MainTable from '@/Components/Main/Admin/Components/Tables/MainTable.vue';
 import SaveClient from "@/Pages/Admin/Clients/Partials/SaveClient.vue";
 import Search from '@/Components/Main/Admin/Components/Searchs/Search.vue';
 import { usePermission } from "@/Composables/permissions";
-import SaveUser from "@/Pages/Admin/Users/Partials/SaveUser.vue";
 import EditButton from "@/Components/Main/Admin/Components/Buttons/Tables/EditButton.vue";
 
 defineOptions({

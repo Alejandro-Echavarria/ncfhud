@@ -15,6 +15,7 @@ class Invoice606 extends Model
     protected $table = 'invoices_606';
     protected $fillable = [
         'user_id',
+        'client_id',
         'rnc',
         'business_name',
         'ncf',
@@ -42,6 +43,26 @@ class Invoice606 extends Model
         );
     }
 
+    protected function proofDate(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => Carbon::parse($value)->format('d/m/Y'),
+        );
+    }
+
+    protected function amount(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => "RD$ " . number_format($value, 2, '.', ','),
+        );
+    }
+
+    protected function itbis(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => "RD$ " . number_format($value, 2, '.', ','),
+        );
+    }
     /*----------------------------------------------------------------------------*/
     // Scopes (local)
     /*----------------------------------------------------------------------------*/

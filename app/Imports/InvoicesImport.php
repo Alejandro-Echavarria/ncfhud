@@ -15,7 +15,7 @@ class InvoicesImport implements ToModel, WithValidation, WithHeadingRow, WithCal
 
     public function __construct($data)
     {
-        $this->userId = 1;
+        $this->userId = $data['user'];
         $this->clientId = $data['client'];
     }
 
