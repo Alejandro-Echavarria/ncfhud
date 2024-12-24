@@ -9,6 +9,7 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import SimpleForm from '@/Components/Main/Admin/Components/Forms/Forms/SimpleForm.vue';
 import Icon from "@/Components/Main/Admin/Components/Icons/Icon.vue";
+import { usePermission } from "@/Composables/permissions.js";
 
 const props = defineProps({
     data: Object,
@@ -27,6 +28,11 @@ const form = useForm({
     commercial_activity: '',
     email: '',
 });
+
+const { hasPermission } = usePermission();
+const canCreateClient = hasPermission("admin.clients.create");
+
+const PrimaryButtonComponent = canCreateClient ? PrimaryButton : null;
 
 const save = () => {
     if (operation.value === 1) {
@@ -89,15 +95,15 @@ const ok = (msj, type, timer) => {
     // SaveAlert(msj, type, timer);
 };
 
-defineExpose({openModal});
+defineExpose({ openModal });
 </script>
 
 <template>
     <div>
-        <PrimaryButton class="w-full" @click="openModal(1)">
+        <component :is="PrimaryButtonComponent" ref="callOpenModal" class="w-full" @click="openModal(1)">
             <Icon icon="Plus" class="mr-1"/>
             Agregar cliente
-        </PrimaryButton>
+        </component>
 
         <DialogModal :show="modal" :maxWidth="'4xl'" @close="closeModal">
             <template #title>

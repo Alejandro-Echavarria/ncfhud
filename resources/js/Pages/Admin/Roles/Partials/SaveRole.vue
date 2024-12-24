@@ -11,6 +11,7 @@ import TextInput from "@/Components/TextInput.vue";
 import InputError from "@/Components/InputError.vue";
 import Checkbox from "@/Components/Checkbox.vue";
 import SaveAlert from "@/Helpers/Alerts/SaveAlert.js";
+import { usePermission } from "@/Composables/permissions.js";
 
 const props = defineProps({
     data: Object,
@@ -24,6 +25,11 @@ const modal = ref(false);
 const closeOpenModal = ref(true);
 const operation = ref(1);
 const role = ref(null);
+
+const { hasPermission } = usePermission();
+const canCreateRole = hasPermission("admin.roles.create");
+
+const PrimaryButtonComponent = canCreateRole ? PrimaryButton : null;
 
 const form = useForm({
     name: '',
@@ -102,10 +108,10 @@ defineExpose({ openModal });
 
 <template>
     <div>
-        <PrimaryButton class="w-full" @click="openModal(1)">
+        <component :is="PrimaryButtonComponent" ref="callOpenModal" class="w-full" @click="openModal(1)">
             <Icon icon="Plus" class="mr-1"/>
             Agregar role
-        </PrimaryButton>
+        </component>
 
         <DialogModal :show="modal" :maxWidth="'4xl'" @close="closeModal">
             <template #title>

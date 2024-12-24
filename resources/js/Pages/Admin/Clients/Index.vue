@@ -30,7 +30,7 @@ const { hasPermission } = usePermission();
 const canCreateClient = hasPermission("admin.clients.create");
 const canEditClient = hasPermission("admin.clients.edit");
 
-const CreateClientComponent = canCreateClient ? SaveClient : null;
+const CreateClientComponent = canCreateClient || canEditClient ? SaveClient : null;
 const EditClientComponent = canEditClient ? EditButton : null;
 
 const openModal = (op, data) => {
@@ -48,7 +48,7 @@ const openModal = (op, data) => {
             <Search :filter="filter" :url="url"/>
         </template>
 
-        <template #createButton v-if="canCreateClient">
+        <template #createButton>
             <component :is="CreateClientComponent" ref="callOpenModal" :filter="filter" :page="page"/>
         </template>
 

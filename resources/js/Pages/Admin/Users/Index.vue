@@ -34,7 +34,7 @@ const { hasPermission } = usePermission();
 const canCreateUser = hasPermission("admin.users.create");
 const canEditUser = hasPermission("admin.users.edit");
 
-const CreateUserComponent = canCreateUser ? SaveUser : null;
+const CreateUserComponent = canCreateUser || canEditUser ? SaveUser : null;
 const EditUserComponent = canEditUser ? EditButton : null;
 
 const openModal = (op, data) => {
@@ -52,7 +52,7 @@ const openModal = (op, data) => {
             <Search :filter="filter" :url="url"/>
         </template>
 
-        <template #createButton v-if="canCreateUser">
+        <template #createButton>
             <component :is="CreateUserComponent" ref="callOpenModal" :data="{ roles }" :filter="filter" :page="page"/>
         </template>
 
