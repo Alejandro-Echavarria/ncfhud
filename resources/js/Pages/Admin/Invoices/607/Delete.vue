@@ -55,7 +55,7 @@ const hasInvoices = computed(() => {
 const destroy = () => {
     DeleteAlert().then((result) => {
         if (result.isConfirmed) {
-            form.delete(route('admin.invoices606.destroy', form.client), {
+            form.delete(route('admin.invoices.destroy', form.client), {
                 preserveScroll: true,
                 preserveState: true,
                 onSuccess: () => {

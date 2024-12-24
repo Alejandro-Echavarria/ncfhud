@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Imports\InvoicesImport;
 use App\Models\Client;
 use App\Models\Invoice;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
@@ -20,6 +21,7 @@ class InvoiceController extends Controller implements HasMiddleware
         return [
             new Middleware('permission:admin.invoices.index', only: ['index']),
             new Middleware('permission:admin.invoices.create_607', only: ['create', 'store']),
+            new Middleware('permission:admin.invoices.destroy_607', only: ['delete', 'destroy']),
         ];
     }
 
@@ -43,7 +45,7 @@ class InvoiceController extends Controller implements HasMiddleware
         return Inertia::render('Admin/Invoices/Index', compact('clients', 'invoices', 'clientFilter', 'monthFilter', 'yearFilter', 'page', 'perPage'));
     }
 
-    public function create(Request $request): \Inertia\Response
+    public function create(Request $request): Response
     {
         $clients = Client::selectRaw(
             "id, CONCAT(rnc, ' - ', business_name, ' - ', commercial_activity) AS business_name"
@@ -118,7 +120,7 @@ class InvoiceController extends Controller implements HasMiddleware
         );
     }
 
-    public function destroy(Request $request)
+    public function destroy(Request $request): RedirectResponse
     {
         $data = $request->validate([
             'client' => 'required|exists:clients,id',
