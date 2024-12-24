@@ -38,7 +38,9 @@ class Invoices606Import implements ToModel, WithValidation, WithHeadingRow, With
             'rnc' => $row['rnc_cedula'],
             'business_name' => $row['razon_social'],
             'ncf' => $row['numero_de_comprobante'],
-            'proof_date' => is_string($row['fecha_comprobante']) ? Carbon::parse($row['fecha_comprobante'])->format('Ymd') :  date('Ymd', ($row['fecha_comprobante'] - 25569) * 86400),
+            'proof_date' => is_string($row['fecha_comprobante'])
+                ? Carbon::parse($row['fecha_comprobante'])->format('Ymd')
+                : date('Ymd', ($row['fecha_comprobante'] - 25569) * 86400),
 //            'proof_date' => is_string($row['fecha_comprobante']) ? $row['fecha_comprobante'] : DATE::excelToDateTimeObject($row['fecha_comprobante'])->format('Ymd'),
             'payment_date' => $getOrZero($row['fecha_de_pago']),
             'amount' => $getOrZero($row['monto_facturado']),
