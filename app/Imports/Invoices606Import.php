@@ -51,7 +51,7 @@ class Invoices606Import implements ToModel, WithValidation, WithHeadingRow, With
                 'required',
                 'regex:/^\d{4}(0[1-9]|1[0-2])([0-2][0-9]|3[0-1])$/'
             ],
-//            'numero_de_comprobante' => 'required|string|max:19|unique:invoices_606,ncf',
+            'numero_de_comprobante' => 'required|string|max:19|unique:invoices_606,ncf',
         ];
     }
 
