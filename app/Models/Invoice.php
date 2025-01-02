@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\DB;
 
 class Invoice extends Model
@@ -39,19 +40,27 @@ class Invoice extends Model
     ];
 
     /*----------------------------------------------------------------------------*/
+    // Relations
+    /*----------------------------------------------------------------------------*/
+    public function client(): BelongsTo
+    {
+        return $this->belongsTo(Client::class);
+    }
+
+    /*----------------------------------------------------------------------------*/
     // Accessors & Mutators
     /*----------------------------------------------------------------------------*/
     protected function createdAt(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => Carbon::parse($value)->timezone(config('app.timezone'))->toFormattedDateString(),
+            get: fn($value) => Carbon::parse($value)->format('d/m/Y'),
         );
     }
 
     protected function updatedAt(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => Carbon::parse($value)->timezone(config('app.timezone'))->toFormattedDateString(),
+            get: fn($value) => Carbon::parse($value)->format('d/m/Y'),
         );
     }
 

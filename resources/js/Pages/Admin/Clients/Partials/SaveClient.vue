@@ -10,6 +10,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import SimpleForm from '@/Components/Main/Admin/Components/Forms/Forms/SimpleForm.vue';
 import Icon from "@/Components/Main/Admin/Components/Icons/Icon.vue";
 import { usePermission } from "@/Composables/permissions.js";
+import SaveAlert from "@/Helpers/Alerts/SaveAlert.js";
 
 const props = defineProps({
     data: Object,
@@ -19,6 +20,7 @@ const props = defineProps({
 
 const title = ref('');
 const modal = ref(false);
+const closeOpenModal = ref(true);
 const operation = ref(1);
 const client = ref(null);
 
@@ -44,10 +46,14 @@ const save = () => {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
-                ok('Client created');
+                closeOpenModal.value = true;
+                ok('Cliente creado');
             },
-            onError: () => {
-                console.log("error");
+            onError: (errors) => {
+                if (errors.update) {
+                    closeOpenModal.value = false;
+                    ok(errors.update, 'error', null, false, 'Error');
+                }
             }
         });
     } else {
@@ -55,14 +61,18 @@ const save = () => {
             ...data,
             search: props.filter,
             page: props.page
-        })).post(route('admin.clients.update', client.value), {
+        })).put(route('admin.clients.update', client.value), {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
-                ok('Client updated');
+                closeOpenModal.value = true;
+                ok('Cliente actualizado');
             },
-            onError: () => {
-                console.log("error");
+            onError: (errors) => {
+                if (errors.update) {
+                    closeOpenModal.value = false;
+                    ok(errors.update, 'error', null, false, 'Error');
+                }
             }
         });
     }
@@ -90,9 +100,9 @@ const closeModal = () => {
     form.reset();
 };
 
-const ok = (msj, type, timer) => {
-    closeModal();
-    // SaveAlert(msj, type, timer);
+const ok = (msj, type, timer, toast, title) => {
+    closeOpenModal.value && closeModal();
+    SaveAlert(msj, type, timer, toast, title);
 };
 
 defineExpose({ openModal });
