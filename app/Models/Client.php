@@ -3,8 +3,10 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Client extends Model
 {
@@ -18,21 +20,39 @@ class Client extends Model
         'email',
     ];
 
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+            'is_active' => 'boolean',
+        ];
+    }
+
+    /*----------------------------------------------------------------------------*/
+    // Relations
+    /*----------------------------------------------------------------------------*/
+    public function invoices(): HasMany
+    {
+        return $this->hasMany(Invoice::class);
+    }
+
     /*----------------------------------------------------------------------------*/
     // Accessors & Mutators
     /*----------------------------------------------------------------------------*/
-    public function getCreatedAtAttribute($value)
+    protected function createdAt(): Attribute
     {
-        $carbon = Carbon::parse($value)->timezone(config('app.timezone'));
-        return $carbon->toFormattedDateString();
+        return Attribute::make(
+            get: fn($value) => Carbon::parse($value)->format('d/m/Y'),
+        );
     }
 
-    public function getUpdatedAtAttribute($value)
+    protected function updatedAt(): Attribute
     {
-        $carbon = Carbon::parse($value)->timezone(config('app.timezone'));
-        return $carbon->toFormattedDateString();
+        return Attribute::make(
+            get: fn($value) => Carbon::parse($value)->format('d/m/Y'),
+        );
     }
-
 
     /*----------------------------------------------------------------------------*/
     // Scopes (local)

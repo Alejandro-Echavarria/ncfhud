@@ -1,6 +1,6 @@
 <script setup>
-import {watch, ref} from "vue";
-import {Head, useForm} from "@inertiajs/vue3";
+import { watch, ref } from "vue";
+import { Head, useForm } from "@inertiajs/vue3";
 import MainLayout from "@/Components/Main/Admin/Layout/MainLayout.vue";
 import MainTitle from "@/Components/Main/Admin/Components/Titles/MainTitle.vue";
 import Filters from "@/Pages/Admin/Invoices/Partials/Filters.vue";
@@ -45,6 +45,7 @@ const notInExcel = ref([]);
 const notInDatabase = ref([]);
 const differences = ref([]);
 const comparing = ref(false);
+const errorsMessage = ref([]);
 
 watch(
     () => [props.clientFilter, props.monthFilter, props.yearFilter],
@@ -56,6 +57,7 @@ watch(
 );
 
 const compare = async () => {
+    errorsMessage.value = [];
     comparing.value = true;
     const formData = new FormData();
 
@@ -85,9 +87,9 @@ const compare = async () => {
         notInExcel.value = response.data.data.not_in_excel;
         notInDatabase.value = response.data.data.not_in_database;
         differences.value = response.data.data.differences;
-        // ok('Client created');
     } catch (error) {
-        console.log("error");
+        const errors = error.response?.data?.errors || {};
+        errorsMessage.value = Object.values(errors).flat();
     }
 
     comparing.value = false;
@@ -131,7 +133,7 @@ const compare = async () => {
             </div>
 
             <div>
-                <template v-for="error in form.errors">
+                <template v-for="error in errorsMessage">
                     <InputError :message="error" class="mt-2"/>
                 </template>
             </div>
@@ -204,7 +206,8 @@ const compare = async () => {
 
             <MainTable :actions="false" :copy-table="true" :show-all-button="true">
                 <template #thead>
-                    <th v-for="(th, key) in thead_differences" scope="col" :class="['px-4 py-3', key === 2 && 'bg-white']" :key="key + 'th'">
+                    <th v-for="(th, key) in thead_differences" scope="col"
+                        :class="['px-4 py-3', key === 2 && 'bg-white']" :key="key + 'th'">
                         {{ th }}
                     </th>
                 </template>

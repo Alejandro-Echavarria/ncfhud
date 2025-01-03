@@ -50,11 +50,13 @@ class InvoiceCompareController extends Controller implements HasMiddleware
         $page = $request?->page;
 
         $data = $request->validate([
-            'client' => 'required',
-            'month' => 'required',
-            'year' => 'required',
+            'client' => 'required|exists:clients,id',
+            'month' => 'required|min:1',
+            'year' => 'required|min:4',
             'file' => 'required|mimes:xlsx,xls,csv',
         ]);
+
+        $data['user'] = auth()->user()->id;
 
         $excelData = Excel::toArray(new InvoicesImport($data), $data['file']);
 

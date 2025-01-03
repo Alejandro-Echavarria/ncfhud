@@ -39,7 +39,7 @@ const canCreateRole = hasPermission("admin.roles.create");
 const canEditRole = hasPermission("admin.roles.edit");
 const canDeleteRole = hasPermission("admin.roles.destroy");
 
-const CreateRoleComponent = canCreateRole ? SaveRole : null;
+const CreateRoleComponent = canCreateRole || canEditRole ? SaveRole : null;
 const EditButtonComponent = canEditRole ? EditButton : null;
 const DeleteRoleComponent = canDeleteRole ? DeleteRole : null;
 

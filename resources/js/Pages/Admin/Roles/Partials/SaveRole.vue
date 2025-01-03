@@ -11,6 +11,7 @@ import TextInput from "@/Components/TextInput.vue";
 import InputError from "@/Components/InputError.vue";
 import Checkbox from "@/Components/Checkbox.vue";
 import SaveAlert from "@/Helpers/Alerts/SaveAlert.js";
+import { usePermission } from "@/Composables/permissions.js";
 
 const props = defineProps({
     data: Object,
@@ -24,6 +25,11 @@ const modal = ref(false);
 const closeOpenModal = ref(true);
 const operation = ref(1);
 const role = ref(null);
+
+const { hasPermission } = usePermission();
+const canCreateRole = hasPermission("admin.roles.create");
+
+const PrimaryButtonComponent = canCreateRole ? PrimaryButton : null;
 
 const form = useForm({
     name: '',
@@ -102,10 +108,10 @@ defineExpose({ openModal });
 
 <template>
     <div>
-        <PrimaryButton class="w-full" @click="openModal(1)">
+        <component :is="PrimaryButtonComponent" ref="callOpenModal" class="w-full" @click="openModal(1)">
             <Icon icon="Plus" class="mr-1"/>
             Agregar role
-        </PrimaryButton>
+        </component>
 
         <DialogModal :show="modal" :maxWidth="'4xl'" @close="closeModal">
             <template #title>
@@ -128,17 +134,31 @@ defineExpose({ openModal });
                                     Roles
                                     <span class="text-red-500"> * </span>
                                 </span>
-                                <div class="grid grid-cols-2 gap-3">
-                                    <div v-for="permission in permissions" :key="permission.id" class="flex gap-3">
-                                        <Checkbox v-model:checked="form.permissions" :value="permission.id"
-                                                  :id="`role-${permission.name}`"/>
 
-                                        <InputLabel :for="`role-${permission.name}`" :value="permission.description"
-                                                    :required="false"/>
+                                <div v-for="(permissionsByType, type) in permissions" :key="type" class="mb-8">
+                                    <!-- Título del tipo de permisos -->
+                                    <div class="my-4 capitalize flex gap-1">
+                                        <p class="text-sm font-medium">
+                                            {{ type.replace('_', ' ') }}
+                                        </p>
                                     </div>
 
-                                    <InputError :message="form.errors.permissions" class="mt-2"/>
+                                    <!-- Permisos del tipo -->
+                                    <div class="grid grid-cols-2 gap-3">
+                                        <div v-for="permission in permissionsByType" :key="permission.id"
+                                             class="flex gap-3">
+                                            <Checkbox v-model:checked="form.permissions" :value="permission.id"
+                                                      :id="`role-${permission.name}`"/>
+
+                                            <InputLabel class="font-normal" :for="`role-${permission.name}`"
+                                                        :value="permission.description"
+                                                        :required="false"/>
+                                        </div>
+                                    </div>
                                 </div>
+
+                                <!-- Error de permisos -->
+                                <InputError :message="form.errors.permissions" class="mt-2"/>
                             </div>
                         </div>
                     </template>

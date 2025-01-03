@@ -1,14 +1,15 @@
 <script setup>
-import { watch } from 'vue';
-import { Head, useForm } from '@inertiajs/vue3';
+import { watch, computed } from "vue";
+import { Head, useForm } from "@inertiajs/vue3";
 import MainLayout from "@/Components/Main/Admin/Layout/MainLayout.vue";
 import MainTitle from "@/Components/Main/Admin/Components/Titles/MainTitle.vue";
 import Filters from "@/Pages/Admin/Invoices/Partials/Filters.vue";
 import MainTable from "@/Components/Main/Admin/Components/Tables/MainTable.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-import InputLabel from "@/Components/InputLabel.vue";
-import InputError from "@/Components/InputError.vue";
+import DangerButton from "@/Components/DangerButton.vue";
+import Icon from "@/Components/Main/Admin/Components/Icons/Icon.vue";
 import SaveAlert from "@/Helpers/Alerts/SaveAlert.js";
+import InputError from "@/Components/InputError.vue";
+import DeleteAlert from "@/Helpers/Alerts/DeleteAlert.js";
 
 defineOptions({
     layout: MainLayout
@@ -32,12 +33,11 @@ const props = defineProps({
 const form = useForm({
     client: props.clientFilter,
     month: props.monthFilter,
-    year: props.yearFilter,
-    file: null
+    year: props.yearFilter
 });
 
 const thead = ['ncf', 'Fecha comprobante', 'monto', 'itbis'];
-const url = 'admin.invoices.create';
+const url = 'admin.invoices.delete';
 
 watch(
     () => [props.clientFilter, props.monthFilter, props.yearFilter],
@@ -48,22 +48,28 @@ watch(
     }
 );
 
-const save = () => {
-    form.transform((data) => ({
-        ...data,
-        search: props.filter,
-        page: props.page,
-    })).post(route('admin.invoices.store'), {
-        preserveScroll: true,
-        preserveState: true,
-        onSuccess: () => {
-            ok('Facturas cargadas');
-        },
-        onError: () => {
-            console.log("error");
+const hasInvoices = computed(() => {
+    return props.invoices.data?.length > 0;
+});
+
+const destroy = () => {
+    DeleteAlert().then((result) => {
+        if (result.isConfirmed) {
+            form.delete(route('admin.invoices.destroy', form.client), {
+                preserveScroll: true,
+                preserveState: true,
+                onSuccess: () => {
+                    ok('Facturas Eliminadas');
+                },
+                onError: (errors) => {
+                    if (errors.data) {
+                        ok(errors.data, 'error', null, false, 'Error');
+                    }
+                }
+            });
         }
     });
-};
+}
 
 const ok = (msj, type, timer, toast, title) => {
     SaveAlert(msj, type, timer, toast, title);
@@ -71,34 +77,14 @@ const ok = (msj, type, timer, toast, title) => {
 </script>
 
 <template>
-    <Head title="Crear facturas"/>
+    <Head title="Eliminar facturas 607"/>
 
-    <MainTitle>Crear facturas</MainTitle>
+    <MainTitle>Eliminar facturas 607</MainTitle>
 
     <div class="space-y-6">
-        <Filters :clients="clients" :filters="{ client: clientFilter, month: monthFilter, year: yearFilter }"
+        <Filters :clients="clients"
+                 :filters="{ client: clientFilter, month: monthFilter, year: yearFilter }"
                  :url="url"/>
-
-        <div>
-            <InputLabel for="file" value="Cargar archivo"/>
-            <div class="flex w-full space-x-6 mt-2">
-                <div class="w-full">
-                    <label for="file" class="sr-only">Choose file</label>
-                    <input type="file" name="file" id="file" @input="form.file = $event.target.files[0]"
-                           class="block w-full border-0 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-700 sm:text-sm sm:leading-6 transition rounded-lg text-sm
-                       file:bg-gray-50 overflow-hidden
-                       file:border-0 file:ring-1 file:rounded-l-lg file:ring-gray-300 file:focus:ring-inset file:focus:ring-indigo-700 file:focus:ring-2 file:me-4 file:py-2 file:px-4 file:transition">
-                </div>
-
-                <div>
-                    <PrimaryButton
-                        @click="save()" :class="{ 'opacity-25': form.processing }"
-                        :disabled="form.processing">
-                        {{ form.processing ? 'Procesando...' : 'Cargar' }}
-                    </PrimaryButton>
-                </div>
-            </div>
-        </div>
 
         <div>
             <template v-for="error in form.errors">
@@ -108,6 +94,17 @@ const ok = (msj, type, timer, toast, title) => {
 
         <div>
             <MainTable :pagination="invoices">
+                <template #createButton>
+                    <DangerButton
+                        :disabled="!hasInvoices"
+                        class="w-full disabled:opacity-50 disabled:cursor-not-allowed transition ease-linear duration-300"
+                        :onclick="destroy"
+                    >
+                        <Icon icon="Trash" class="mr-1"/>
+                        Eliminar facturas
+                    </DangerButton>
+                </template>
+
                 <template #thead>
                     <th v-for="(th, key) in thead" scope="col" class="px-4 py-3" :key="key + 'th'">
                         {{ th }}

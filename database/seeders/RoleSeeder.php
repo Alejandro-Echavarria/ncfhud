@@ -141,10 +141,17 @@ class RoleSeeder extends Seeder
         ])->syncRoles([$admin, $operator]);
 
         Permission::create([
-            'name' => 'admin.invoices.destroy',
-            'description' => 'Eliminar facturas',
+            'name' => 'admin.invoices.destroy_606',
+            'description' => 'Eliminar facturas 606',
             'type' => 'invoice_management',
             'order' => 6
+        ])->syncRoles([$admin, $operator]);
+
+        Permission::create([
+            'name' => 'admin.invoices.destroy_607',
+            'description' => 'Eliminar facturas 607',
+            'type' => 'invoice_management',
+            'order' => 7
         ])->syncRoles([$admin, $operator]);
     }
 }

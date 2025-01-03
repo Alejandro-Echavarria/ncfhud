@@ -36,10 +36,10 @@ class ClientController extends Controller implements HasMiddleware
     public function store(Request $request): RedirectResponse
     {
         $data = $request->validate([
-            'rnc' => 'required',
-            'business_name' => 'required',
-            'commercial_activity' => 'required',
-            'email' => 'required',
+            'rnc' => 'required|max:11|unique:clients,rnc',
+            'business_name' => 'required|max:150',
+            'commercial_activity' => 'required|max:150',
+            'email' => 'required|max:255',
         ]);
 
         $data['created_by_user_id'] = auth()->user()->id;
@@ -52,5 +52,39 @@ class ClientController extends Controller implements HasMiddleware
             'search' => $search,
             'page' => $page
         ])->with('flash', 'Client created');
+    }
+
+    public function update(Request $request, Client $client): RedirectResponse
+    {
+        $data = $request->validate([
+            'rnc' => 'required|max:11|unique:clients,rnc,' . $client->id,
+            'business_name' => 'required|max:150',
+            'commercial_activity' => 'required|max:150',
+            'email' => 'required|max:255',
+        ]);
+
+        $client = $client->update($data);
+
+        $page = $request?->page;
+        $search = $request?->search;
+
+        return to_route('admin.clients.index', [
+            'search' => $search,
+            'page' => $page
+        ])->with('flash', 'Cliente actualizado');
+    }
+
+    public function destroy(Client $client): RedirectResponse
+    {
+        $invoicesCount = number_format($client->invoices()->count());
+
+        if ($invoicesCount) {
+            return to_route('admin.clients.index')->withErrors([
+                'delete' => "Este cliente no puede ser eliminado porque tiene  $invoicesCount facturas asociadas."
+            ]);
+        }
+
+        $client->delete();
+        return redirect()->back()->with('flash', 'Client deleted');
     }
 }

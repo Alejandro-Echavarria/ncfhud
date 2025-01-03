@@ -3,49 +3,28 @@
 namespace App\Models;
 
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\DB;
 
-class Invoice extends Model
+class Invoice606 extends Model
 {
     use HasFactory;
 
+    protected $table = 'invoices_606';
     protected $fillable = [
-        'rnc',
         'user_id',
         'client_id',
-        'identification_type',
+        'rnc',
+        'business_name',
         'ncf',
-        'ncf_modified',
-        'income_type',
         'proof_date',
-        'withholding_date',
+        'payment_date',
         'amount',
         'itbis',
-        'third_party_itbis',
-        'received_itbis',
-        'third_party_income_retention',
-        'isr',
-        'selective_tax',
-        'other_taxes_fees',
-        'legal_tip_amount',
-        'cash',
-        'check_transfer_deposit',
-        'debit_credit_card',
-        'credit_sale',
-        'bonds_certificates',
+        'withheld_itbis',
     ];
-
-    /*----------------------------------------------------------------------------*/
-    // Relations
-    /*----------------------------------------------------------------------------*/
-    public function client(): BelongsTo
-    {
-        return $this->belongsTo(Client::class);
-    }
 
     /*----------------------------------------------------------------------------*/
     // Accessors & Mutators
@@ -53,14 +32,14 @@ class Invoice extends Model
     protected function createdAt(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => Carbon::parse($value)->format('d/m/Y'),
+            get: fn($value) => Carbon::parse($value)->timezone(config('app.timezone'))->toFormattedDateString(),
         );
     }
 
     protected function updatedAt(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => Carbon::parse($value)->format('d/m/Y'),
+            get: fn($value) => Carbon::parse($value)->timezone(config('app.timezone'))->toFormattedDateString(),
         );
     }
 
@@ -84,8 +63,6 @@ class Invoice extends Model
             get: fn($value) => "RD$ " . number_format($value, 2, '.', ','),
         );
     }
-
-
     /*----------------------------------------------------------------------------*/
     // Scopes (local)
     /*----------------------------------------------------------------------------*/

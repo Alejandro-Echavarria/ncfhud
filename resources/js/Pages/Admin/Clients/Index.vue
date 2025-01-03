@@ -1,14 +1,14 @@
 <script setup>
 import { ref } from 'vue';
 import { Head } from '@inertiajs/vue3';
+import { usePermission } from "@/Composables/permissions";
 import MainLayout from "@/Components/Main/Admin/Layout/MainLayout.vue";
 import MainTitle from '@/Components/Main/Admin/Components/Titles/MainTitle.vue';
+import Search from '@/Components/Main/Admin/Components/Searchs/Search.vue';
 import MainTable from '@/Components/Main/Admin/Components/Tables/MainTable.vue';
 import SaveClient from "@/Pages/Admin/Clients/Partials/SaveClient.vue";
-import Search from '@/Components/Main/Admin/Components/Searchs/Search.vue';
-import { usePermission } from "@/Composables/permissions";
-import SaveUser from "@/Pages/Admin/Users/Partials/SaveUser.vue";
 import EditButton from "@/Components/Main/Admin/Components/Buttons/Tables/EditButton.vue";
+import DeleteClient from "@/Pages/Admin/Clients/Partials/DeleteClient.vue";
 
 defineOptions({
     layout: MainLayout
@@ -28,11 +28,13 @@ const url = 'admin.clients.index';
 const callOpenModal = ref(null);
 
 const { hasPermission } = usePermission();
-const canCreateClient = hasPermission("admin.clients.create");
-const canEditClient = hasPermission("admin.clients.edit");
+const canCreate = hasPermission("admin.clients.create");
+const canEdit = hasPermission("admin.clients.edit");
+const canDelete = hasPermission("admin.clients.destroy");
 
-const CreateClientComponent = canCreateClient ? SaveClient : null;
-const EditClientComponent = canEditClient ? EditButton : null;
+const CreateComponent = canCreate || canEdit ? SaveClient : null;
+const EditComponent = canEdit ? EditButton : null;
+const DeleteComponent = canDelete ? DeleteClient : null;
 
 const openModal = (op, data) => {
     callOpenModal.value.openModal(op, data);
@@ -49,8 +51,8 @@ const openModal = (op, data) => {
             <Search :filter="filter" :url="url"/>
         </template>
 
-        <template #createButton v-if="canCreateClient">
-            <component :is="CreateClientComponent" ref="callOpenModal" :filter="filter" :page="page"/>
+        <template #createButton>
+            <component :is="CreateComponent" ref="callOpenModal" :filter="filter" :page="page"/>
         </template>
 
         <template #thead>
@@ -70,7 +72,13 @@ const openModal = (op, data) => {
                 <td class="px-4 py-3">{{ tb.created_at }}</td>
                 <td class="px-4 py-3">{{ tb.updated_at }}</td>
                 <td class="px-4 py-3 flex items-center justify-end">
+                    <div class="flex items-center justify-end">
+                        <component :is="EditComponent" @click="openModal(2, tb)"
+                                   :key="tb.id + 'editBtn'"/>
 
+                        <component :is="DeleteComponent" :id="tb.id" :filter="filter" :page="page"
+                                   :key="tb.id + 'deleteBtn'"/>
+                    </div>
                 </td>
             </tr>
         </template>

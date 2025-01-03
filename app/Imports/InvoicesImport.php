@@ -15,7 +15,7 @@ class InvoicesImport implements ToModel, WithValidation, WithHeadingRow, WithCal
 
     public function __construct($data)
     {
-        $this->userId = 1;
+        $this->userId = $data['user'];
         $this->clientId = $data['client'];
     }
 
@@ -71,5 +71,10 @@ class InvoicesImport implements ToModel, WithValidation, WithHeadingRow, WithCal
             'rnccedula_o_pasaporte' => 'rnc',
             'numero_comprobante_fiscal' => 'ncf',
         ];
+    }
+
+    public function headingRow(): int
+    {
+        return 11;
     }
 }

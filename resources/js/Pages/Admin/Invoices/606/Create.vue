@@ -1,14 +1,14 @@
 <script setup>
-import { watch } from 'vue';
-import { Head, useForm } from '@inertiajs/vue3';
+import { Head, useForm } from "@inertiajs/vue3";
 import MainLayout from "@/Components/Main/Admin/Layout/MainLayout.vue";
 import MainTitle from "@/Components/Main/Admin/Components/Titles/MainTitle.vue";
-import Filters from "@/Pages/Admin/Invoices/Partials/Filters.vue";
-import MainTable from "@/Components/Main/Admin/Components/Tables/MainTable.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-import InputLabel from "@/Components/InputLabel.vue";
-import InputError from "@/Components/InputError.vue";
+import { watch } from "vue";
 import SaveAlert from "@/Helpers/Alerts/SaveAlert.js";
+import InputLabel from "@/Components/InputLabel.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import InputError from "@/Components/InputError.vue";
+import MainTable from "@/Components/Main/Admin/Components/Tables/MainTable.vue";
+import Filters from "@/Pages/Admin/Invoices/Partials/Filters.vue";
 
 defineOptions({
     layout: MainLayout
@@ -36,8 +36,8 @@ const form = useForm({
     file: null
 });
 
-const thead = ['ncf', 'Fecha comprobante', 'monto', 'itbis'];
-const url = 'admin.invoices.create';
+const thead = ['rnc', 'razón social', 'ncf', 'Fecha comprobante', 'monto', 'itbis'];
+const url = 'admin.invoices606.create';
 
 watch(
     () => [props.clientFilter, props.monthFilter, props.yearFilter],
@@ -52,15 +52,17 @@ const save = () => {
     form.transform((data) => ({
         ...data,
         search: props.filter,
-        page: props.page,
-    })).post(route('admin.invoices.store'), {
+        page: props.page
+    })).post(route('admin.invoices606.store'), {
         preserveScroll: true,
         preserveState: true,
         onSuccess: () => {
             ok('Facturas cargadas');
         },
-        onError: () => {
-            console.log("error");
+        onError: (errors) => {
+            if (errors.data) {
+                ok(errors.data, 'error', null, false, 'Error');
+            }
         }
     });
 };
@@ -71,12 +73,12 @@ const ok = (msj, type, timer, toast, title) => {
 </script>
 
 <template>
-    <Head title="Crear facturas"/>
+    <Head title="Facturas 606"/>
 
-    <MainTitle>Crear facturas</MainTitle>
+    <MainTitle>Facturas 606</MainTitle>
 
     <div class="space-y-6">
-        <Filters :clients="clients" :filters="{ client: clientFilter, month: monthFilter, year: yearFilter }"
+        <Filters :clients="clients" :filters="{ month: monthFilter, year: yearFilter }"
                  :url="url"/>
 
         <div>
@@ -118,6 +120,8 @@ const ok = (msj, type, timer, toast, title) => {
                     <tr v-for="tb in invoices.data"
                         class="dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 transition ease-linear duration-300"
                         :key="tb.id + 'tb'">
+                        <td class="px-4 py-3">{{ tb.rnc }}</td>
+                        <td class="px-4 py-3">{{ tb.business_name }}</td>
                         <td class="px-4 py-3">{{ tb.ncf }}</td>
                         <td class="px-4 py-3">{{ tb.proof_date }}</td>
                         <td class="px-4 py-3">{{ tb.amount }}</td>

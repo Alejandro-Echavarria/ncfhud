@@ -12,6 +12,7 @@ import Icon from "@/Components/Main/Admin/Components/Icons/Icon.vue";
 import ToggleSwitch from "@/Components/Main/Admin/Components/Forms/Inputs/ToggleSwitch/ToggleSwitch.vue";
 import VueSelect from "@/Components/Main/Admin/Components/Selects/VueSelect.vue";
 import SaveAlert from "@/Helpers/Alerts/SaveAlert.js";
+import { usePermission } from "@/Composables/permissions.js";
 
 const props = defineProps({
     data: Object,
@@ -24,8 +25,12 @@ const modal = ref(false);
 const closeOpenModal = ref(true);
 const operation = ref(1);
 const user = ref(null);
-
 const rolesOptions = ref(props.data.roles);
+
+const { hasPermission } = usePermission();
+const canCreateUser = hasPermission("admin.users.create");
+
+const PrimaryButtonComponent = canCreateUser ? PrimaryButton : null;
 
 const form = useForm({
     name: '',
@@ -105,16 +110,15 @@ const ok = (msj, type, timer, toast, title) => {
     SaveAlert(msj, type, timer, toast, title);
 };
 
-
 defineExpose({ openModal });
 </script>
 
 <template>
     <div>
-        <PrimaryButton class="w-full" @click="openModal(1)">
+        <component :is="PrimaryButtonComponent" ref="callOpenModal" class="w-full" @click="openModal(1)">
             <Icon icon="Plus" class="mr-1"/>
-            Agregar user
-        </PrimaryButton>
+            Agregar usuario
+        </component>
 
         <DialogModal :show="modal" :maxWidth="'4xl'" @close="closeModal">
             <template #title>
