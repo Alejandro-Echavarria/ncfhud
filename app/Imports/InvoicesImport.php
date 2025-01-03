@@ -72,4 +72,9 @@ class InvoicesImport implements ToModel, WithValidation, WithHeadingRow, WithCal
             'numero_comprobante_fiscal' => 'ncf',
         ];
     }
+
+    public function headingRow(): int
+    {
+        return 11;
+    }
 }

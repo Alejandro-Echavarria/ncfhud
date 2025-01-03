@@ -79,7 +79,7 @@ class InvoiceController extends Controller implements HasMiddleware
     {
         $data = $request->validate([
             'client' => 'required|exists:clients,id',
-            'file' => 'required|mimes:xlsx,xls,csv',
+            'file' => 'required|mimes:xlsx,xls',
         ]);
 
         $data['user'] = auth()->user()->id;
