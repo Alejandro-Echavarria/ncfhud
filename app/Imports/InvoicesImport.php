@@ -36,7 +36,7 @@ class InvoicesImport implements ToModel, WithValidation, WithHeadingRow, WithCal
             'withholding_date' => $row['fecha_de_retencion'],
             'amount' => $getOrZero($row['monto_facturado']),
             'itbis' => $getOrZero($row['itbis_facturado']),
-            'third_party_itbis' => $getOrZero($row['itbis_retenido_por_terceros']),
+            'third_party_itbis_withheld' => $getOrZero($row['itbis_retenido_por_terceros']),
             'received_itbis' => $getOrZero($row['itbis_percibido']),
             'third_party_income_retention' => $getOrZero($row['retencion_renta_por_terceros']),
             'isr' => $getOrZero($row['isr_percibido']),

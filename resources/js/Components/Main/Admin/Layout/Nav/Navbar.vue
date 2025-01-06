@@ -78,9 +78,9 @@ const navItems = computed(() => [
                 visible: true
             },
             {
-                href: 'admin.invoicescompare.index',
-                active: route().current('admin.invoicescompare.index'),
-                activeClass: '/admin/invoices-compare',
+                href: 'admin.v2.invoicescompare.index',
+                active: route().current('admin.v2.invoicescompare.index'),
+                activeClass: '/admin/v2/invoices-compare',
                 label: 'Comparar',
                 children: [],
                 icon: '',
