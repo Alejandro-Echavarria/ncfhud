@@ -207,7 +207,7 @@ const compare = async () => {
                                     </div>
 
                                     <div class="whitespace-nowrap">
-                                        <span class="font-semibold text-gray-700">607:</span>
+                                        <span class="font-semibold text-gray-700">&nbsp;607:</span>
                                         {{ difference.invoices607 }}
                                     </div>
                                 </div>
