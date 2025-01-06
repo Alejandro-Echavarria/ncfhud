@@ -5,6 +5,7 @@ import SecondaryButton from "@/Components/SecondaryButton.vue";
 import Icon from "@/Components/Main/Admin/Components/Icons/Icon.vue";
 import HideBackground from "@/Components/Main/Admin/Components/Backgrounds/HideBackground.vue";
 import HoverTooltip from "@/Components/Main/Admin/Components/ToolTips/HoverTooltip.vue";
+import SaveAlert from "@/Helpers/Alerts/SaveAlert.js";
 
 const props = defineProps({
     pagination: {
@@ -61,11 +62,17 @@ const copyTableData = () => {
     // Copia el texto al portapapeles
     navigator.clipboard.writeText(textToCopy)
         .then(() => {
+            ok('Datos copiados');
             console.log("Datos copiados al portapapeles con éxito.");
         })
         .catch((error) => {
+            ok('Error al copiar los datos', 'error');
             console.error("No se pudo copiar los datos: ", error);
         });
+};
+
+const ok = (msj, type, timer, toast, title) => {
+    SaveAlert(msj, type, timer, toast, title);
 };
 </script>
 
