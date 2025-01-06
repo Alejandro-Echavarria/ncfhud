@@ -29,7 +29,7 @@ return new class extends Migration
 
             $this->addUnsignedNullableInteger($table, 'amount');
             $this->addUnsignedNullableInteger($table, 'itbis');
-            $this->addUnsignedNullableInteger($table, 'third_party_itbis');
+            $this->addUnsignedNullableInteger($table, 'third_party_itbis_withheld');
             $this->addUnsignedNullableInteger($table, 'received_itbis');
             $this->addUnsignedNullableInteger($table, 'third_party_income_retention');
             $this->addUnsignedNullableInteger($table, 'isr');

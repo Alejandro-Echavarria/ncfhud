@@ -74,17 +74,16 @@ class Invoice extends Model
     protected function amount(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => "RD$ " . number_format($value, 2, '.', ','),
+            get: fn($value) => number_format($value, 2, '.', ','),
         );
     }
 
     protected function itbis(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => "RD$ " . number_format($value, 2, '.', ','),
+            get: fn($value) => number_format($value, 2, '.', ','),
         );
     }
-
 
     /*----------------------------------------------------------------------------*/
     // Scopes (local)
