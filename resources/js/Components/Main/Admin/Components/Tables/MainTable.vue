@@ -4,9 +4,7 @@ import Pagination from '@/Components/Main/Admin/Components/Paginations/Paginatio
 import SecondaryButton from "@/Components/SecondaryButton.vue";
 import Icon from "@/Components/Main/Admin/Components/Icons/Icon.vue";
 import HideBackground from "@/Components/Main/Admin/Components/Backgrounds/HideBackground.vue";
-import HoverTooltip from "@/Components/Main/Admin/Components/ToolTips/HoverTooltip.vue";
 import SaveAlert from "@/Helpers/Alerts/SaveAlert.js";
-import ButtonTooltip from "@/Components/Main/Admin/Components/ToolTips/ButtonTooltip.vue";
 import HoverCSSTooltip from "@/Components/Main/Admin/Components/ToolTips/HoverCSSTooltip.vue";
 
 const props = defineProps({
