@@ -6,6 +6,8 @@ import Icon from "@/Components/Main/Admin/Components/Icons/Icon.vue";
 import HideBackground from "@/Components/Main/Admin/Components/Backgrounds/HideBackground.vue";
 import HoverTooltip from "@/Components/Main/Admin/Components/ToolTips/HoverTooltip.vue";
 import SaveAlert from "@/Helpers/Alerts/SaveAlert.js";
+import ButtonTooltip from "@/Components/Main/Admin/Components/ToolTips/ButtonTooltip.vue";
+import HoverCSSTooltip from "@/Components/Main/Admin/Components/ToolTips/HoverCSSTooltip.vue";
 
 const props = defineProps({
     pagination: {
@@ -91,7 +93,7 @@ const ok = (msj, type, timer, toast, title) => {
 
             <div v-if="showAllButton || copyTable" class="flex gap-3">
                 <div v-if="showAllButton">
-                    <HoverTooltip content="Mostrar todas las filas">
+                    <HoverCSSTooltip content="Mostrar todas las filas">
                         <SecondaryButton @click="() => showAll = !showAll">
                             <Icon icon="Arrow"
                                   :class="[!showAll ?
@@ -99,15 +101,15 @@ const ok = (msj, type, timer, toast, title) => {
                               '-rotate-90 transition duration-150 ease-linear'
                           ]"/>
                         </SecondaryButton>
-                    </HoverTooltip>
+                    </HoverCSSTooltip>
                 </div>
 
                 <div v-if="copyTable">
-                    <HoverTooltip content="Copiar tabla">
+                    <HoverCSSTooltip content="Copiar tabla">
                         <SecondaryButton @click="copyTableData">
                             <Icon icon="Copy"/>
                         </SecondaryButton>
-                    </HoverTooltip>
+                    </HoverCSSTooltip>
                 </div>
             </div>
         </div>
