@@ -71,9 +71,9 @@ const ok = (msj, type, timer, toast, title) => {
 </script>
 
 <template>
-    <Head title="Crear facturas"/>
+    <Head title="Facturas 607"/>
 
-    <MainTitle>Crear facturas</MainTitle>
+    <MainTitle>Facturas 607</MainTitle>
 
     <div class="space-y-6">
         <Filters :clients="clients" :filters="{ client: clientFilter, month: monthFilter, year: yearFilter }"
