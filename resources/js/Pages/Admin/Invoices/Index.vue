@@ -7,6 +7,7 @@ import MainTable from '@/Components/Main/Admin/Components/Tables/MainTable.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import Filters from "@/Pages/Admin/Invoices/Partials/Filters.vue";
 import { usePermission } from "@/Composables/permissions.js";
+import H2Title from "@/Components/Main/Admin/Components/Titles/H2Title.vue";
 
 defineOptions({
     layout: MainLayout
@@ -50,6 +51,10 @@ const openModal = (op, id, rnc, business_name, commercial_activity, email) => {
     <div class="space-y-6">
         <Filters :clients="clients" :filters="{ client: clientFilter, month: monthFilter, year: yearFilter }"
                  :url="url"/>
+
+        <H2Title>
+            607
+        </H2Title>
 
         <MainTable :pagination="invoices">
             <template #createButton v-if="canCreateInvoice">

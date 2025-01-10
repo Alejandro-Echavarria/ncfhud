@@ -121,8 +121,8 @@ defineExpose({ openModal });
             <template #content>
                 <SimpleForm :actions="true" @submitted="save">
                     <template #form>
-                        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                            <div class="md:col-span-4">
+                        <div class="grid grid-cols-4 gap-6">
+                            <div class="col-span-4">
                                 <InputLabel for="name" value="Nombre" :required="true"/>
                                 <TextInput id="name" ref="nameInput" v-model="form.name" type="text"/>
 

@@ -4,7 +4,8 @@ import Pagination from '@/Components/Main/Admin/Components/Paginations/Paginatio
 import SecondaryButton from "@/Components/SecondaryButton.vue";
 import Icon from "@/Components/Main/Admin/Components/Icons/Icon.vue";
 import HideBackground from "@/Components/Main/Admin/Components/Backgrounds/HideBackground.vue";
-import HoverTooltip from "@/Components/Main/Admin/Components/ToolTips/HoverTooltip.vue";
+import SaveAlert from "@/Helpers/Alerts/SaveAlert.js";
+import HoverCSSTooltip from "@/Components/Main/Admin/Components/ToolTips/HoverCSSTooltip.vue";
 
 const props = defineProps({
     pagination: {
@@ -61,11 +62,17 @@ const copyTableData = () => {
     // Copia el texto al portapapeles
     navigator.clipboard.writeText(textToCopy)
         .then(() => {
+            ok('Datos copiados');
             console.log("Datos copiados al portapapeles con éxito.");
         })
         .catch((error) => {
+            ok('Error al copiar los datos', 'error');
             console.error("No se pudo copiar los datos: ", error);
         });
+};
+
+const ok = (msj, type, timer, toast, title) => {
+    SaveAlert(msj, type, timer, toast, title);
 };
 </script>
 
@@ -84,7 +91,7 @@ const copyTableData = () => {
 
             <div v-if="showAllButton || copyTable" class="flex gap-3">
                 <div v-if="showAllButton">
-                    <HoverTooltip content="Mostrar todas las filas">
+                    <HoverCSSTooltip content="Mostrar todas las filas">
                         <SecondaryButton @click="() => showAll = !showAll">
                             <Icon icon="Arrow"
                                   :class="[!showAll ?
@@ -92,15 +99,15 @@ const copyTableData = () => {
                               '-rotate-90 transition duration-150 ease-linear'
                           ]"/>
                         </SecondaryButton>
-                    </HoverTooltip>
+                    </HoverCSSTooltip>
                 </div>
 
                 <div v-if="copyTable">
-                    <HoverTooltip content="Copiar tabla">
+                    <HoverCSSTooltip content="Copiar tabla">
                         <SecondaryButton @click="copyTableData">
                             <Icon icon="Copy"/>
                         </SecondaryButton>
-                    </HoverTooltip>
+                    </HoverCSSTooltip>
                 </div>
             </div>
         </div>
