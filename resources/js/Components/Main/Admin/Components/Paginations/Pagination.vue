@@ -34,7 +34,6 @@ watch(() => props.pagination?.data?.length, (newLength, oldLength) => {
     }
 });
 
-
 const changePage = (url) => {
     const page = url.split("?page=")[1];
     router.visit(router.page.url, {
@@ -53,69 +52,75 @@ const changePage = (url) => {
         <div class="w-full sm:hidden">
             <div class="flex justify-between mb-4">
                 <span v-if="pagination.prev_page_url === null"
-                    class="relative inline-flex items-center py-2 text-sm font-semibold text-gray-600 focus:z-20 cursor-not-allowed">
-                    Previous
+                      class="relative inline-flex items-center py-2 text-sm font-semibold text-gray-600 focus:z-20 cursor-not-allowed">
+                    Anterior
                 </span>
 
                 <a v-else @click="changePage(pagination.prev_page_url)" :key="'mobile-link'"
-                    :class="pagination.prev_page_url == null
+                   :class="pagination.prev_page_url == null
                     ? 'relative inline-flex items-center py-2 text-sm font-semibold text-gray-600 focus:z-20 cursor-not-allowed'
                     : 'relative inline-flex items-center py-2 text-sm font-semibold text-gray-900 focus:z-20 cursor-pointer'">
-                    Previous
+                    Anterior
                 </a>
 
                 <span v-if="pagination.next_page_url === null"
-                    class="relative inline-flex items-center py-2 text-sm font-semibold text-gray-600 focus:z-20 cursor-not-allowed">
-                    Next
+                      class="relative inline-flex items-center py-2 text-sm font-semibold text-gray-600 focus:z-20 cursor-not-allowed">
+                    Siguiente
                 </span>
 
                 <a v-else @click="changePage(pagination.next_page_url)" :key="'mobile-link'"
-                    :class="pagination.next_page_url == null
+                   :class="pagination.next_page_url == null
                     ? 'relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-600 focus:z-20 cursor-not-allowed'
                     : 'relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 focus:z-20 cursor-pointer'">
-                    Next
+                    Siguiente
                 </a>
             </div>
             <div class="flex justify-center">
                 <p class="text-sm text-gray-700">
-                    Showing
+                    Mostrando
                     <span class="font-small">{{ pagination.from }}</span>
-                    to
+                    al
                     <span class="font-small">{{ pagination.to }}</span>
-                    of
+                    de
                     <span class="font-small">{{ pagination.total }}</span>
-                    results
+                    resultados
                 </p>
             </div>
         </div>
-        <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
-            <div>
-                <p class="text-sm text-gray-700">
-                    Showing
-                    <span class="font-medium">{{ pagination.from }}</span>
-                    to
-                    <span class="font-medium">{{ pagination.to }}</span>
-                    of
-                    <span class="font-medium">{{ pagination.total }}</span>
-                    results
-                </p>
-            </div>
-            <div v-if="pagination.links.length > 3">
-                <nav class="isolate inline-flex -space-x-px rounded-md" aria-label="Pagination">
-                    <template v-for="(link, index) in pagination.links">
-                        <div v-if="link.url == null" :key="'botons-' + index"
-                            class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-600 focus:z-20 cursor-not-allowed select-none"
-                            v-html="link.label">
-                        </div>
 
-                        <a v-else :key="'links-' + index" @click="changePage(link.url)"
-                            class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 focus:z-20 cursor-pointer select-none"
-                            :class="link.active
-                    ? 'z-10 border-b-2 border-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 focus:outline-none focus:border-indigo-500 transition duration-150 ease-in-out'
-                    : ''" v-html="link.label">
-                        </a>
-                    </template>
-                </nav>
+        <div class="hidden sm:block w-full">
+            <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-center mb-6">
+                <div v-if="pagination.links.length > 3">
+                    <nav class="isolate inline-flex -space-x-px rounded-md" aria-label="Pagination">
+                        <template v-for="(link, index) in pagination.links">
+                            <div v-if="link.url == null" :key="'botons-' + index"
+                                 class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-600 focus:z-20 cursor-not-allowed select-none"
+                                 v-html="link.label">
+                            </div>
+
+                            <a v-else :key="'links-' + index" @click="changePage(link.url)"
+                               class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 focus:z-20 cursor-pointer select-none"
+                               :class="link.active
+                                    ? 'z-10 border-b-2 border-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 focus:outline-none focus:border-indigo-500 transition duration-150 ease-in-out'
+                                    : ''" v-html="link.label">
+                            </a>
+                        </template>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-center">
+                <div>
+                    <p class="text-sm text-gray-700">
+                        Monstrando
+                        <span class="font-medium">{{ pagination.from }}</span>
+                        al
+                        <span class="font-medium">{{ pagination.to }}</span>
+                        de
+                        <span class="font-medium">{{ pagination.total }}</span>
+                        resultados
+                    </p>
+                </div>
             </div>
         </div>
     </div>
