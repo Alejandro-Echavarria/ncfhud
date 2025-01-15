@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('ncf', 19)->nullable();
             $table->string('ncf_modified', 19)->nullable();
 
-            $table->integer('income_type')->unsigned()->default(0);
+            $table->string('income_type', 255)->nullable();
 
             $table->string('proof_date', 8)->nullable();
             $table->string('withholding_date', 8)->nullable();

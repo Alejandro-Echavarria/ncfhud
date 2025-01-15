@@ -148,7 +148,7 @@ defineExpose({ openModal });
                             </div>
 
                             <div class="md:col-span-2">
-                                <InputLabel for="email" value="Email" :required="true"/>
+                                <InputLabel for="email" value="Email" :required="false"/>
                                 <TextInput id="email" ref="EmailInput" v-model="form.email" type="text"/>
 
                                 <InputError :message="form.errors.email" class="mt-2"/>
