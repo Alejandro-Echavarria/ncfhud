@@ -12,11 +12,15 @@ class InvoicesImport implements ToModel, WithValidation, WithHeadingRow, WithCal
 {
     private int $userId;
     private int $clientId;
+    private string $monthPeriod;
+    private string $yearPeriod;
 
     public function __construct($data)
     {
         $this->userId = $data['user'];
         $this->clientId = $data['client'];
+        $this->monthPeriod = $data['month'];
+        $this->yearPeriod = $data['year'];
     }
 
     public function model(array $row): Invoice
@@ -48,6 +52,8 @@ class InvoicesImport implements ToModel, WithValidation, WithHeadingRow, WithCal
             'bonds_certificates' => $this->getOrZero($row['bonos_o_certificados_de_regalo']),
             'barter' => $this->getOrZero($row['permuta']),
             'other_sales_forms' => $this->getOrZero($row['otras_formas_de_ventas']),
+            'month_period' => $this->monthPeriod,
+            'year_period' => $this->yearPeriod
         ]);
     }
 

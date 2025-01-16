@@ -44,6 +44,9 @@ return new class extends Migration
             $this->addUnsignedNullableInteger($table, 'barter');
             $this->addUnsignedNullableInteger($table, 'other_sales_forms');
 
+            $table->string('month_period', 2);
+            $table->string('year_period', 4);
+
             $table->timestamps();
         });
     }
