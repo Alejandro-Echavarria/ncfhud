@@ -20,7 +20,6 @@ class Invoice606Controller extends Controller implements HasMiddleware
         return [
             new Middleware('permission:admin.invoices.create_606', only: ['create', 'store']),
             new Middleware('permission:admin.invoices.destroy_606', only: ['delete', 'destroy']),
-
         ];
     }
 

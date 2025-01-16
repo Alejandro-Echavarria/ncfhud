@@ -55,22 +55,28 @@ class InvoiceCompareController extends Controller implements HasMiddleware
 
     public function compare(Request $request): JsonResponse
     {
-        $this->validateRequest($request);
+        try {
+            $this->validateRequest($request);
 
-        $clientFilter = $request->client;
-        $monthFilter = $request->month;
-        $yearFilter = $request->year;
+            $clientFilter = $request->client;
+            $monthFilter = $request->month;
+            $yearFilter = $request->year;
 
-        // Obtener facturas
-        $invoices607 = $this->getInvoices607($clientFilter, $monthFilter, $yearFilter);
-        $invoices606 = $this->getInvoices606($clientFilter, $monthFilter, $yearFilter);
+            // Obtener facturas
+            $invoices607 = $this->getInvoices607($clientFilter, $monthFilter, $yearFilter);
+            $invoices606 = $this->getInvoices606($clientFilter, $monthFilter, $yearFilter);
 
-        // Realizar comparaciones
-        $comparisonResults = $this->comparisonService->compareInvoices($invoices606, $invoices607);
+            // Realizar comparaciones
+            $comparisonResults = $this->comparisonService->compareInvoices($invoices606, $invoices607);
 
-        return response()->json([
-            'data' => $comparisonResults,
-        ]);
+            return response()->json([
+                'data' => $comparisonResults,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 
     private function validateRequest(Request $request): void

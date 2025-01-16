@@ -57,6 +57,7 @@ class InvoiceComparisonService
     private function compareFields(array $invoice606, array $invoice607, array $fieldsToCompare, array $attributeTranslations): array
     {
         $rowDifferences = [];
+        $fieldsByMonthYear = $this->getFieldsToCompareByMonthYear();
 
         foreach ($fieldsToCompare as $field606 => $field607) {
             if (is_int($field606)) {
@@ -66,7 +67,19 @@ class InvoiceComparisonService
             $value606 = $invoice606[$field606] ?? null;
             $value607 = $invoice607[$field607] ?? null;
 
-            if (in_array($field606, ['amount', 'itbis', 'withheld_itbis'])) {
+            if (in_array($field606, $fieldsByMonthYear, true)) {
+                // Comparar solo mes/año
+                $monthYear606 = $this->extractMonthYear($value606);
+                $monthYear607 = $this->extractMonthYear($value607);
+
+                if ($monthYear606 !== $monthYear607) {
+                    $rowDifferences[$attributeTranslations[$field606] ?? $field606] = [
+                        'invoices606' => $monthYear606,
+                        'invoices607' => $monthYear607,
+                    ];
+                }
+            } elseif (in_array($field606, ['amount', 'itbis', 'withheld_itbis'])) {
+                // Comparar como números con redondeo
                 if (round((float)$value606, 2) !== round((float)$value607, 2)) {
                     $rowDifferences[$attributeTranslations[$field606] ?? $field606] = [
                         'invoices606' => $value606,
@@ -74,6 +87,7 @@ class InvoiceComparisonService
                     ];
                 }
             } elseif ((string)$value606 !== (string)$value607) {
+                // Comparar como cadenas
                 $rowDifferences[$attributeTranslations[$field606] ?? $field606] = [
                     'invoices606' => $value606,
                     'invoices607' => $value607,
@@ -82,6 +96,20 @@ class InvoiceComparisonService
         }
 
         return $rowDifferences;
+    }
+
+    private function extractMonthYear(?string $date): ?string
+    {
+        if (empty($date)) {
+            return null;
+        }
+
+        try {
+            // Convertir fecha al formato deseado usando Carbon
+            return \Carbon\Carbon::createFromFormat('d/m/Y', $date)->format('Y-m');
+        } catch (\Exception $e) {
+            return null; // Manejo de fechas inválidas
+        }
     }
 
     private function getAttributeTranslations(): array
@@ -106,6 +134,13 @@ class InvoiceComparisonService
             'amount',
             'itbis',
             'withheld_itbis' => 'third_party_itbis_withheld',
+        ];
+    }
+
+    private function getFieldsToCompareByMonthYear(): array
+    {
+        return [
+            'proof_date'
         ];
     }
 }
