@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use Carbon\Carbon;
+
 class InvoiceComparisonService
 {
     public function compareInvoices(array $invoices606, array $invoices607): array
@@ -106,7 +108,7 @@ class InvoiceComparisonService
 
         try {
             // Convertir fecha al formato deseado usando Carbon
-            return \Carbon\Carbon::createFromFormat('d/m/Y', $date)->format('Y-m');
+            return Carbon::createFromFormat('d/m/Y', $date)->format('Y/m');
         } catch (\Exception $e) {
             return null; // Manejo de fechas inválidas
         }
