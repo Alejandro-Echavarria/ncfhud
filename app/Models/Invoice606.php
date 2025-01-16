@@ -24,6 +24,8 @@ class Invoice606 extends Model
         'amount',
         'itbis',
         'withheld_itbis',
+        'month_period',
+        'year_period',
     ];
 
     /*----------------------------------------------------------------------------*/
@@ -63,23 +65,23 @@ class Invoice606 extends Model
             get: fn($value) => number_format($value, 2, '.', ','),
         );
     }
+
+    protected function monthPeriod(): Attribute
+    {
+        return Attribute::make(
+            set: fn($value) => ltrim((string)$value, '0') // Elimina ceros a la izquierda
+        );
+    }
+
     /*----------------------------------------------------------------------------*/
     // Scopes (local)
     /*----------------------------------------------------------------------------*/
-    public function scopeFilter($query, $clientFilter, $monthFilter, $yearFilter)
+    public function scopeFilter($query, $clientFilter, $monthFilter, $yearFilter): void
     {
         $query->when($clientFilter ?? null && $monthFilter && null && $yearFilter ?? null, function ($query, $clientFilter) use ($monthFilter, $yearFilter) {
             $query->where('client_id', "$clientFilter")
-                ->whereMonth(
-                    config('app.db_driver') === 'pgsql' ?
-                        DB::raw("TO_DATE(proof_date, 'YYYYMMDD')") :
-                        DB::raw("STR_TO_DATE(proof_date, '%Y%m%d')"), "$monthFilter"
-                )
-                ->whereYear(
-                    config('app.db_driver') === 'pgsql' ?
-                        DB::raw("TO_DATE(proof_date, 'YYYYMMDD')") :
-                        DB::raw("STR_TO_DATE(proof_date, '%Y%m%d')"), "$yearFilter"
-                );
+                ->where('month_period', "$monthFilter")
+                ->where('year_period', "$yearFilter");
         });
     }
 }

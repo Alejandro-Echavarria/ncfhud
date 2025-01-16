@@ -24,6 +24,9 @@ return new class extends Migration
             $this->addNullableInteger($table, 'itbis');
             $this->addNullableInteger($table, 'withheld_itbis');
 
+            $table->string('month_period', 2);
+            $table->string('year_period', 4);
+
             $table->timestamps();
         });
     }
