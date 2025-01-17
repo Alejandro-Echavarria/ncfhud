@@ -35,15 +35,13 @@ class Invoices606Import implements ToModel, WithValidation, WithHeadingRow, With
         return new Invoice606([
             'user_id' => $this->userId,
             'client_id' => $this->clientId,
-            'rnc' => $row['rnc_cedula'],
-            'business_name' => $row['razon_social'],
-            'ncf' => $row['numero_de_comprobante'],
+            'rnc' => $row['rnc_cedula_ncf'],
+            'business_name' => $row['nombre'],
+            'ncf' => $row['numero_ncf'],
             'proof_date' => is_string($row['fecha_comprobante'])
                 ? Carbon::parse($row['fecha_comprobante'])->format('Ymd')
                 : date('Ymd', ($row['fecha_comprobante'] - 25569) * 86400),
-//            'proof_date' => is_string($row['fecha_comprobante']) ? $row['fecha_comprobante'] : DATE::excelToDateTimeObject($row['fecha_comprobante'])->format('Ymd'),
-            'payment_date' => $this->getOrZero($row['fecha_de_pago']),
-            'amount' => $this->getOrZero($row['monto_facturado']),
+            'amount' => $this->normalizeNoteValue($this->getOrZero($row['monto_facturado'])),
             'itbis' => $this->getOrZero($row['itbis_facturado']),
             'withheld_itbis' => $this->getOrZero($row['itbis_retenido']),
             'month_period' => $this->monthPeriod,
@@ -58,7 +56,7 @@ class Invoices606Import implements ToModel, WithValidation, WithHeadingRow, With
                 'required',
 //                'regex:/^\d{4}(0[1-9]|1[0-2])([0-2][0-9]|3[0-1])$/'
             ],
-            'numero_de_comprobante' => 'required|string|max:19|unique:invoices_606,ncf',
+            'numero_ncf' => 'required|string|max:19|unique:invoices_606,ncf',
         ];
     }
 
@@ -83,5 +81,12 @@ class Invoices606Import implements ToModel, WithValidation, WithHeadingRow, With
         if (!is_numeric($value)) return 0;
 
         return round((float)$value, 2);
+    }
+
+    public function normalizeNoteValue(float $value): float
+    {
+        if (!is_numeric($value)) return 0;
+
+        return $value < 0 ? $value * -1 : $value;
     }
 }

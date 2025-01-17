@@ -27,6 +27,7 @@ class Invoice extends Model
         'itbis',
         'third_party_itbis',
         'received_itbis',
+        'third_party_itbis_withheld',
         'third_party_income_retention',
         'isr',
         'selective_tax',
@@ -37,6 +38,8 @@ class Invoice extends Model
         'debit_credit_card',
         'credit_sale',
         'bonds_certificates',
+        'barter',
+        'other_sales_forms',
         'month_period',
         'year_period',
     ];
@@ -81,6 +84,13 @@ class Invoice extends Model
     }
 
     protected function itbis(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => number_format($value, 2, '.', ','),
+        );
+    }
+
+    protected function thirdPartyItbisWithheld(): Attribute
     {
         return Attribute::make(
             get: fn($value) => number_format($value, 2, '.', ','),

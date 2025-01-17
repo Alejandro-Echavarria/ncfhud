@@ -20,7 +20,6 @@ class Invoice606 extends Model
         'business_name',
         'ncf',
         'proof_date',
-        'payment_date',
         'amount',
         'itbis',
         'withheld_itbis',
@@ -60,6 +59,13 @@ class Invoice606 extends Model
     }
 
     protected function itbis(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => number_format($value, 2, '.', ','),
+        );
+    }
+
+    protected function withheldItbis(): Attribute
     {
         return Attribute::make(
             get: fn($value) => number_format($value, 2, '.', ','),

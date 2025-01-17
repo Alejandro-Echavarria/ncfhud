@@ -19,7 +19,6 @@ return new class extends Migration
             $table->text('business_name')->nullable();
             $table->string('ncf', 19)->nullable();
             $table->string('proof_date', 8)->nullable();
-            $table->string('payment_date', 8)->nullable();
             $this->addNullableInteger($table, 'amount');
             $this->addNullableInteger($table, 'itbis');
             $this->addNullableInteger($table, 'withheld_itbis');

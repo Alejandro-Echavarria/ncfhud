@@ -60,6 +60,7 @@ class InvoicesImport implements ToModel, WithValidation, WithHeadingRow, WithCal
     public function rules(): array
     {
         return [
+            'rnccedula_o_pasaporte' => ['required'],
             'fecha_comprobante' => [
                 'required',
                 'regex:/^\d{4}(0[1-9]|1[0-2])([0-2][0-9]|3[0-1])$/'

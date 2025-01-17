@@ -36,7 +36,7 @@ const form = useForm({
     file: null
 });
 
-const thead = ['rnc', 'razón social', 'ncf', 'Fecha comprobante', 'monto', 'itbis'];
+const thead = ['rnc', 'nombre', 'ncf', 'Fecha comprobante', 'monto', 'itbis'];
 const url = 'admin.invoices606.create';
 
 watch(

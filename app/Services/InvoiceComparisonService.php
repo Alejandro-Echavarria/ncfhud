@@ -80,7 +80,7 @@ class InvoiceComparisonService
                         'invoices607' => $monthYear607,
                     ];
                 }
-            } elseif (in_array($field606, ['amount', 'itbis', 'withheld_itbis'])) {
+            } elseif (in_array($field606, ['amount', 'itbis', 'third_party_itbis_withheld'])) {
                 // Comparar como números con redondeo
                 if (round((float)$value606, 2) !== round((float)$value607, 2)) {
                     $rowDifferences[$attributeTranslations[$field606] ?? $field606] = [
