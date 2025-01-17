@@ -86,6 +86,7 @@ class InvoiceComparisonService
                     $rowDifferences[$attributeTranslations[$field606] ?? $field606] = [
                         'invoices606' => $value606,
                         'invoices607' => $value607,
+                        'amount_difference' => $this->amountDifference($value606, $value607),
                     ];
                 }
             } elseif ((string)$value606 !== (string)$value607) {
@@ -145,4 +146,38 @@ class InvoiceComparisonService
             'proof_date'
         ];
     }
+
+    private function normalizeAmount(string|float|int $amount): float
+    {
+        // Convierte a float después de eliminar separadores de miles si es un string
+        if (is_string($amount)) {
+            $amount = (float)str_replace(',', '', $amount);
+        }
+
+        // Asegura que los valores negativos se normalicen como positivos
+        return $amount < 0 ? $amount * -1 : $amount;
+    }
+
+    private function formatAmount(float $amount): string
+    {
+        // Devuelve el valor formateado con separadores de miles y dos decimales
+        return number_format($amount, 2, '.', ',');
+    }
+
+    private function amountDifference(string|float|int $value606, string|float|int $value607): string
+    {
+        // Normaliza los montos
+        $amount606 = $this->normalizeAmount($value606);
+        $amount607 = $this->normalizeAmount($value607);
+
+        // Si ambos valores son iguales después de la normalización
+        if ($amount606 === $amount607) {
+            return "Montos iguales (negativo)";
+        }
+
+        // Calcula la diferencia entre los montos y devuelve el valor formateado
+        $difference = $amount606 - $amount607;
+        return $this->formatAmount($difference);
+    }
+
 }

@@ -55,28 +55,22 @@ class InvoiceCompareController extends Controller implements HasMiddleware
 
     public function compare(Request $request): JsonResponse
     {
-        try {
-            $this->validateRequest($request);
+        $this->validateRequest($request);
 
-            $clientFilter = $request->client;
-            $monthFilter = $request->month;
-            $yearFilter = $request->year;
+        $clientFilter = $request->client;
+        $monthFilter = $request->month;
+        $yearFilter = $request->year;
 
-            // Obtener facturas
-            $invoices607 = $this->getInvoices607($clientFilter, $monthFilter, $yearFilter);
-            $invoices606 = $this->getInvoices606($clientFilter, $monthFilter, $yearFilter);
+        // Obtener facturas
+        $invoices607 = $this->getInvoices607($clientFilter, $monthFilter, $yearFilter);
+        $invoices606 = $this->getInvoices606($clientFilter, $monthFilter, $yearFilter);
 
-            // Realizar comparaciones
-            $comparisonResults = $this->comparisonService->compareInvoices($invoices606, $invoices607);
+        // Realizar comparaciones
+        $comparisonResults = $this->comparisonService->compareInvoices($invoices606, $invoices607);
 
-            return response()->json([
-                'data' => $comparisonResults,
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => $e->getMessage(),
-            ], 500);
-        }
+        return response()->json([
+            'data' => $comparisonResults,
+        ]);
     }
 
     private function validateRequest(Request $request): void
@@ -85,7 +79,12 @@ class InvoiceCompareController extends Controller implements HasMiddleware
             'client' => 'required|exists:clients,id',
             'month' => 'required|min:1',
             'year' => 'required|min:4',
-        ]);
+        ],
+            [],
+            [
+                'client' => 'cliente',
+            ]
+        );
     }
 
     private function getInvoices607($client, $month, $year): array

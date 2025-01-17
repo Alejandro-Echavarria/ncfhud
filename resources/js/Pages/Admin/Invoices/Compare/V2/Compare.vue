@@ -212,6 +212,11 @@ const compare = async () => {
                                     </div>
                                 </div>
                             </div>
+                            <div class="mt-3 flex text-xs min-w-[150px] flex-shrink-0"
+                                 v-if="difference.amount_difference">
+                                <div class="pr-1 font-bold justify-center uppercase text-gray-700">Diferencia:</div>
+                                {{ difference.amount_difference }}
+                            </div>
                         </td>
                     </tr>
                 </template>
