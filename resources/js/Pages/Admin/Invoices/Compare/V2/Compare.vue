@@ -208,13 +208,15 @@ const compare = async () => {
 
                                     <div class="whitespace-nowrap">
                                         <span class="font-semibold text-gray-700">&nbsp;607:</span>
-                                        {{ difference.invoices607 }}
+                                        {{ difference.invoices607 }}&nbsp;
                                     </div>
                                 </div>
                             </div>
                             <div class="mt-3 flex text-xs min-w-[150px] flex-shrink-0"
                                  v-if="difference.amount_difference">
-                                <div class="pr-1 font-bold justify-center uppercase text-gray-700">Diferencia:</div>
+                                <div class="pr-1 font-bold justify-center uppercase text-gray-700"><span
+                                    class="text-white hidden">|</span>Diferencia:
+                                </div>
                                 {{ difference.amount_difference }}
                             </div>
                         </td>
