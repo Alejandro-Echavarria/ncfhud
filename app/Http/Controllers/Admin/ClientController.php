@@ -39,7 +39,7 @@ class ClientController extends Controller implements HasMiddleware
             'rnc' => 'required|max:11|unique:clients,rnc',
             'business_name' => 'required|max:150',
             'commercial_activity' => 'required|max:150',
-            'email' => 'required|max:255',
+            'email' => 'nullable|email:rfc,dns|max:255',
         ]);
 
         $data['created_by_user_id'] = auth()->user()->id;

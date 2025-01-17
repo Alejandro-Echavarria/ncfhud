@@ -20,7 +20,6 @@ class Invoice606Controller extends Controller implements HasMiddleware
         return [
             new Middleware('permission:admin.invoices.create_606', only: ['create', 'store']),
             new Middleware('permission:admin.invoices.destroy_606', only: ['delete', 'destroy']),
-
         ];
     }
 
@@ -61,6 +60,8 @@ class Invoice606Controller extends Controller implements HasMiddleware
         $data = $request->validate([
             'client' => 'required|exists:clients,id',
             'file' => 'required|mimes:xlsx,xls',
+            'month' => 'required|between:1,12',
+            'year' => 'required|digits:4',
         ]);
 
         $data['user'] = auth()->user()->id;

@@ -125,7 +125,7 @@ defineExpose({ openModal });
                     <template #form>
                         <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                             <div class="md:col-span-2">
-                                <InputLabel for="rnc" value="RNC" :required="true"/>
+                                <InputLabel for="rnc" value="RNC / cédula" :required="true"/>
                                 <TextInput id="rnc" ref="rncInput" v-model="form.rnc" type="text"/>
 
                                 <InputError :message="form.errors.rnc" class="mt-2"/>
@@ -148,7 +148,7 @@ defineExpose({ openModal });
                             </div>
 
                             <div class="md:col-span-2">
-                                <InputLabel for="email" value="Email" :required="true"/>
+                                <InputLabel for="email" value="Email" :required="false"/>
                                 <TextInput id="email" ref="EmailInput" v-model="form.email" type="text"/>
 
                                 <InputError :message="form.errors.email" class="mt-2"/>

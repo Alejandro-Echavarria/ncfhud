@@ -14,11 +14,15 @@ class Invoices606Import implements ToModel, WithValidation, WithHeadingRow, With
 {
     private int $userId;
     private int $clientId;
+    private string $monthPeriod;
+    private string $yearPeriod;
 
     public function __construct($data)
     {
         $this->userId = $data['user'];
         $this->clientId = $data['client'];
+        $this->monthPeriod = $data['month'];
+        $this->yearPeriod = $data['year'];
     }
 
     /**
@@ -28,9 +32,6 @@ class Invoices606Import implements ToModel, WithValidation, WithHeadingRow, With
      */
     public function model(array $row): Model|Invoice606|null
     {
-        // Función para obtener el valor o cero si el valor es nulo
-        $getOrZero = fn($value) => $value !== null ? round((float)$value, 2) : 0;
-
         return new Invoice606([
             'user_id' => $this->userId,
             'client_id' => $this->clientId,
@@ -41,10 +42,12 @@ class Invoices606Import implements ToModel, WithValidation, WithHeadingRow, With
                 ? Carbon::parse($row['fecha_comprobante'])->format('Ymd')
                 : date('Ymd', ($row['fecha_comprobante'] - 25569) * 86400),
 //            'proof_date' => is_string($row['fecha_comprobante']) ? $row['fecha_comprobante'] : DATE::excelToDateTimeObject($row['fecha_comprobante'])->format('Ymd'),
-            'payment_date' => $getOrZero($row['fecha_de_pago']),
-            'amount' => $getOrZero($row['monto_facturado']),
-            'itbis' => $getOrZero($row['itbis_facturado']),
-            'withheld_itbis' => $getOrZero($row['itbis_retenido']),
+            'payment_date' => $this->getOrZero($row['fecha_de_pago']),
+            'amount' => $this->getOrZero($row['monto_facturado']),
+            'itbis' => $this->getOrZero($row['itbis_facturado']),
+            'withheld_itbis' => $this->getOrZero($row['itbis_retenido']),
+            'month_period' => $this->monthPeriod,
+            'year_period' => $this->yearPeriod
         ]);
     }
 
@@ -65,5 +68,20 @@ class Invoices606Import implements ToModel, WithValidation, WithHeadingRow, With
             'rnc_cedula' => 'rnc',
             'numero_de_comprobante' => 'ncf',
         ];
+    }
+
+    /*----------------------------------------------------------------------------*/
+    // My functions
+    /*----------------------------------------------------------------------------*/
+
+    /**
+     * @param float|null $value
+     * @return float
+     */
+    public function getOrZero(?float $value): float
+    {
+        if (!is_numeric($value)) return 0;
+
+        return round((float)$value, 2);
     }
 }

@@ -79,7 +79,12 @@ class InvoiceCompareController extends Controller implements HasMiddleware
             'client' => 'required|exists:clients,id',
             'month' => 'required|min:1',
             'year' => 'required|min:4',
-        ]);
+        ],
+            [],
+            [
+                'client' => 'cliente',
+            ]
+        );
     }
 
     private function getInvoices607($client, $month, $year): array
