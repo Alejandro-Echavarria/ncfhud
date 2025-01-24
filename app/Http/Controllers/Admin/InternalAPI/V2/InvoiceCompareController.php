@@ -32,9 +32,7 @@ class InvoiceCompareController extends Controller implements HasMiddleware
 
     public function index(Request $request): Response
     {
-        $clients = Client::selectRaw("
-            id, CONCAT(rnc, ' - ', business_name, ' - ', commercial_activity) AS business_name"
-        )->get();
+        $clients = Client::getAllCombinedDetails();
 
         $clientFilter = $request?->client;
         $monthFilter = $request?->month;

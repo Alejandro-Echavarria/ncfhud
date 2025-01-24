@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('client_id')->constrained();
-            $table->string('rnc', 11)->nullable();
+            $table->text('rnc')->nullable();
             $table->text('business_name')->nullable();
-            $table->string('ncf', 19)->nullable();
+            $table->text('ncf')->nullable();
             $table->string('proof_date', 8)->nullable();
             $this->addNullableInteger($table, 'amount');
             $this->addNullableInteger($table, 'itbis');

@@ -25,9 +25,7 @@ class Invoice606Controller extends Controller implements HasMiddleware
 
     public function create(Request $request): Response
     {
-        $clients = Client::selectRaw(
-            "id, CONCAT(rnc, ' - ', business_name, ' - ', commercial_activity) AS business_name"
-        )->get();
+        $clients = Client::getAllCombinedDetails();
 
         $clientFilter = $request?->client;
         $monthFilter = $request?->month;
@@ -71,9 +69,7 @@ class Invoice606Controller extends Controller implements HasMiddleware
 
     public function delete(Request $request): Response
     {
-        $clients = Client::selectRaw(
-            "id, CONCAT(rnc, ' - ', business_name, ' - ', commercial_activity) AS business_name"
-        )->get();
+        $clients = Client::getAllCombinedDetails();
 
         $clientFilter = $request?->client;
         $monthFilter = $request?->month;
