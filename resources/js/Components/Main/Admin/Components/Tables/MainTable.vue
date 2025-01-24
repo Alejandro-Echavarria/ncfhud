@@ -1,5 +1,5 @@
 <script setup>
-import {ref} from 'vue';
+import { ref } from 'vue';
 import Pagination from '@/Components/Main/Admin/Components/Paginations/Pagination.vue';
 import SecondaryButton from "@/Components/SecondaryButton.vue";
 import Icon from "@/Components/Main/Admin/Components/Icons/Icon.vue";
@@ -59,17 +59,26 @@ const copyTableData = () => {
         .filter(row => row.trim() !== '') // Elimina filas vacías
         .join('\n'); // Usa saltos de línea entre filas
 
-    // Copia el texto al portapapeles
-    navigator.clipboard.writeText(textToCopy)
-        .then(() => {
-            ok('Datos copiados');
-            console.log("Datos copiados al portapapeles con éxito.");
-        })
-        .catch((error) => {
-            ok('Error al copiar los datos', 'error');
-            console.error("No se pudo copiar los datos: ", error);
-        });
+    // Usa un enfoque alternativo para copiar al portapapeles
+    const textarea = document.createElement('textarea');
+    textarea.value = textToCopy;
+    textarea.style.position = 'absolute';
+    textarea.style.left = '-9999px'; // Mueve el textarea fuera de la vista
+    document.body.appendChild(textarea);
+    textarea.select();
+
+    try {
+        document.execCommand('copy'); // Copia el texto al portapapeles
+        ok('Datos copiados');
+        console.log("Datos copiados al portapapeles con éxito.");
+    } catch (error) {
+        ok('Error al copiar los datos', 'error');
+        console.error("No se pudo copiar los datos: ", error);
+    } finally {
+        document.body.removeChild(textarea); // Elimina el textarea temporal
+    }
 };
+
 
 const ok = (msj, type, timer, toast, title) => {
     SaveAlert(msj, type, timer, toast, title);
