@@ -44,6 +44,19 @@ class Invoice extends Model
         'year_period',
     ];
 
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'rnc' => 'encrypted',
+            'ncf' => 'encrypted',
+        ];
+    }
+
     /*----------------------------------------------------------------------------*/
     // Relations
     /*----------------------------------------------------------------------------*/

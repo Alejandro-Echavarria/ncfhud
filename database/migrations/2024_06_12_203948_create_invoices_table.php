@@ -15,12 +15,12 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('client_id')->constrained();
-            $table->string('rnc', 11)->nullable();
+            $table->text('rnc')->nullable();
 
             $table->integer('identification_type')->unsigned()->default(0);
 
-            $table->string('ncf', 19)->nullable();
-            $table->string('ncf_modified', 19)->nullable();
+            $table->text('ncf')->nullable();
+            $table->text('ncf_modified')->nullable();
 
             $table->string('income_type', 255)->nullable();
 

@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Traits\ConcatenatesClientDetails;
+use Illuminate\Support\Collection;
 
 class Client extends Model
 {
-    use HasFactory;
+    use HasFactory, ConcatenatesClientDetails;
 
     protected $fillable = [
         'created_by_user_id',
@@ -57,7 +59,7 @@ class Client extends Model
     /*----------------------------------------------------------------------------*/
     // Scopes (local)
     /*----------------------------------------------------------------------------*/
-    public function scopeFilter($query, $filter)
+    public function scopeFilter($query, $filter): void
     {
         $query->when($filter ?? null, function ($query, $search) {
             $query->whereAny([
@@ -67,6 +69,22 @@ class Client extends Model
                 'email',
                 'created_at'
             ], config('app.db_driver') === 'pgsql' ? 'ILIKE' : 'LIKE', "%$search%");
+        });
+    }
+
+    /*----------------------------------------------------------------------------*/
+    // My functions
+    /*----------------------------------------------------------------------------*/
+
+    /**
+     * Obtener los detalles combinados de todos los clientes.
+     *
+     * @return Collection
+     */
+    public static function getAllCombinedDetails(): Collection
+    {
+        return self::all()->map(function ($client) {
+            return $client->getCombinedDetails();
         });
     }
 }

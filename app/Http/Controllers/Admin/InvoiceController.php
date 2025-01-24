@@ -40,16 +40,14 @@ class InvoiceController extends Controller implements HasMiddleware
                 ->paginate($perPage);
         }
 
-        $clients = Client::selectRaw("id, CONCAT(rnc, ' - ', business_name, ' - ', commercial_activity) AS business_name")->get();
+        $clients = Client::getAllCombinedDetails();
 
         return Inertia::render('Admin/Invoices/Index', compact('clients', 'invoices', 'clientFilter', 'monthFilter', 'yearFilter', 'page', 'perPage'));
     }
 
     public function create(Request $request): Response
     {
-        $clients = Client::selectRaw(
-            "id, CONCAT(rnc, ' - ', business_name, ' - ', commercial_activity) AS business_name"
-        )->get();
+        $clients = Client::getAllCombinedDetails();
 
         $clientFilter = $request?->client;
         $monthFilter = $request?->month;
@@ -91,9 +89,7 @@ class InvoiceController extends Controller implements HasMiddleware
 
     public function delete(Request $request): Response
     {
-        $clients = Client::selectRaw(
-            "id, CONCAT(rnc, ' - ', business_name, ' - ', commercial_activity) AS business_name"
-        )->get();
+        $clients = Client::getAllCombinedDetails();
 
         $clientFilter = $request?->client;
         $monthFilter = $request?->month;
