@@ -82,7 +82,7 @@ class InvoiceComparisonService
                 }
             } elseif (in_array($field606, ['amount', 'itbis', 'third_party_itbis_withheld'])) {
                 // Comparar como números con redondeo
-                if (round((float)$value606, 2) !== round((float)$value607, 2)) {
+                if ($this->cleanAmount($value606) !== $this->cleanAmount($value607)) {
                     $rowDifferences[$attributeTranslations[$field606] ?? $field606] = [
                         'invoices606' => $value606,
                         'invoices607' => $value607,
@@ -145,6 +145,16 @@ class InvoiceComparisonService
         return [
             'proof_date'
         ];
+    }
+
+    private function cleanAmount(string|float|int $amount): float
+    {
+        // Convierte a float después de eliminar separadores de miles si es un string
+        if (is_string($amount)) {
+            $amount = (float)str_replace(',', '', $amount);
+        }
+
+        return round($amount, 2);
     }
 
     private function normalizeAmount(string|float|int $amount): float
