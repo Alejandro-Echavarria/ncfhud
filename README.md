@@ -2,7 +2,7 @@
 
 ## Descripción
 
-**ncfhud** es una aplicación desarrollada en Laravel diseñada para la gestión y validación de comprobantes fiscales en la República Dominicana. Proporciona herramientas avanzadas para el procesamiento de facturas, conciliación de datos y generación de reportes fiscales, facilitando la automatización y el control en la administración tributaria.
+**NCF Hud** es un MVP desarrollada en Laravel y Vue.js, diseñada para la gestión y validación de comprobantes fiscales en la República Dominicana.
 
 ## Características
 
