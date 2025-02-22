@@ -1,16 +1,4 @@
-<p align="center">
-    <a href="https://maet.dev" target="_blank">
-        <img src="https://maet.dev/storage/images/companies/logo_file/FH4XwvmrtNmy-icon2.webp" width="150" alt="ncfhud Logo">
-    </a>
-</p>
-
-<h1 align="center">ncfhud</h1>
-
-<p align="center">
-    <a href="https://github.com/Alejandro-Echavarria/ncfhud/blob/main/LICENSE">
-        <img src="https://img.shields.io/github/license/Alejandro-Echavarria/ncfhud" alt="License">
-    </a>
-</p>
+<h1 align="center">NCF Hud</h1>
 
 ## Descripción
 
