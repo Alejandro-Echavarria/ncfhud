@@ -50,7 +50,7 @@ return [
     |
     */
 
-    'debug' => (bool) env('APP_DEBUG', false),
+    'debug' => (bool)env('APP_DEBUG', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -132,6 +132,23 @@ return [
     'maintenance' => [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Configuración del Administrador
+    |--------------------------------------------------------------------------
+    |
+    | Estas credenciales corresponden al usuario administrador predeterminado
+    | del sistema. Se recomienda definir estos valores en el archivo .env
+    | para mayor seguridad y flexibilidad. La contraseña será encriptada
+    | antes de guardarse en la base de datos.
+    |
+    */
+
+    'admin' => [
+        'email' => env('MAET_EMAIL_ADMIN'),
+        'password' => env('MAET_PASSWORD_ADMIN'),
     ],
 
 ];
