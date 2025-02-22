@@ -42,6 +42,10 @@ class HandleInertiaRequests extends Middleware
             'auth.permissions' => fn() => $request->user()
                 ? $request->user()->getAllPermissions()->pluck('name')
                 : null,
+            'entity' => [
+                'name' => config('app.name'),
+                'version' => config('app.version'),
+            ],
         ]);
     }
 }

@@ -28,6 +28,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Versión de la Aplicación
+    |--------------------------------------------------------------------------
+    |
+    | Define la versión actual de la aplicación. Se recomienda gestionarla a
+    | través del archivo .env para facilitar su actualización sin modificar código.
+    |
+    */
+
+    'version' => env('APP_VERSION', '1.0.0'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Environment
     |--------------------------------------------------------------------------
     |
